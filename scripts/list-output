@@ -1,0 +1,12 @@
+#!/bin/bash
+# =============================================================================
+# @file   list-output
+# @author Derek Anderson
+# @date   11.01.2024
+#
+# Short script to point to the output of jetAna and jetAnaSim
+# =============================================================================
+
+ls /gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC
+
+# end =========================================================================
