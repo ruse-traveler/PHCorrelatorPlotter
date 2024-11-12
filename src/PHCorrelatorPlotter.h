@@ -17,6 +17,7 @@
 // forward declarations
 class TCanvas;
 class TFile;
+class TLegend;
 
 
 
@@ -30,11 +31,14 @@ class PHCorrelatorPlotter {
     PHCorrelatorPlotter()  {};
     ~PHCorrelatorPlotter() {};
 
-    /* TODO fill in */
+    // plotting routines
+    void CompareTrueVsRecoEEC(const std::string in_file, const std::string out_file);
 
   private:
 
-    /* TODO fill in */
+    // helper methods
+    TFile*   OpenFile(const std::string name, const std::string option);
+    TLegend* MakeLegend();
 
 };  // end Plotter
 
