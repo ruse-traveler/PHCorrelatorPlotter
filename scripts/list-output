@@ -7,6 +7,6 @@
 # Short script to point to the output of jetAna and jetAnaSim
 # =============================================================================
 
-ls /gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC
+ls /gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC/*
 
 # end =========================================================================
