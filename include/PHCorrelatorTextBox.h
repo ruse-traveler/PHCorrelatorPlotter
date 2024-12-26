@@ -32,25 +32,25 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      Types::TextList m_text;
-      Types::Vertices m_vtxs;
-      std::string     m_opt = "NDC NB";
+      Type::TextList m_text;
+      Type::Vertices m_vtxs;
+      std::string    m_opt = "NDC NB";
 
     public:
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Types::TextList GetText()     const {return m_text;}
-      Types::Vertices GetVertices() const {return m_vtxs;}
-      std::string     GetOption()   const {return m_opt;}
+      Type::TextList GetText()     const {return m_text;}
+      Type::Vertices GetVertices() const {return m_vtxs;}
+      std::string    GetOption()   const {return m_opt;}
 
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetText(const Types::TextList& text)     {m_text = text;}
-      void SetVertices(const Types::Vertices& vtxs) {m_vtxs = vtxs;}
-      void SetOption(const std::string& opt)        {m_opt  = opt;}
+      void SetText(const Type::TextList& text)     {m_text = text;}
+      void SetVertices(const Type::Vertices& vtxs) {m_vtxs = vtxs;}
+      void SetOption(const std::string& opt)       {m_opt  = opt;}
 
       // ----------------------------------------------------------------------
       //! Add a line of text
@@ -92,8 +92,8 @@ namespace PHEnergyCorrelator {
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
       TextBox(
-        const Types::TextList& text, 
-        const Types::Vertices& vtxs,
+        const Type::TextList& text, 
+        const Type::Vertices& vtxs,
         const std::string& opt = "NDC NB"
       ) {
 
@@ -101,7 +101,7 @@ namespace PHEnergyCorrelator {
         m_vtxs = vtxs;
         m_opt  = opt;
 
-      }  // end ctor(Types::TextList&, Types::Vertices&, std::string&)'
+      }  // end ctor(Type::TextList&, Type::Vertices&, std::string&)'
 
   };  // end TextBox
 

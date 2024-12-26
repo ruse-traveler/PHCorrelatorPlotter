@@ -33,31 +33,31 @@ namespace PHEnergyCorrelator {
     private:
 
       // members
-      PadOpts         m_opts;
-      Types::Vertices m_vtxs;
-      Types::Margins  m_mgns;
-      std::string     m_name;
-      std::string     m_title = "";
+      PadOpts        m_opts;
+      Type::Vertices m_vtxs;
+      Type::Margins  m_mgns;
+      std::string    m_name;
+      std::string    m_title = "";
 
     public:
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      PadOpts         GetOptions()  const {return m_opts;}
-      Types::Vertices GetVertices() const {return m_vtxs;}
-      Types::Margins  GetMargins()  const {return m_mgns;}
-      std::string     GetName()     const {return m_name;}
-      std::string     GetTitle()    const {return m_title;}
+      PadOpts        GetOptions()  const {return m_opts;}
+      Type::Vertices GetVertices() const {return m_vtxs;}
+      Type::Margins  GetMargins()  const {return m_mgns;}
+      std::string    GetName()     const {return m_name;}
+      std::string    GetTitle()    const {return m_title;}
 
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetOptions(const PadOpts& opts)          {m_opts  = opts;}
-      void SetVertices(const Types::Vertices& vtxs) {m_vtxs  = vtxs;}
-      void SetMargins(const Types::Margins& mgns)   {m_mgns  = mgns;}
-      void SetName(const std::string& name)         {m_name  = name;}
-      void SetTitle(const std::string& ttl)         {m_title = ttl;}
+      void SetOptions(const PadOpts& opts)         {m_opts  = opts;}
+      void SetVertices(const Type::Vertices& vtxs) {m_vtxs  = vtxs;}
+      void SetMargins(const Type::Margins& mgns)   {m_mgns  = mgns;}
+      void SetName(const std::string& name)        {m_name  = name;}
+      void SetTitle(const std::string& ttl)        {m_title = ttl;}
 
       // ----------------------------------------------------------------------
       //! Create a TPad 
@@ -75,10 +75,10 @@ namespace PHEnergyCorrelator {
         );
 
         // set margins
-        pad -> SetTopMargin( m_mgns[Types::Margin::Top] );
-        pad -> SetRightMargin( m_mgns[Types::Margin::Right] );
-        pad -> SetBottomMargin( m_mgns[Types::Margin::Bottom] );
-        pad -> SetLeftMargin( m_mgns[Types::Margin::Left] );
+        pad -> SetTopMargin( m_mgns[Type::Margin::Top] );
+        pad -> SetRightMargin( m_mgns[Type::Margin::Right] );
+        pad -> SetBottomMargin( m_mgns[Type::Margin::Bottom] );
+        pad -> SetLeftMargin( m_mgns[Type::Margin::Left] );
 
         // apply options and return pointer
         m_opts.Apply(pad);
@@ -98,8 +98,8 @@ namespace PHEnergyCorrelator {
       Pad(
         const std::string& name,
         const std::string& title,
-        const Types::Vertices& vtxs,
-        const Types::Margins& mgns,
+        const Type::Vertices& vtxs,
+        const Type::Margins& mgns,
         const PadOpts& opts
       ) {
 
@@ -109,7 +109,7 @@ namespace PHEnergyCorrelator {
         m_mgns  = mgns;
         m_opts  = opts;
 
-      }  // end ctor(std::string& x 2, Types::Vertices&, Types::Margins&, PadOpts&)'
+      }  // end ctor(std::string& x 2, Type::Vertices&, Type::Margins&, PadOpts&)'
 
   };  // end Pad
 

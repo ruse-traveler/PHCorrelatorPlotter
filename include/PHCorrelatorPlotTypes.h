@@ -22,7 +22,7 @@
 
 
 namespace PHEnergyCorrelator {
-  namespace Types {
+  namespace Type {
 
     // ------------------------------------------------------------------------
     //! Convenient types
@@ -37,6 +37,11 @@ namespace PHEnergyCorrelator {
     typedef std::map<std::string, std::size_t> LabelToIndexMap;
 
 
+
+    // ------------------------------------------------------------------------
+    //! Different axes of histograms & graphs
+    // ------------------------------------------------------------------------
+    enum Axis {X, Y, Z};
 
     // ------------------------------------------------------------------------
     //! Different margins of a pad or canvas

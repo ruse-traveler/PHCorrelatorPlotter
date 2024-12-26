@@ -70,7 +70,7 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      Types::Vertices    m_vtxs;
+      Type::Vertices     m_vtxs;
       std::string        m_header = "";
       std::vector<Entry> m_entries;
 
@@ -79,14 +79,14 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Types::Vertices    GetVertices() const {return m_vtxs;}
+      Type::Vertices     GetVertices() const {return m_vtxs;}
       std::string        GetHeader()   const {return m_header;}
       std::vector<Entry> GetEntries()  const {return m_entries;}
 
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetVertices(const Types::Vertices& vtxs)      {m_vtxs    = vtxs;}
+      void SetVertices(const Type::Vertices& vtxs)       {m_vtxs    = vtxs;}
       void SetHeader(const std::string& hdr)             {m_header  = hdr;}
       void SetEntries(const std::vector<Entry>& entries) {m_entries = entries;}
 
@@ -129,7 +129,7 @@ namespace PHEnergyCorrelator {
       //! ctor accepting arguments 
       // ----------------------------------------------------------------------
       Legend(
-        const Types::Vertices& vtxs,
+        const Type::Vertices& vtxs,
         const std::vector<Entry>& entries,
         const std::string& hdr = ""
       ) {
@@ -138,7 +138,7 @@ namespace PHEnergyCorrelator {
         m_header  = hdr;
         m_entries = entries;
 
-      };  // end ctor(Types::Vertices&, std::vector<Entry>&, std::string&)'
+      };  // end ctor(Type::Vertices&, std::vector<Entry>&, std::string&)'
 
   };  // end Legend
 

@@ -23,7 +23,6 @@
 #include <TObject.h>
 #include <TPaveText.h>
 // plotting utilities
-#include "../hist/HistTypes.hxx"
 #include "PHCorrelatorPlotTypes.h"
 
 
@@ -37,8 +36,6 @@ namespace PHEnergyCorrelator {
    *  options that define the style (e.g. 
    *  marker color & style) of things like
    *  histograms, graphs, etc.
-   *
-   *  FIXME should also add TBox, TLine, TEllipse...
    */
   class Style { 
 
@@ -226,8 +223,8 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Axis dependent getters
       // ----------------------------------------------------------------------
-      Label GetLabelStyle(const Types::Axis& axis) const {return m_labels[axis];}
-      Title GetTitleStyle(const Types::Axis& axis) const {return m_titles[axis];}
+      Label GetLabelStyle(const Type::Axis& axis) const {return m_labels[axis];}
+      Title GetTitleStyle(const Type::Axis& axis) const {return m_titles[axis];}
 
       // ----------------------------------------------------------------------
       //! Get all label styles
@@ -258,22 +255,22 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Set a specific label style
       // ----------------------------------------------------------------------
-      void SetLabelStyle(const Label& label, const Types::Axis& axis) {
+      void SetLabelStyle(const Label& label, const Type::Axis& axis) {
 
         m_labels[axis] = label;
         return;
 
-      }  // end 'SetLabelStyle(Label&, Types::Axis&)'
+      }  // end 'SetLabelStyle(Label&, Type::Axis&)'
 
       // ----------------------------------------------------------------------
       //! Set a specific title style
       // ----------------------------------------------------------------------
-      void SetTitleStyle(const Title& title, const Types::Axis& axis) {
+      void SetTitleStyle(const Title& title, const Type::Axis& axis) {
 
         m_titles[axis] = title;
         return;
 
-      }  // end 'SetTitleStyle(Title&, Types::Axis&)'
+      }  // end 'SetTitleStyle(Title&, Type::Axis&)'
 
       // ----------------------------------------------------------------------
       //! Set all axis labels to same style
@@ -300,9 +297,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetLabelStyles(const std::vector<Label>& labels) {
 
-        if (labels.size() >= 1) m_labels[Types::Axis::X] = labels.at(0);
-        if (labels.size() >= 2) m_labels[Types::Axis::Y] = labels.at(1);
-        if (labels.size() >= 3) m_labels[Types::Axis::Z] = labels.at(2);
+        if (labels.size() >= 1) m_labels[Type::Axis::X] = labels.at(0);
+        if (labels.size() >= 2) m_labels[Type::Axis::Y] = labels.at(1);
+        if (labels.size() >= 3) m_labels[Type::Axis::Z] = labels.at(2);
         return;
 
       }  // end 'SetLabelStyles(std::vector<Label>&)'
@@ -312,9 +309,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetTitleStyles(const std::vector<Title>& titles) {
 
-        if (titles.size() >= 1) m_titles[Types::Axis::X] = titles.at(0);
-        if (titles.size() >= 2) m_titles[Types::Axis::Y] = titles.at(1);
-        if (titles.size() >= 3) m_titles[Types::Axis::Z] = titles.at(2);
+        if (titles.size() >= 1) m_titles[Type::Axis::X] = titles.at(0);
+        if (titles.size() >= 2) m_titles[Type::Axis::Y] = titles.at(1);
+        if (titles.size() >= 3) m_titles[Type::Axis::Z] = titles.at(2);
         return;
 
       }  // end 'SetTitleStyles(std::vector<Title>&)'
@@ -333,27 +330,27 @@ namespace PHEnergyCorrelator {
         func -> SetLineWidth( m_plot.width );
         func -> SetMarkerColor( m_plot.color );
         func -> SetMarkerStyle( m_plot.marker );
-        func -> GetXaxis() -> CenterTitle( m_titles[Types::Axis::X].center );
-        func -> GetXaxis() -> SetTitleFont( m_titles[Types::Axis::X].font );
-        func -> GetXaxis() -> SetTitleSize( m_titles[Types::Axis::X].size );
-        func -> GetXaxis() -> SetTitleOffset( m_titles[Types::Axis::X].offset );
-        func -> GetXaxis() -> SetLabelFont( m_labels[Types::Axis::X].font );
-        func -> GetXaxis() -> SetLabelSize( m_labels[Types::Axis::X].size );
-        func -> GetXaxis() -> SetLabelOffset( m_labels[Types::Axis::X].offset );
-        func -> GetYaxis() -> CenterTitle( m_titles[Types::Axis::Y].center );
-        func -> GetYaxis() -> SetTitleFont( m_titles[Types::Axis::Y].font );
-        func -> GetYaxis() -> SetTitleSize( m_titles[Types::Axis::Y].size );
-        func -> GetYaxis() -> SetTitleOffset( m_titles[Types::Axis::Y].offset );
-        func -> GetYaxis() -> SetLabelFont( m_labels[Types::Axis::Y].font );
-        func -> GetYaxis() -> SetLabelSize( m_labels[Types::Axis::Y].size );
-        func -> GetYaxis() -> SetLabelOffset( m_labels[Types::Axis::Y].offset );
-        func -> GetZaxis() -> CenterTitle( m_titles[Types::Axis::Z].center );
-        func -> GetZaxis() -> SetTitleFont( m_titles[Types::Axis::Z].font );
-        func -> GetZaxis() -> SetTitleSize( m_titles[Types::Axis::Z].size );
-        func -> GetZaxis() -> SetTitleOffset( m_titles[Types::Axis::Z].offset );
-        func -> GetZaxis() -> SetLabelFont( m_labels[Types::Axis::Z].font );
-        func -> GetZaxis() -> SetLabelSize( m_labels[Types::Axis::Z].size );
-        func -> GetZaxis() -> SetLabelOffset( m_labels[Types::Axis::Z].offset );
+        func -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
+        func -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
+        func -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
+        func -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
+        func -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
+        func -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
+        func -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
+        func -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
+        func -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
+        func -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
+        func -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
+        func -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
+        func -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
+        func -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
+        func -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
+        func -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
+        func -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
+        func -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
+        func -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
+        func -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
+        func -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
         return;
 
       }  // end 'Apply(TFN*)'
@@ -373,27 +370,27 @@ namespace PHEnergyCorrelator {
         hist -> SetMarkerColor( m_plot.color );
         hist -> SetMarkerStyle( m_plot.marker );
         hist -> SetTitleFont( m_text.font );
-        hist -> GetXaxis() -> CenterTitle( m_titles[Types::Axis::X].center );
-        hist -> GetXaxis() -> SetTitleFont( m_titles[Types::Axis::X].font );
-        hist -> GetXaxis() -> SetTitleSize( m_titles[Types::Axis::X].size );
-        hist -> GetXaxis() -> SetTitleOffset( m_titles[Types::Axis::X].offset );
-        hist -> GetXaxis() -> SetLabelFont( m_labels[Types::Axis::X].font );
-        hist -> GetXaxis() -> SetLabelSize( m_labels[Types::Axis::X].size );
-        hist -> GetXaxis() -> SetLabelOffset( m_labels[Types::Axis::X].offset );
-        hist -> GetYaxis() -> CenterTitle( m_titles[Types::Axis::Y].center );
-        hist -> GetYaxis() -> SetTitleFont( m_titles[Types::Axis::Y].font );
-        hist -> GetYaxis() -> SetTitleSize( m_titles[Types::Axis::Y].size );
-        hist -> GetYaxis() -> SetTitleOffset( m_titles[Types::Axis::Y].offset );
-        hist -> GetYaxis() -> SetLabelFont( m_labels[Types::Axis::Y].font );
-        hist -> GetYaxis() -> SetLabelSize( m_labels[Types::Axis::Y].size );
-        hist -> GetYaxis() -> SetLabelOffset( m_labels[Types::Axis::Y].offset );
-        hist -> GetZaxis() -> CenterTitle( m_titles[Types::Axis::Z].center );
-        hist -> GetZaxis() -> SetTitleFont( m_titles[Types::Axis::Z].font );
-        hist -> GetZaxis() -> SetTitleSize( m_titles[Types::Axis::Z].size );
-        hist -> GetZaxis() -> SetTitleOffset( m_titles[Types::Axis::Z].offset );
-        hist -> GetZaxis() -> SetLabelFont( m_labels[Types::Axis::Z].font );
-        hist -> GetZaxis() -> SetLabelSize( m_labels[Types::Axis::Z].size );
-        hist -> GetZaxis() -> SetLabelOffset( m_labels[Types::Axis::Z].offset );
+        hist -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
+        hist -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
+        hist -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
+        hist -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
+        hist -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
+        hist -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
+        hist -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
+        hist -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
+        hist -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
+        hist -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
+        hist -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
+        hist -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
+        hist -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
+        hist -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
+        hist -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
+        hist -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
+        hist -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
+        hist -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
+        hist -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
+        hist -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
+        hist -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
         return;
 
       }  // end 'Apply(TH1*)'
@@ -413,20 +410,20 @@ namespace PHEnergyCorrelator {
         graph -> SetLineWidth( m_plot.width );
         graph -> SetMarkerColor( m_plot.color );
         graph -> SetMarkerStyle( m_plot.marker );
-        graph -> GetXaxis() -> CenterTitle( m_titles[Types::Axis::X].center );
-        graph -> GetXaxis() -> SetTitleFont( m_titles[Types::Axis::X].font );
-        graph -> GetXaxis() -> SetTitleSize( m_titles[Types::Axis::X].size );
-        graph -> GetXaxis() -> SetTitleOffset( m_titles[Types::Axis::X].offset );
-        graph -> GetXaxis() -> SetLabelFont( m_labels[Types::Axis::X].font );
-        graph -> GetXaxis() -> SetLabelSize( m_labels[Types::Axis::X].size );
-        graph -> GetXaxis() -> SetLabelOffset( m_labels[Types::Axis::X].offset );
-        graph -> GetYaxis() -> CenterTitle( m_titles[Types::Axis::Y].center );
-        graph -> GetYaxis() -> SetTitleFont( m_titles[Types::Axis::Y].font );
-        graph -> GetYaxis() -> SetTitleSize( m_titles[Types::Axis::Y].size );
-        graph -> GetYaxis() -> SetTitleOffset( m_titles[Types::Axis::Y].offset );
-        graph -> GetYaxis() -> SetLabelFont( m_labels[Types::Axis::Y].font );
-        graph -> GetYaxis() -> SetLabelSize( m_labels[Types::Axis::Y].size );
-        graph -> GetYaxis() -> SetLabelOffset( m_labels[Types::Axis::Y].offset );
+        graph -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
+        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
+        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
+        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
+        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
+        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
+        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
+        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
+        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
+        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
+        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
+        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
+        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
+        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
         return;
 
       }  // end 'Apply(TGraph*)'
@@ -445,27 +442,27 @@ namespace PHEnergyCorrelator {
         graph -> SetLineWidth( m_plot.width );
         graph -> SetMarkerColor( m_plot.color );
         graph -> SetMarkerStyle( m_plot.marker );
-        graph -> GetXaxis() -> CenterTitle( m_titles[Types::Axis::X].center );
-        graph -> GetXaxis() -> SetTitleFont( m_titles[Types::Axis::X].font );
-        graph -> GetXaxis() -> SetTitleSize( m_titles[Types::Axis::X].size );
-        graph -> GetXaxis() -> SetTitleOffset( m_titles[Types::Axis::X].offset );
-        graph -> GetXaxis() -> SetLabelFont( m_labels[Types::Axis::X].font );
-        graph -> GetXaxis() -> SetLabelSize( m_labels[Types::Axis::X].size );
-        graph -> GetXaxis() -> SetLabelOffset( m_labels[Types::Axis::X].offset );
-        graph -> GetYaxis() -> CenterTitle( m_titles[Types::Axis::Y].center );
-        graph -> GetYaxis() -> SetTitleFont( m_titles[Types::Axis::Y].font );
-        graph -> GetYaxis() -> SetTitleSize( m_titles[Types::Axis::Y].size );
-        graph -> GetYaxis() -> SetTitleOffset( m_titles[Types::Axis::Y].offset );
-        graph -> GetYaxis() -> SetLabelFont( m_labels[Types::Axis::Y].font );
-        graph -> GetYaxis() -> SetLabelSize( m_labels[Types::Axis::Y].size );
-        graph -> GetYaxis() -> SetLabelOffset( m_labels[Types::Axis::Y].offset );
-        graph -> GetZaxis() -> CenterTitle( m_titles[Types::Axis::Z].center );
-        graph -> GetZaxis() -> SetTitleFont( m_titles[Types::Axis::Z].font );
-        graph -> GetZaxis() -> SetTitleSize( m_titles[Types::Axis::Z].size );
-        graph -> GetZaxis() -> SetTitleOffset( m_titles[Types::Axis::Z].offset );
-        graph -> GetZaxis() -> SetLabelFont( m_labels[Types::Axis::Z].font );
-        graph -> GetZaxis() -> SetLabelSize( m_labels[Types::Axis::Z].size );
-        graph -> GetZaxis() -> SetLabelOffset( m_labels[Types::Axis::Z].offset );
+        graph -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
+        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
+        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
+        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
+        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
+        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
+        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
+        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
+        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
+        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
+        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
+        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
+        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
+        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
+        graph -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
+        graph -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
+        graph -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
+        graph -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
+        graph -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
+        graph -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
+        graph -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
         return;
 
       }  // end 'Apply(TGraph2D*)'

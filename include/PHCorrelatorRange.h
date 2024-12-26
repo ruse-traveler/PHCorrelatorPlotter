@@ -28,9 +28,9 @@ namespace PHEnergyCorrelator {
   struct Range {
 
     // members
-    Types::Interval x;
-    Types::Interval y;
-    Types::Interval z;
+    Type::Interval x;
+    Type::Interval y;
+    Type::Interval z;
 
     // ------------------------------------------------------------------------
     //! default ctor/dtor
@@ -41,7 +41,7 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! ctor accepting only x range
     // ------------------------------------------------------------------------
-    Range(const Types::Interval& xrange) {
+    Range(const Type::Interval& xrange) {
       x = xrange;
     }
 
@@ -49,9 +49,9 @@ namespace PHEnergyCorrelator {
     //! ctor accepting x, y, and possibly z range
     // ------------------------------------------------------------------------
     Range(
-      const Types::Interval& xrange,
-      const Types::Interval& yrange,
-      std::optional<Types::Interval> zrange = std::nullopt
+      const Type::Interval& xrange,
+      const Type::Interval& yrange,
+      std::optional<Type::Interval> zrange = std::nullopt
     ) {
       x = xrange;
       y = yrange;

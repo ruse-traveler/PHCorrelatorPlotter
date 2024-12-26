@@ -38,34 +38,34 @@ namespace PHEnergyCorrelator {
     private:
 
       // members
-      PadOpts           m_opts;
-      Types::Margins    m_mgns;
-      Types::Dimensions m_dims;
-      std::string       m_name;
-      std::string       m_title = "";
-      std::vector<Pad>  m_pads;
+      PadOpts          m_opts;
+      Type::Margins    m_mgns;
+      Type::Dimensions m_dims;
+      std::string      m_name;
+      std::string      m_title = "";
+      std::vector<Pad> m_pads;
 
     public:
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      PadOpts           GetOptions()    const {return m_opts;}
-      Types::Margins    GetMargins()    const {return m_mgns;}
-      Types::Dimensions GetDimensions() const {return m_dims;}
-      std::string       GetName()       const {return m_name;}
-      std::string       GetTitle()      const {return m_title;}
-      std::vector<Pad>  GetPads()       const {return m_pads;}
+      PadOpts          GetOptions()    const {return m_opts;}
+      Type::Margins    GetMargins()    const {return m_mgns;}
+      Type::Dimensions GetDimensions() const {return m_dims;}
+      std::string      GetName()       const {return m_name;}
+      std::string      GetTitle()      const {return m_title;}
+      std::vector<Pad> GetPads()       const {return m_pads;}
 
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetOptions(const PadOpts& opts)              {m_opts  = opts;}
-      void SetMargins(const Types::Margins& mgns)       {m_mgns  = mgns;}
-      void SetDimensions(const Types::Dimensions& dims) {m_dims  = dims;}
-      void SetName(const std::string& name)             {m_name  = name;}
-      void SetTitle(const std::string& ttl)             {m_title = ttl;}
-      void SetPads(const std::vector<Pad>& pads)        {m_pads  = pads;}
+      void SetOptions(const PadOpts& opts)             {m_opts  = opts;}
+      void SetMargins(const Type::Margins& mgns)       {m_mgns  = mgns;}
+      void SetDimensions(const Type::Dimensions& dims) {m_dims  = dims;}
+      void SetName(const std::string& name)            {m_name  = name;}
+      void SetTitle(const std::string& ttl)            {m_title = ttl;}
+      void SetPads(const std::vector<Pad>& pads)       {m_pads  = pads;}
 
       // ----------------------------------------------------------------------
       //! Add an associated pad
@@ -101,10 +101,10 @@ namespace PHEnergyCorrelator {
 
         // set margins if needed
         if (m_pads.empty()) {
-          canvas -> SetTopMargin( m_mgns[Types::Margin::Top] );
-          canvas -> SetRightMargin( m_mgns[Types::Margin::Right] );
-          canvas -> SetBottomMargin( m_mgns[Types::Margin::Bottom] );
-          canvas -> SetLeftMargin( m_mgns[Types::Margin::Left] );
+          canvas -> SetTopMargin( m_mgns[Type::Margin::Top] );
+          canvas -> SetRightMargin( m_mgns[Type::Margin::Right] );
+          canvas -> SetBottomMargin( m_mgns[Type::Margin::Bottom] );
+          canvas -> SetLeftMargin( m_mgns[Type::Margin::Left] );
         }
 
         // apply options and return pointer
@@ -138,9 +138,9 @@ namespace PHEnergyCorrelator {
       Canvas(
         const std::string& name,
         const std::string& title,
-        const Types::Dimensions& dims,
+        const Type::Dimensions& dims,
         const PadOpts& opts,
-        std::optional<Types::Margins> mgns = std::nullopt,
+        std::optional<Type::Margins> mgns = std::nullopt,
         std::optional<std::vector<Pad>> pads = std::nullopt
       ) {
 
@@ -154,7 +154,7 @@ namespace PHEnergyCorrelator {
         if (mgns.has_value()) m_mgns = mgns.value();
         if (pads.has_value()) m_pads = pads.value();
 
-      }  // end ctor(std::string& x 2, Types::Dimensions&, PadOpts&, std::optional x 2)'
+      }  // end ctor(std::string& x 2, Type::Dimensions&, PadOpts&, std::optional x 2)'
 
   };  // end Canvas
 

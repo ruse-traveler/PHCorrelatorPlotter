@@ -46,8 +46,8 @@ namespace PHEnergyCorrelator {
       std::vector<TPad*> m_pads;
 
       // pad-label-to-index map
-      Types::LabelList       m_labels;
-      Types::LabelToIndexMap m_labtoindex;
+      Type::LabelList       m_labels;
+      Type::LabelToIndexMap m_labtoindex;
 
       // ----------------------------------------------------------------------
       //! Make a pad label
@@ -92,14 +92,14 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       Canvas             GetDefinition() const {return m_define;}
       TCanvas*           GetTCanvas()    const {return m_canvas;}
-      Types::LabelList   GetPadLabels()  const {return m_labels;}
+      Type::LabelList    GetPadLabels()  const {return m_labels;}
       std::vector<TPad*> GetTPads()      const {return m_pads;}
 
       // ----------------------------------------------------------------------
       //! Setters 
       // ----------------------------------------------------------------------
-      void SetDefinition(const Canvas& define)          {m_define = define;}
-      void SetPadLabels(const Types::LabelList& labels) {m_labels = labels;}
+      void SetDefinition(const Canvas& define)         {m_define = define;}
+      void SetPadLabels(const Type::LabelList& labels) {m_labels = labels;}
 
       // ----------------------------------------------------------------------
       //! Make canvas and pads 
@@ -179,7 +179,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       PlotManager(
         const Canvas& define,
-        std::optional<Types::LabelList> padlabels = std::nullopt
+        std::optional<Type::LabelList> padlabels = std::nullopt
       ) {
 
         m_define = define;
