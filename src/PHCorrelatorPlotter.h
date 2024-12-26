@@ -1,7 +1,7 @@
 /// ===========================================================================
-/*! \file   PHCorrelatorPlotter.h
- *  \author Derek Anderson
- *  \date   11.12.2024
+/*! \file    PHCorrelatorPlotter.h
+ *  \authors Derek Anderson
+ *  \date    11.12.2024
  *
  *  Class to consolidate plotting routines associated with
  *  the PHENIX ENC analysis.
@@ -13,6 +13,8 @@
 
 // c++ utilities
 #include <string>
+// plotting utilities
+#include "../include/PHCorrelatorPlotting.h"
 
 // forward declarations
 class TCanvas;
