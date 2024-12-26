@@ -37,7 +37,7 @@ namespace PHEnergyCorrelator {
       Type::Vertices m_vtxs;
       Type::Margins  m_mgns;
       std::string    m_name;
-      std::string    m_title = "";
+      std::string    m_title;
 
     public:
 
@@ -75,10 +75,10 @@ namespace PHEnergyCorrelator {
         );
 
         // set margins
-        pad -> SetTopMargin( m_mgns[Type::Margin::Top] );
-        pad -> SetRightMargin( m_mgns[Type::Margin::Right] );
-        pad -> SetBottomMargin( m_mgns[Type::Margin::Bottom] );
-        pad -> SetLeftMargin( m_mgns[Type::Margin::Left] );
+        pad -> SetTopMargin( m_mgns[Type::Top] );
+        pad -> SetRightMargin( m_mgns[Type::Right] );
+        pad -> SetBottomMargin( m_mgns[Type::Bottom] );
+        pad -> SetLeftMargin( m_mgns[Type::Left] );
 
         // apply options and return pointer
         m_opts.Apply(pad);
@@ -87,9 +87,15 @@ namespace PHEnergyCorrelator {
       }  // end 'MakeTPad()'
 
       // ----------------------------------------------------------------------
-      //! default ctor/dtor
+      //! default ctor
       // ----------------------------------------------------------------------
-      Pad()  {};
+      Pad() {
+        m_title = "";
+      };
+
+      // ----------------------------------------------------------------------
+      //! default dtor
+      // ----------------------------------------------------------------------
       ~Pad() {};
 
       // ----------------------------------------------------------------------

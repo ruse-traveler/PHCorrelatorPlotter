@@ -12,13 +12,13 @@
 
 // c++ utilities
 #include <iostream>
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
 // root libraries
 #include <TCanvas.h>
 #include <TPad.h>
+#include <TString.h>
 // plotting utilities
 #include "PHCorrelatorCanvas.h"
 #include "PHCorrelatorPad.h"
@@ -50,12 +50,27 @@ namespace PHEnergyCorrelator {
       Type::LabelToIndexMap m_labtoindex;
 
       // ----------------------------------------------------------------------
+      //! Convert an index to a string
+      // ----------------------------------------------------------------------
+      std::string StringifyIndex(const std::size_t index) const {
+
+        // create TString, add index
+        TString tstr;
+        tstr += index;
+
+        // create std::string and return
+        const std::string sstr(tstr.Data());
+        return sstr;
+
+      }  // end 'StringifyIndex(std::size_t)'
+
+      // ----------------------------------------------------------------------
       //! Make a pad label
       // ----------------------------------------------------------------------
       std::string MakePadLabel(const std::size_t index) const {
 
         // by default use the index as a label
-        std::string label = std::to_string(index);
+        std::string label = StringifyIndex(index);
 
         // but if corresponding label exists, use that
         if (index < m_labels.size()) {
@@ -122,8 +137,8 @@ namespace PHEnergyCorrelator {
       void Draw() {
 
         m_canvas -> Draw();
-        for (TPad* pad : m_pads) {
-          pad -> Draw();
+        for (std::size_t ipad = 0; ipad < m_pads.size(); ++ipad) {
+          m_pads[ipad] -> Draw();
         }
         return;
 
@@ -154,7 +169,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       TPad* GetTPad(const std::string& label) const {
 
-        return m_pads.at( m_labtoindex.at(label) );
+        /* FIXME add size checks here */
+
+        return m_pads[ m_labtoindex.at(label) ];
 
       }  // end 'GetTPad(std::string&)'
 
@@ -163,7 +180,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       TPad* GetTPad(const std::size_t index) const {
 
-        return m_pads.at(index);
+        /* FIXME add size checks here */
+
+        return m_pads[ index ];
 
       }  // end 'GetTPad(std::size_t)'
 
@@ -179,12 +198,12 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       PlotManager(
         const Canvas& define,
-        std::optional<Type::LabelList> padlabels = std::nullopt
+        const Type::LabelList& padlabels = Type::LabelList()
       ) {
 
         m_define = define;
-        if (padlabels.has_value()) {
-          m_labels = padlabels.value();
+        if (!padlabels.empty()) {
+          m_labels = padlabels;
         }
 
       }   // end ctor(Canvas&)' 

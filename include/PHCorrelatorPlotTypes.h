@@ -11,7 +11,6 @@
 #define PHCORRELATORPLOTTYPES_H
 
 // c++ utilities
-#include <array>
 #include <map>
 #include <string>
 #include <utility>
@@ -27,14 +26,19 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! Convenient types
     // ------------------------------------------------------------------------
-    typedef std::array<float, 4>               Vertices;
-    typedef std::array<float, 4>               Margins;
-    typedef std::vector<TObject*>              Objects;
-    typedef std::vector<std::string>           TextList;
-    typedef std::vector<std::string>           LabelList;
-    typedef std::pair<float, float>            Interval;
-    typedef std::pair<uint32_t, uint32_t>      Dimensions;
-    typedef std::map<std::string, std::size_t> LabelToIndexMap;
+    typedef std::vector<float>                  Vertices;
+    typedef std::vector<float>                  Margins;
+    typedef std::vector<TObject*>               Objects;
+    typedef std::vector<std::string>            TextList;
+    typedef std::vector<std::string>            LabelList;
+    typedef std::map<std::string, std::size_t>  LabelToIndexMap;
+    typedef std::pair<float, float>             Interval;
+    typedef std::pair<std::size_t, std::size_t> Dimensions;
+
+    // ------------------------------------------------------------------------
+    //! Iterator for iterating over label-to-index maps
+    // ------------------------------------------------------------------------
+    typedef std::map<std::string, std::size_t>::iterator it_label;
 
 
 

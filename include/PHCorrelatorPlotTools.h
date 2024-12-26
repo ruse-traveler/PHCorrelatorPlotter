@@ -10,11 +10,6 @@
 #ifndef PHCORRELATORPLOTTOOLS_H
 #define PHCORRELATORPLOTTOOLS_H
 
-// c++ utilities
-#include <optional>
-// root libraries
-#include <TObject.h>
-
 
 
 namespace PHEnergyCorrelator {
@@ -26,16 +21,13 @@ namespace PHEnergyCorrelator {
     float GetHeight(
       const std::size_t nlines,
       const float spacing,
-      std::optional<float> off = std::nullopt
+      const float off = 0.0
     ) {
 
-      float height = nlines * spacing;
-      if (off.has_value()) {
-        height += off.value();
-      }
+      float height = (nlines * spacing) + off;
       return height;
 
-    }  // end 'GetHeight(std::size_t float, std::optional<float>)'
+    }  // end 'GetHeight(std::size_t, float x 2)'
 
   }  // end Tools namespace
 }  // end PHEnergyCorrelator namespace

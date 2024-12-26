@@ -34,7 +34,7 @@ namespace PHEnergyCorrelator {
       // data members
       Type::TextList m_text;
       Type::Vertices m_vtxs;
-      std::string    m_opt = "NDC NB";
+      std::string    m_opt;
 
     public:
 
@@ -75,17 +75,23 @@ namespace PHEnergyCorrelator {
           m_opt.data()
         );
 
-        for (const std::string& text : m_text) {
-          pt -> AddText( text.data() );
+        for (std::size_t itxt = 0; itxt < m_text.size(); ++itxt) {
+          pt -> AddText( m_text[itxt].data() );
         }
         return pt;
 
       }  // end 'MakeTPaveText()'
  
       // ----------------------------------------------------------------------
-      //! default ctor/dtor
+      //! default ctor
       // ----------------------------------------------------------------------
-      TextBox()  {};
+      TextBox() {
+        m_opt = "NDC NB";
+      };
+ 
+      // ----------------------------------------------------------------------
+      //! default dtor
+      // ----------------------------------------------------------------------
       ~TextBox() {};
 
       // ----------------------------------------------------------------------

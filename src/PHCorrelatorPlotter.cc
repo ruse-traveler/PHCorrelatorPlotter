@@ -62,7 +62,7 @@ void PHCorrelatorPlotter::CompareTrueVsRecoEEC(const std::string in_file, const 
   // announce end
   std::cout << "  Finished true vs. reco EEC comparison!\n"
             << " -------------------------------- \n"
-            << endl;
+            << std::endl;
 
   // exit routine
   return;

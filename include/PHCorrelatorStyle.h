@@ -11,7 +11,6 @@
 #define PHCORRELATORSTYLE_H
 
 // c++ utilities
-#include <array>
 #include <vector>
 // root libraries
 #include <TF1.h>
@@ -50,34 +49,44 @@ namespace PHEnergyCorrelator {
       struct Plot {
 
         // members
-        uint32_t color  = 1;
-        uint32_t marker = 1;
-        uint32_t fill   = 0;
-        uint32_t line   = 1;
-        uint32_t width  = 1;
+        std::size_t color;
+        std::size_t marker;
+        std::size_t fill;
+        std::size_t line;
+        std::size_t width;
 
         // --------------------------------------------------------------------
-        //! default ctor/dtor
+        //! default ctor
         // --------------------------------------------------------------------
-        Plot()  {};
+        Plot() {
+          color  = 1;
+          marker = 1;
+          fill   = 0;
+          line   = 1;
+          width  = 1;
+        };
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
         ~Plot() {};
 
         // --------------------------------------------------------------------
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Plot(
-          const uint32_t col_arg,
-          const uint32_t mar_arg,
-          const uint32_t fil_arg,
-          const uint32_t lin_arg = 1,
-          const uint32_t lin_wid = 1
+          const std::size_t col_arg,
+          const std::size_t mar_arg,
+          const std::size_t fil_arg,
+          const std::size_t lin_arg = 1,
+          const std::size_t lin_wid = 1
         ) {
           color  = col_arg;
           marker = mar_arg;
           fill   = fil_arg;
           line   = lin_arg;
           width  = lin_wid;
-        }  // end ctor (uint32_t x 5)
+        }  // end ctor (std::size_t x 5)
 
       };  // end Plot
 
@@ -90,31 +99,40 @@ namespace PHEnergyCorrelator {
       struct Text {
 
         // members
-        uint32_t color   = 1;
-        uint32_t font    = 42;
-        uint32_t align   = 12;
-        float    spacing = 0.05;
+        std::size_t color;
+        std::size_t font;
+        std::size_t align;
+        float       spacing;
 
         // --------------------------------------------------------------------
-        //! default ctor/dtor
+        //! default ctor
         // --------------------------------------------------------------------
-        Text()  {};
+        Text() {
+          color   = 1;
+          font    = 42;
+          align   = 12;
+          spacing = 0.05;
+        };
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
         ~Text() {};
 
         // --------------------------------------------------------------------
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Text(
-          const uint32_t col_arg,
-          const uint32_t fon_arg,
-          const uint32_t aln_arg = 12,
-          const float    spa_arg = 0.05
+          const std::size_t col_arg,
+          const std::size_t fon_arg,
+          const std::size_t aln_arg = 12,
+          const float       spa_arg = 0.05
         ) {
           color   = col_arg;
           font    = fon_arg;
           align   = aln_arg;
           spacing = spa_arg;
-        }  // end ctor(uint32_t x 3, float)
+        }  // end ctor(std::size_t x 3, float)
 
       };  // end Text
 
@@ -127,31 +145,40 @@ namespace PHEnergyCorrelator {
       struct Label {
 
         // members
-        uint32_t color  = 1;
-        uint32_t font   = 42;
-        float    size   = 0.04;
-        float    offset = 0.005;
+        std::size_t color;
+        std::size_t font;
+        float       size;
+        float       offset;
 
         // --------------------------------------------------------------------
-        //! default ctor/dtor
+        //! default ctor
         // --------------------------------------------------------------------
-        Label()  {};
+        Label() {
+          color  = 1;
+          font   = 42;
+          size   = 0.04;
+          offset = 0.005;
+        };
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
         ~Label() {};
 
         // --------------------------------------------------------------------
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Label(
-          const uint32_t col_arg,
-          const uint32_t fon_arg,
-          const float    siz_arg = 0.04,
-          const float    off_arg = 0.005
+          const std::size_t col_arg,
+          const std::size_t fon_arg,
+          const float       siz_arg = 0.04,
+          const float       off_arg = 0.005
         ) {
           color  = col_arg;
           font   = fon_arg;
           size   = siz_arg;
           offset = off_arg;
-        }  // end ctor(uint32_t x 2, float x 2)
+        }  // end ctor(std::size_t x 2, float x 2)
 
       };  // end LabelStyle
 
@@ -165,34 +192,44 @@ namespace PHEnergyCorrelator {
       struct Title {
 
         // members
-        uint32_t color  = 1;
-        uint32_t center = 0;
-        uint32_t font   = 42;
-        float    size   = 0.04;
-        float    offset = 1.0;
+        std::size_t color;
+        std::size_t center;
+        std::size_t font;
+        float       size;
+        float       offset;
 
         // --------------------------------------------------------------------
-        //! defualt ctor/dtor
+        //! defualt ctor
         // --------------------------------------------------------------------
-        Title()  {};
+        Title() {
+          color  = 1;
+          center = 0;
+          font   = 42;
+          size   = 0.04;
+          offset = 1.0;
+        };
+
+        // --------------------------------------------------------------------
+        //! defualt dtor
+        // --------------------------------------------------------------------
         ~Title() {};
 
         // --------------------------------------------------------------------
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Title(
-          const uint32_t col_arg,
-          const uint32_t cen_arg,
-          const uint32_t fon_arg,
-          const float    siz_arg = 0.04,
-          const float    off_arg = 1.0
+          const std::size_t col_arg,
+          const std::size_t cen_arg,
+          const std::size_t fon_arg,
+          const float       siz_arg = 0.04,
+          const float       off_arg = 1.0
         ) {
           color  = col_arg;
           center = cen_arg;
           font   = fon_arg;
           size   = siz_arg;
           offset = off_arg;
-        }  // end ctor(uint32_t x 3, float x 3)
+        }  // end ctor(std::size_t x 3, float x 3)
 
       };  // end Title
 
@@ -203,8 +240,8 @@ namespace PHEnergyCorrelator {
       Text m_text;
 
       // axis dependent members
-      std::array<Label, 3> m_labels;
-      std::array<Title, 3> m_titles;
+      Label m_labels[3];
+      Title m_titles[3];
 
     public:
 
@@ -232,8 +269,8 @@ namespace PHEnergyCorrelator {
       std::vector<Label> GetLabelStyles() const {
 
         std::vector<Label> labels;
-        for (const auto& label : m_labels) {
-          labels.push_back( label );
+        for (std::size_t ilbl = 0; ilbl < 3; ++ilbl) {
+          labels.push_back( m_labels[ilbl] );
         }
         return labels;
 
@@ -245,8 +282,8 @@ namespace PHEnergyCorrelator {
       std::vector<Title> GetTitleStyles() const {
 
         std::vector<Title> titles;
-        for (const auto& title : m_titles) {
-          titles.push_back( title );
+        for (std::size_t ittl = 0; ittl < 3; ++ittl) {
+          titles.push_back( m_titles[ittl] );
         }
         return titles;
 
@@ -277,7 +314,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetLabelStyles(const Label& label) {
 
-        std::fill(m_labels.begin(), m_labels.end(), label);
+        m_labels[0] = label;
+        m_labels[1] = label;
+        m_labels[2] = label;
         return;
 
       }  // end 'SetLabelStyles(Label&)'
@@ -287,7 +326,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetTitleStyles(const Title& title) {
 
-        std::fill(m_titles.begin(), m_titles.end(), title);
+        m_titles[0] = title;
+        m_titles[1] = title;
+        m_titles[2] = title;
         return;
 
       }  // end 'SetTitleStyle(Title&)'
@@ -297,9 +338,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetLabelStyles(const std::vector<Label>& labels) {
 
-        if (labels.size() >= 1) m_labels[Type::Axis::X] = labels.at(0);
-        if (labels.size() >= 2) m_labels[Type::Axis::Y] = labels.at(1);
-        if (labels.size() >= 3) m_labels[Type::Axis::Z] = labels.at(2);
+        if (labels.size() >= 1) m_labels[Type::X] = labels[0];
+        if (labels.size() >= 2) m_labels[Type::Y] = labels[1];
+        if (labels.size() >= 3) m_labels[Type::Z] = labels[2];
         return;
 
       }  // end 'SetLabelStyles(std::vector<Label>&)'
@@ -309,9 +350,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetTitleStyles(const std::vector<Title>& titles) {
 
-        if (titles.size() >= 1) m_titles[Type::Axis::X] = titles.at(0);
-        if (titles.size() >= 2) m_titles[Type::Axis::Y] = titles.at(1);
-        if (titles.size() >= 3) m_titles[Type::Axis::Z] = titles.at(2);
+        if (titles.size() >= 1) m_titles[Type::X] = titles[0];
+        if (titles.size() >= 2) m_titles[Type::Y] = titles[1];
+        if (titles.size() >= 3) m_titles[Type::Z] = titles[2];
         return;
 
       }  // end 'SetTitleStyles(std::vector<Title>&)'
@@ -330,27 +371,27 @@ namespace PHEnergyCorrelator {
         func -> SetLineWidth( m_plot.width );
         func -> SetMarkerColor( m_plot.color );
         func -> SetMarkerStyle( m_plot.marker );
-        func -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
-        func -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
-        func -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
-        func -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
-        func -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
-        func -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
-        func -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
-        func -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
-        func -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
-        func -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
-        func -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
-        func -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
-        func -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
-        func -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
-        func -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
-        func -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
-        func -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
-        func -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
-        func -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
-        func -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
-        func -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
+        func -> GetXaxis() -> CenterTitle( m_titles[Type::X].center );
+        func -> GetXaxis() -> SetTitleFont( m_titles[Type::X].font );
+        func -> GetXaxis() -> SetTitleSize( m_titles[Type::X].size );
+        func -> GetXaxis() -> SetTitleOffset( m_titles[Type::X].offset );
+        func -> GetXaxis() -> SetLabelFont( m_labels[Type::X].font );
+        func -> GetXaxis() -> SetLabelSize( m_labels[Type::X].size );
+        func -> GetXaxis() -> SetLabelOffset( m_labels[Type::X].offset );
+        func -> GetYaxis() -> CenterTitle( m_titles[Type::Y].center );
+        func -> GetYaxis() -> SetTitleFont( m_titles[Type::Y].font );
+        func -> GetYaxis() -> SetTitleSize( m_titles[Type::Y].size );
+        func -> GetYaxis() -> SetTitleOffset( m_titles[Type::Y].offset );
+        func -> GetYaxis() -> SetLabelFont( m_labels[Type::Y].font );
+        func -> GetYaxis() -> SetLabelSize( m_labels[Type::Y].size );
+        func -> GetYaxis() -> SetLabelOffset( m_labels[Type::Y].offset );
+        func -> GetZaxis() -> CenterTitle( m_titles[Type::Z].center );
+        func -> GetZaxis() -> SetTitleFont( m_titles[Type::Z].font );
+        func -> GetZaxis() -> SetTitleSize( m_titles[Type::Z].size );
+        func -> GetZaxis() -> SetTitleOffset( m_titles[Type::Z].offset );
+        func -> GetZaxis() -> SetLabelFont( m_labels[Type::Z].font );
+        func -> GetZaxis() -> SetLabelSize( m_labels[Type::Z].size );
+        func -> GetZaxis() -> SetLabelOffset( m_labels[Type::Z].offset );
         return;
 
       }  // end 'Apply(TFN*)'
@@ -370,27 +411,27 @@ namespace PHEnergyCorrelator {
         hist -> SetMarkerColor( m_plot.color );
         hist -> SetMarkerStyle( m_plot.marker );
         hist -> SetTitleFont( m_text.font );
-        hist -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
-        hist -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
-        hist -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
-        hist -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
-        hist -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
-        hist -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
-        hist -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
-        hist -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
-        hist -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
-        hist -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
-        hist -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
-        hist -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
-        hist -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
-        hist -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
-        hist -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
-        hist -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
-        hist -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
-        hist -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
-        hist -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
-        hist -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
-        hist -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
+        hist -> GetXaxis() -> CenterTitle( m_titles[Type::X].center );
+        hist -> GetXaxis() -> SetTitleFont( m_titles[Type::X].font );
+        hist -> GetXaxis() -> SetTitleSize( m_titles[Type::X].size );
+        hist -> GetXaxis() -> SetTitleOffset( m_titles[Type::X].offset );
+        hist -> GetXaxis() -> SetLabelFont( m_labels[Type::X].font );
+        hist -> GetXaxis() -> SetLabelSize( m_labels[Type::X].size );
+        hist -> GetXaxis() -> SetLabelOffset( m_labels[Type::X].offset );
+        hist -> GetYaxis() -> CenterTitle( m_titles[Type::Y].center );
+        hist -> GetYaxis() -> SetTitleFont( m_titles[Type::Y].font );
+        hist -> GetYaxis() -> SetTitleSize( m_titles[Type::Y].size );
+        hist -> GetYaxis() -> SetTitleOffset( m_titles[Type::Y].offset );
+        hist -> GetYaxis() -> SetLabelFont( m_labels[Type::Y].font );
+        hist -> GetYaxis() -> SetLabelSize( m_labels[Type::Y].size );
+        hist -> GetYaxis() -> SetLabelOffset( m_labels[Type::Y].offset );
+        hist -> GetZaxis() -> CenterTitle( m_titles[Type::Z].center );
+        hist -> GetZaxis() -> SetTitleFont( m_titles[Type::Z].font );
+        hist -> GetZaxis() -> SetTitleSize( m_titles[Type::Z].size );
+        hist -> GetZaxis() -> SetTitleOffset( m_titles[Type::Z].offset );
+        hist -> GetZaxis() -> SetLabelFont( m_labels[Type::Z].font );
+        hist -> GetZaxis() -> SetLabelSize( m_labels[Type::Z].size );
+        hist -> GetZaxis() -> SetLabelOffset( m_labels[Type::Z].offset );
         return;
 
       }  // end 'Apply(TH1*)'
@@ -410,20 +451,20 @@ namespace PHEnergyCorrelator {
         graph -> SetLineWidth( m_plot.width );
         graph -> SetMarkerColor( m_plot.color );
         graph -> SetMarkerStyle( m_plot.marker );
-        graph -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
-        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
-        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
-        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
-        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
-        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
-        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
-        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
-        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
-        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
-        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
-        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
-        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
-        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
+        graph -> GetXaxis() -> CenterTitle( m_titles[Type::X].center );
+        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::X].font );
+        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::X].size );
+        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::X].offset );
+        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::X].font );
+        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::X].size );
+        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::X].offset );
+        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Y].center );
+        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Y].font );
+        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Y].size );
+        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Y].offset );
+        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Y].font );
+        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Y].size );
+        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Y].offset );
         return;
 
       }  // end 'Apply(TGraph*)'
@@ -442,27 +483,27 @@ namespace PHEnergyCorrelator {
         graph -> SetLineWidth( m_plot.width );
         graph -> SetMarkerColor( m_plot.color );
         graph -> SetMarkerStyle( m_plot.marker );
-        graph -> GetXaxis() -> CenterTitle( m_titles[Type::Axis::X].center );
-        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::Axis::X].font );
-        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::Axis::X].size );
-        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::Axis::X].offset );
-        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::Axis::X].font );
-        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::Axis::X].size );
-        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::Axis::X].offset );
-        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Axis::Y].center );
-        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Axis::Y].font );
-        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Axis::Y].size );
-        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Axis::Y].offset );
-        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Axis::Y].font );
-        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Axis::Y].size );
-        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Axis::Y].offset );
-        graph -> GetZaxis() -> CenterTitle( m_titles[Type::Axis::Z].center );
-        graph -> GetZaxis() -> SetTitleFont( m_titles[Type::Axis::Z].font );
-        graph -> GetZaxis() -> SetTitleSize( m_titles[Type::Axis::Z].size );
-        graph -> GetZaxis() -> SetTitleOffset( m_titles[Type::Axis::Z].offset );
-        graph -> GetZaxis() -> SetLabelFont( m_labels[Type::Axis::Z].font );
-        graph -> GetZaxis() -> SetLabelSize( m_labels[Type::Axis::Z].size );
-        graph -> GetZaxis() -> SetLabelOffset( m_labels[Type::Axis::Z].offset );
+        graph -> GetXaxis() -> CenterTitle( m_titles[Type::X].center );
+        graph -> GetXaxis() -> SetTitleFont( m_titles[Type::X].font );
+        graph -> GetXaxis() -> SetTitleSize( m_titles[Type::X].size );
+        graph -> GetXaxis() -> SetTitleOffset( m_titles[Type::X].offset );
+        graph -> GetXaxis() -> SetLabelFont( m_labels[Type::X].font );
+        graph -> GetXaxis() -> SetLabelSize( m_labels[Type::X].size );
+        graph -> GetXaxis() -> SetLabelOffset( m_labels[Type::X].offset );
+        graph -> GetYaxis() -> CenterTitle( m_titles[Type::Y].center );
+        graph -> GetYaxis() -> SetTitleFont( m_titles[Type::Y].font );
+        graph -> GetYaxis() -> SetTitleSize( m_titles[Type::Y].size );
+        graph -> GetYaxis() -> SetTitleOffset( m_titles[Type::Y].offset );
+        graph -> GetYaxis() -> SetLabelFont( m_labels[Type::Y].font );
+        graph -> GetYaxis() -> SetLabelSize( m_labels[Type::Y].size );
+        graph -> GetYaxis() -> SetLabelOffset( m_labels[Type::Y].offset );
+        graph -> GetZaxis() -> CenterTitle( m_titles[Type::Z].center );
+        graph -> GetZaxis() -> SetTitleFont( m_titles[Type::Z].font );
+        graph -> GetZaxis() -> SetTitleSize( m_titles[Type::Z].size );
+        graph -> GetZaxis() -> SetTitleOffset( m_titles[Type::Z].offset );
+        graph -> GetZaxis() -> SetLabelFont( m_labels[Type::Z].font );
+        graph -> GetZaxis() -> SetLabelSize( m_labels[Type::Z].size );
+        graph -> GetZaxis() -> SetLabelOffset( m_labels[Type::Z].offset );
         return;
 
       }  // end 'Apply(TGraph2D*)'

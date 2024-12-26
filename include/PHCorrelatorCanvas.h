@@ -11,7 +11,6 @@
 #define PHCORRELATORCANVAS_H
 
 // c++ utilities
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -42,7 +41,7 @@ namespace PHEnergyCorrelator {
       Type::Margins    m_mgns;
       Type::Dimensions m_dims;
       std::string      m_name;
-      std::string      m_title = "";
+      std::string      m_title;
       std::vector<Pad> m_pads;
 
     public:
@@ -101,10 +100,10 @@ namespace PHEnergyCorrelator {
 
         // set margins if needed
         if (m_pads.empty()) {
-          canvas -> SetTopMargin( m_mgns[Type::Margin::Top] );
-          canvas -> SetRightMargin( m_mgns[Type::Margin::Right] );
-          canvas -> SetBottomMargin( m_mgns[Type::Margin::Bottom] );
-          canvas -> SetLeftMargin( m_mgns[Type::Margin::Left] );
+          canvas -> SetTopMargin( m_mgns[Type::Top] );
+          canvas -> SetRightMargin( m_mgns[Type::Right] );
+          canvas -> SetBottomMargin( m_mgns[Type::Bottom] );
+          canvas -> SetLeftMargin( m_mgns[Type::Left] );
         }
 
         // apply options and return pointer
@@ -119,17 +118,24 @@ namespace PHEnergyCorrelator {
       std::vector<TPad*> MakeTPads() {
 
         std::vector<TPad*> pads;
-        for (const auto& pad : m_pads) {
-          pads.push_back( pad.MakeTPad() ); 
+        for (std::size_t ipad = 0; ipad < m_pads.size(); ++ipad) {
+          pads.push_back( m_pads[ipad].MakeTPad() ); 
         }
         return pads;
 
       }  // end 'MakeTPads()'
 
       // ----------------------------------------------------------------------
-      //! default ctor/dtor
+      //! default ctor
       // ----------------------------------------------------------------------
-      Canvas()  {};
+      Canvas() {
+        m_title = "";
+        m_dims  = std::make_pair(750, 750);
+      };
+
+      // ----------------------------------------------------------------------
+      //! default dtor
+      // ----------------------------------------------------------------------
       ~Canvas() {};
 
       // ----------------------------------------------------------------------
@@ -140,8 +146,8 @@ namespace PHEnergyCorrelator {
         const std::string& title,
         const Type::Dimensions& dims,
         const PadOpts& opts,
-        std::optional<Type::Margins> mgns = std::nullopt,
-        std::optional<std::vector<Pad>> pads = std::nullopt
+        const Type::Margins& mgns = std::vector<float>(),
+        const std::vector<Pad>& pads = std::vector<Pad>()
       ) {
 
         // set necessary arguments
@@ -151,10 +157,10 @@ namespace PHEnergyCorrelator {
         m_opts  = opts;
 
         // set optional arguments
-        if (mgns.has_value()) m_mgns = mgns.value();
-        if (pads.has_value()) m_pads = pads.value();
+        if (!mgns.empty()) m_mgns = mgns;
+        if (!pads.empty()) m_pads = pads;
 
-      }  // end ctor(std::string& x 2, Type::Dimensions&, PadOpts&, std::optional x 2)'
+      }  // end ctor(std::string& x 2, Type::Dimensions&, PadOpts&, Type::Margins&, std::vector<Pad>&)'
 
   };  // end Canvas
 

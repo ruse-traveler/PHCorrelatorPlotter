@@ -44,12 +44,18 @@ namespace PHEnergyCorrelator {
         // members
         TObject*    object;
         std::string label;
-        std::string option = "PF";
+        std::string option;
 
         // --------------------------------------------------------------------
-        // default ctor/dtor
+        // default ctor
         // --------------------------------------------------------------------
-        Entry()  {};
+        Entry() {
+          option = "PF";
+        };
+
+        // --------------------------------------------------------------------
+        // default dtor
+        // --------------------------------------------------------------------
         ~Entry() {};
 
         // --------------------------------------------------------------------
@@ -71,7 +77,7 @@ namespace PHEnergyCorrelator {
 
       // data members
       Type::Vertices     m_vtxs;
-      std::string        m_header = "";
+      std::string        m_header;
       std::vector<Entry> m_entries;
 
     public:
@@ -95,7 +101,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void AddEntry(const Entry& entry) {
 
-        m_entries.emplace_back( entry );
+        m_entries.push_back( entry );
         return;
 
       }  // end 'AddEntry(Entry&)'
@@ -112,17 +118,28 @@ namespace PHEnergyCorrelator {
           m_vtxs[3],
           m_header.data()
         );
-        for (const Entry& entry : m_entries) {
-          leg -> AddEntry( entry.object, entry.label.data(), entry.option.data() );
+
+        for (std::size_t ientry = 0; ientry < m_entries.size(); ++ientry) {
+          leg -> AddEntry(
+            m_entries[ientry].object,
+            m_entries[ientry].label.data(),
+            m_entries[ientry].option.data()
+          );
         }
         return leg;
 
       }  // end 'MakeLegend()
 
       // ----------------------------------------------------------------------
-      //! default ctor/dtor
+      //! default ctor
       // ----------------------------------------------------------------------
-      Legend()  {};
+      Legend() {
+        m_header = "";
+      };
+
+      // ----------------------------------------------------------------------
+      //! default dtor
+      // ----------------------------------------------------------------------
       ~Legend() {};
 
       // ----------------------------------------------------------------------

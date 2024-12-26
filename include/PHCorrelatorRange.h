@@ -11,7 +11,7 @@
 #define PHCORRELATORRANGE_H
 
 // c++ utilities
-#include <optional>
+#include <utility>
 // plotting utilities
 #include "PHCorrelatorPlotTypes.h"
 
@@ -33,9 +33,17 @@ namespace PHEnergyCorrelator {
     Type::Interval z;
 
     // ------------------------------------------------------------------------
-    //! default ctor/dtor
+    //! default ctor
     // ------------------------------------------------------------------------
-    Range()  {};
+    Range() {
+      x = std::make_pair(0.0, 1.0);
+      y = std::make_pair(0.0, 1.0);
+      z = std::make_pair(0.0, 1.0);
+    };
+
+    // ------------------------------------------------------------------------
+    //! default dtor
+    // ------------------------------------------------------------------------
     ~Range() {};
 
     // ------------------------------------------------------------------------
@@ -46,18 +54,27 @@ namespace PHEnergyCorrelator {
     }
 
     // ------------------------------------------------------------------------
-    //! ctor accepting x, y, and possibly z range
+    //! ctor accepting x and y range
+    // ------------------------------------------------------------------------
+    Range(
+      const Type::Interval& xrange,
+      const Type::Interval& yrange
+    ) {
+      x = xrange;
+      y = yrange;
+    }
+
+    // ------------------------------------------------------------------------
+    //! ctor accepting x, y, and z range
     // ------------------------------------------------------------------------
     Range(
       const Type::Interval& xrange,
       const Type::Interval& yrange,
-      std::optional<Type::Interval> zrange = std::nullopt
+      const Type::Interval& zrange
     ) {
       x = xrange;
       y = yrange;
-      if (zrange.has_value()) {
-        z = zrange.value();
-      }
+      z = zrange;
     }
 
   };  // end Range
