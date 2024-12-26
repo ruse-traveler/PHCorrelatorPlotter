@@ -16,7 +16,7 @@
 #include <TPad.h>
 // plotting utilities
 #include "PHCorrelatorPadOpts.h"
-#include "PHCorrelatorPlotTools.h"
+#include "PHCorrelatorPlotTypes.h"
 
 
 
@@ -34,8 +34,8 @@ namespace PHEnergyCorrelator {
 
       // members
       PadOpts         m_opts;
-      Tools::Vertices m_vtxs;
-      Tools::Margins  m_mgns;
+      Types::Vertices m_vtxs;
+      Types::Margins  m_mgns;
       std::string     m_name;
       std::string     m_title = "";
 
@@ -45,8 +45,8 @@ namespace PHEnergyCorrelator {
       //! Getters
       // ----------------------------------------------------------------------
       PadOpts         GetOptions()  const {return m_opts;}
-      Tools::Vertices GetVertices() const {return m_vtxs;}
-      Tools::Margins  GetMargins()  const {return m_mgns;}
+      Types::Vertices GetVertices() const {return m_vtxs;}
+      Types::Margins  GetMargins()  const {return m_mgns;}
       std::string     GetName()     const {return m_name;}
       std::string     GetTitle()    const {return m_title;}
 
@@ -54,8 +54,8 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetOptions(const PadOpts& opts)          {m_opts  = opts;}
-      void SetVertices(const Tools::Vertices& vtxs) {m_vtxs  = vtxs;}
-      void SetMargins(const Tools::Margins& mgns)   {m_mgns  = mgns;}
+      void SetVertices(const Types::Vertices& vtxs) {m_vtxs  = vtxs;}
+      void SetMargins(const Types::Margins& mgns)   {m_mgns  = mgns;}
       void SetName(const std::string& name)         {m_name  = name;}
       void SetTitle(const std::string& ttl)         {m_title = ttl;}
 
@@ -75,10 +75,10 @@ namespace PHEnergyCorrelator {
         );
 
         // set margins
-        pad -> SetTopMargin( m_mgns[Tools::Margin::Top] );
-        pad -> SetRightMargin( m_mgns[Tools::Margin::Right] );
-        pad -> SetBottomMargin( m_mgns[Tools::Margin::Bottom] );
-        pad -> SetLeftMargin( m_mgns[Tools::Margin::Left] );
+        pad -> SetTopMargin( m_mgns[Types::Margin::Top] );
+        pad -> SetRightMargin( m_mgns[Types::Margin::Right] );
+        pad -> SetBottomMargin( m_mgns[Types::Margin::Bottom] );
+        pad -> SetLeftMargin( m_mgns[Types::Margin::Left] );
 
         // apply options and return pointer
         m_opts.Apply(pad);
@@ -98,8 +98,8 @@ namespace PHEnergyCorrelator {
       Pad(
         const std::string& name,
         const std::string& title,
-        const Tools::Vertices& vtxs,
-        const Tools::Margins& mgns,
+        const Types::Vertices& vtxs,
+        const Types::Margins& mgns,
         const PadOpts& opts
       ) {
 
@@ -109,7 +109,7 @@ namespace PHEnergyCorrelator {
         m_mgns  = mgns;
         m_opts  = opts;
 
-      }  // end ctor(std::string& x 2, Tools::Vertices&, Tools::Margins&, PadOpts&)'
+      }  // end ctor(std::string& x 2, Types::Vertices&, Types::Margins&, PadOpts&)'
 
   };  // end Pad
 
