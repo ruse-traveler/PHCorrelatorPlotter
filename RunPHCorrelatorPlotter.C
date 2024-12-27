@@ -14,38 +14,63 @@
 #include <iostream>
 #include <string>
 #include <vector>
-// analysis components
-#include "src/PHCorrelatorPlotter.h"
+// root libraries
+#include <TFile.h>
+#include <TSystem.h>
+// plotter definition
+#include "./src/PHCorrelatorPlotter.h"
+// plotting options
+#include "./BaseOptions.h"
+//#include "./CompareSpectra.h"  // TODO add in after figuring-out linking
 
-// load plotter library
-R__LOAD_LIBRARY(./src/PHCorrelatorPlotter_cc.so)
+// abbreviate common namespaces
+namespace BO = BaseOptions;
+//namespace CS = CompareSpectra;  // TODO add in after figuring-out linking
 
 
 
 // ============================================================================
-//! Run PHCorrelatorPlotter
+//! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter() {
+void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
 
-  // input files
-  std::vector<std::string> input_files;
-  input_files.push_back( "/gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC/jetAnaRun15_pp_R0.30.root" );
-
-  // output files
-  std::vector<std::string> output_files;
-  output_files.push_back( "/sphenix/user/danderson/eec/PHCorrelatorPlotter/trueVsRecoEEC.run15pp.d12m11y2024.root" );
+  // link against plotter library
+  gSystem -> AddLinkedLibs("./src/PHCorrelatorPlotter_cc.so");
 
   // announce start
-  std::cout << "\n  Beginning PHENC plotting routines!" << std::endl;
+  std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
 
-  // create plotter class
-  PHCorrelatorPlotter* plotter = new PHCorrelatorPlotter();
+  // open output & create plotter ---------------------------------------------
 
-  // run routines
-  plotter -> CompareTrueVsRecoEEC( input_files[0], output_files[0] );
+  // open output file
+  TFile* ofile = PHCorrelatorPlotter::OpenFile(out_file, "recreate");
+  std::cout << "    Opened output file" << std::endl;
 
-  // announce end
-  std::cout << "  Finished plotting!\n" << std::endl;
+  // create plotter
+  PHCorrelatorPlotter plotter = PHCorrelatorPlotter(
+    BO::BasePlotStyle(),
+    BO::BaseTextStyle(),
+    BO::Text()
+  );
+  std::cout << "    Made plotter." << std::endl;
+
+  // compare spectra ----------------------------------------------------------
+
+/* TODO add in after figuring-out linking
+  plotter.CompareSpectra(
+    CS::Inputs(),
+    CS::PlotRange(),
+    CS::Canvas(),
+    ofile
+  );
+*/
+  std::cout << "    Ran spectra comparison routines." << std::endl;
+
+  // close files & exit -------------------------------------------------------
+
+  // close output file
+  ofile -> cd();
+  ofile -> Close();
   return;
 
 }
