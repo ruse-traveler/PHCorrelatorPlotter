@@ -10,7 +10,11 @@
 
 #define PHCORRELATORPLOTTER_CC
 
+// class definition
+#include "PHCorrelatorPlotter.h"
+
 // c++ utilities
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -21,62 +25,114 @@
 #include <TFile.h>
 #include <TH1.h>
 #include <TLegend.h>
-// class definition
-#include "PHCorrelatorPlotter.h"
+
+
+
+// ctor/dtor ==================================================================
+
+// ----------------------------------------------------------------------------
+//! default ctor
+// ----------------------------------------------------------------------------
+PHCorrelatorPlotter::PHCorrelatorPlotter() {
+
+  //... nothing to do ...//
+
+}  // end ctor()
+
+
+
+// ----------------------------------------------------------------------------
+//! default dtor
+// ----------------------------------------------------------------------------
+PHCorrelatorPlotter::~PHCorrelatorPlotter() {
+
+  //... nothing to do ...//
+
+}  // end dtor()
+
+
+
+// ----------------------------------------------------------------------------
+//! ctor accepting arguments
+// ----------------------------------------------------------------------------
+PHCorrelatorPlotter::PHCorrelatorPlotter(
+  const PHEC::Style& plot,
+  const PHEC::Style& text,
+  const PHEC::TextBox& box
+) {
+
+  m_basePlotStyle = plot;
+  m_baseTextStyle = text;
+  m_textBox       = box;
+
+}  // end ctor(PHEC::Style&, PHEC::Style&, PHEC::TextBox&)'
 
 
 
 // public methods =============================================================
 
 // ----------------------------------------------------------------------------
-//! Compare truth vs. reco EEC
+//! Compare various ENC (or othwerise) spectra
 // ----------------------------------------------------------------------------
-/*! Compares truth vs. reconstructed two-point
- *  spectra from simulation.
- */
-void PHCorrelatorPlotter::CompareTrueVsRecoEEC(const std::string in_file, const std::string out_file) {
+void PHCorrelatorPlotter::CompareSpectra(
+  const Inputs& inputs,
+  const PHEC::Range& range,
+  const PHEC::Canvas& canvas,
+  TFile* ofile,
+  const std::string& header
+) const {
 
-  // announce start
-  std::cout << "\n -------------------------------- \n"
-            << "   Beginning true vs. reco EEC comparison!"
-            << std::endl;
-
-  // open files
-  TFile* ofile = OpenFile(in_file,  "read");
-  TFile* ifile = OpenFile(out_file, "recreate");
-
-  // announce files
-  std::cout << "     Opened files:\n"
-            << "       input  = " << in_file << "\n"
-            << "       output = " << out_file
-            << std::endl;
-
-  /* TODO fill in routine here */
-
-  // close files
-  ofile -> cd();
-  ofile -> Close();
-  ifile -> cd();
-  ifile -> Close();
-
-  // announce end
-  std::cout << "  Finished true vs. reco EEC comparison!\n"
-            << " -------------------------------- \n"
-            << std::endl;
-
-  // exit routine
+  /* TODO fill in */
   return;
 
-}  // end 'DoTrueVsRecoComparison(std::string, std::string)'
+}  // end 'CompareSpectra(Inputs&, PHEC::Range&, PHEC::Canvas&, TFile*, std::string&)'
 
 
 
-// private methods ============================================================
+// ----------------------------------------------------------------------------
+//! Compare various ENC (or othwerise) spectra to a baseline
+// ----------------------------------------------------------------------------
+void PHCorrelatorPlotter::CompareSpectraToBaseline(
+  const PHEC::PlotInput& in_denom,
+  const Inputs& in_numers,
+  const PHEC::Range& range,
+  const PHEC::Canvas& canvas,
+  TFile* ofile,
+  const std::string& header
+) const {
+
+  /* TODO fill in */
+  return;
+
+}  // end 'CompareSpectraToBaseline(PHEC::PlotInput&, Inputs&, PHEC::Range&, PHEC::Canvas&, TFile*, std::string&)'
+
+
+
+// ----------------------------------------------------------------------------
+//! Compare ratios of various pairs of ENC (or otherwise) spectra
+// ----------------------------------------------------------------------------
+void PHCorrelatorPlotter::CompareRatios(
+  const Inputs& in_denoms,
+  const Inputs& in_numers,
+  const PHEC::Range& range,
+  const PHEC::Canvas& canvas,
+  TFile* ofile,
+  const std::string& header
+) const {
+
+  /* TODO fill in */
+  return;
+
+}  // end 'CompareRatios(Inputs&, Inputs&, PHEC::Range&, PHEC::Canvas&, TFile*, std::string&)'
+
+
+
+// static methods =============================================================
 
 // ----------------------------------------------------------------------------
 //! Open file and check if good
 // ----------------------------------------------------------------------------
-TFile* PHCorrelatorPlotter::OpenFile(const std::string name, const std::string option) {
+TFile* PHCorrelatorPlotter::OpenFile(const std::string& name, const std::string& option) {
 
   // try to open file, throw error if not able
   TFile* file = new TFile( name.data(), option.data() );
@@ -95,22 +151,49 @@ TFile* PHCorrelatorPlotter::OpenFile(const std::string name, const std::string o
               << std::endl;
     assert(isGoodCD);
   }
-
-  // return pointer
   return file;
 
-}  // end 'OpenFile(std::string, std::string)'
+}  // end 'OpenFile(std::string&, std::string&)'
 
 
 
 // ----------------------------------------------------------------------------
-//! Create legend
+//! Grab an object from a file
 // ----------------------------------------------------------------------------
-TLegend* PHCorrelatorPlotter::MakeLegend() {
+TObject* PHCorrelatorPlotter::GrabObject(const std::string& object, TFile* file) {
 
-  /* TODO fill in */
-  return new TLegend(0.1, 0.1, 0.3, 0.3);
+   // try to grab object from file, throw error if not able
+   TObject* grabbed = (TObject*) file -> Get( object.data() );
+   if (!grabbed) {
+     std::cerr << "PANIC: couldn't grab object!\n"
+               << "       file   = " << file   << "\n"
+               << "       object = " << object << "\n"
+               << std::endl;
+     assert(grabbed);
+   }
+   return grabbed;
 
-}  // end 'MakeLegend()'
+}  // end 'GrabObject(std::string&, TFile*)'
+
+
+
+// private methods ============================================================
+
+// ----------------------------------------------------------------------------
+//! Generate list of styles to be applied
+// ---------------------------------------------------------------------------- 
+Styles PHCorrelatorPlotter::GenerateStyles(const Inputs& inputs) const {
+
+  // fill styles with base
+  Styles styles( inputs.size() );
+  std::fill( styles.begin(), styles.end(), m_basePlotStyle );
+
+  // then update plot-specific elements
+  for (std::size_t isty = 0; isty < inputs.size(); ++isty) {
+    styles[isty].SetPlotStyle( inputs[isty].style );
+  }
+  return styles;
+
+}  // end 'GenerateStyles(Inputs&)'
 
 // end ========================================================================
