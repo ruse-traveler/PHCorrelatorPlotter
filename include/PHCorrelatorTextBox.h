@@ -65,7 +65,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Create a TPaveText*
       // ----------------------------------------------------------------------
-      TPaveText* MakeTPaveText() {
+      TPaveText* MakeTPaveText() const {
 
         TPaveText* pt = new TPaveText(
           m_vtxs[0],
