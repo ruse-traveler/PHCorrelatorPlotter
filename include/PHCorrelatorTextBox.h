@@ -1,5 +1,5 @@
 /// ===========================================================================
-/*! \file    PHCorrelatorTextBox.hxx
+/*! \file    PHCorrelatorTextBox.h
  *  \authors Derek Anderson
  *  \date    12.26.2024
  *

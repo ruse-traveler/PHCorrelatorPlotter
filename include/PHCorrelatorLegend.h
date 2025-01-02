@@ -1,5 +1,5 @@
 /// ===========================================================================
-/*! \file    PHCorrelatorLegend.hxx
+/*! \file    PHCorrelatorLegend.h
  *  \authors Derek Anderson
  *  \date    12.26.2024
  *

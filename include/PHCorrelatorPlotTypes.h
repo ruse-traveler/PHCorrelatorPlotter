@@ -1,5 +1,5 @@
 /// ===========================================================================
-/*! \file    PHCorrelatorPlotTypes.hxx
+/*! \file    PHCorrelatorPlotTypes.h
  *  \authors Derek Anderson
  *  \date    12.26.2024
  *
