@@ -17,8 +17,8 @@
 // root libraries
 #include <TFile.h>
 #include <TSystem.h>
-// plotter definition
-#include "include/PHCorrelatorPlotter.h"
+// plotting utilities
+#include "include/PHCorrelatorPlotting.h"
 // plotting options
 #include "options/BaseOptions.h"
 #include "options/CompareSpectra.h"
