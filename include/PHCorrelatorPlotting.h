@@ -17,6 +17,7 @@
 #include "PHCorrelatorPadOpts.h"
 #include "PHCorrelatorPlotManager.h"
 #include "PHCorrelatorPlotInput.h"
+#include "PHCorrelatorPlotter.h"
 #include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorRange.h"

@@ -16,7 +16,7 @@
 #include <vector>
 #include <utility>
 // plotting utilities
-#include "./include/PHCorrelatorPlotting.h"
+#include "../include/PHCorrelatorPlotting.h"
 
 
 
@@ -33,9 +33,17 @@ namespace CompareSpectra {
   // --------------------------------------------------------------------------
   /*! For convenience, all inputs files you'll need can
    *  be collected here.
-   */ 
-  std::vector<std::string> input_files;
-  input_files.push_back("./input/ppRun15_simReco_iter0.d12m11y2024.hists.root");
+   */
+  std::vector<std::string> LoadInputFiles() {
+
+    // load vector of inputs
+    std::vector<std::string> input_files;
+    input_files.push_back("./input/ppRun15_simReco_iter0.d12m11y2024.hists.root");
+
+    // return vector
+    return input_files;
+
+  }  // end 'LoadInputFiles()'
 
 
 
@@ -55,6 +63,10 @@ namespace CompareSpectra {
    */
   std::vector<PHEC::PlotInput> Inputs() {
 
+    // load input files
+    std::vector<std::string> input_files = LoadInputFiles();
+
+    // collect input information
     std::vector<PHEC::PlotInput> inputs;
     inputs.push_back(
       PHEC::PlotInput(
@@ -80,7 +92,7 @@ namespace CompareSpectra {
         "hMR_pt15cf00",
         "hMaxReco_pt15cf00",
         "p_{T}^{jet} #in (15, 20) GeV/c, CF < 0.5",
-        PHEC::Style::Plot(899, 23, 0)
+        PHEC::Style::Plot(859, 23, 0)
       )
     );
     return inputs;
@@ -96,9 +108,9 @@ namespace CompareSpectra {
    *    first  = x range to plot
    *    second = y range to plot
    */ 
-  PHEC::PlotRange PlotRange() {
+  PHEC::Range PlotRange() {
 
-    PHEC::PlotRange range = PHEC::PlotRange(
+    PHEC::Range range = PHEC::Range(
       std::make_pair(0.003, 3.),
       std::make_pair(0.00003, 0.7)
     );

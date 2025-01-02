@@ -1,16 +1,13 @@
 #!/usr/bin/bash
 # =============================================================================
-# \file   wipe-build
-# \author Derek Anderson
-# \date   09.24.2024
+# @file   clean
+# @author Derek Anderson
+# @date   01.02.2025
 #
-# Clean up build files from directory.
+# Clean up build files from top directory
 # ============================================================================
 
 rm *.d
 rm *.so
-rm *.pcm
-rm test.root
 
 # end =========================================================================
-

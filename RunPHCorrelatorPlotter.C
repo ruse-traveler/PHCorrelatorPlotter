@@ -18,14 +18,14 @@
 #include <TFile.h>
 #include <TSystem.h>
 // plotter definition
-#include "./src/PHCorrelatorPlotter.h"
+#include "include/PHCorrelatorPlotter.h"
 // plotting options
-#include "./BaseOptions.h"
-//#include "./CompareSpectra.h"  // TODO add in after figuring-out linking
+#include "options/BaseOptions.h"
+#include "options/CompareSpectra.h"
 
 // abbreviate common namespaces
 namespace BO = BaseOptions;
-//namespace CS = CompareSpectra;  // TODO add in after figuring-out linking
+namespace CS = CompareSpectra;
 
 
 
@@ -34,20 +34,17 @@ namespace BO = BaseOptions;
 // ============================================================================
 void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
 
-  // link against plotter library
-  gSystem -> AddLinkedLibs("./src/PHCorrelatorPlotter_cc.so");
-
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
 
   // open output & create plotter ---------------------------------------------
 
   // open output file
-  TFile* ofile = PHCorrelatorPlotter::OpenFile(out_file, "recreate");
+  TFile* ofile = PHEC::Tools::OpenFile(out_file, "recreate");
   std::cout << "    Opened output file" << std::endl;
 
   // create plotter
-  PHCorrelatorPlotter plotter = PHCorrelatorPlotter(
+  PHEC::PHCorrelatorPlotter plotter = PHEC::PHCorrelatorPlotter(
     BO::BasePlotStyle(),
     BO::BaseTextStyle(),
     BO::Text()
@@ -56,14 +53,12 @@ void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
 
   // compare spectra ----------------------------------------------------------
 
-/* TODO add in after figuring-out linking
   plotter.CompareSpectra(
     CS::Inputs(),
     CS::PlotRange(),
     CS::Canvas(),
     ofile
   );
-*/
   std::cout << "    Ran spectra comparison routines." << std::endl;
 
   // close files & exit -------------------------------------------------------
