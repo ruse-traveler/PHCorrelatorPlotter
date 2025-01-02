@@ -11,16 +11,41 @@
 #define PHCORRELATORPLOTTOOLS_H
 
 // c++ utilities
+#include <limits>
 #include <cassert>
 #include <string>
 // root libraries
 #include <TFile.h>
+#include <TH1.h>
 #include <TObject.h>
 
 
 
 namespace PHEnergyCorrelator {
   namespace Tools {
+
+    // ------------------------------------------------------------------------
+    //! Normalize a histogram by integral
+    // ------------------------------------------------------------------------
+    void NormalizeByIntegral(
+      TH1* hist,
+      const double norm = 1.0,
+      const double start = -1. * std::numeric_limits<double>::max(),
+      const double stop = std::numeric_limits<double>::max()
+    ) {
+
+      // calculate integral over provided range
+      const int    istart   = hist -> FindBin(start);
+      const int    istop    = hist -> FindBin(stop);
+      const double integral = hist -> Integral(istart, istop);
+
+      // apply if nonzero
+      if (integral > 0.) hist -> Scale(norm / integral);
+      return;
+
+    }  // end 'NormalizeByIntegral(TH1*, double, double)'
+
+
 
     // ------------------------------------------------------------------------
     //! Helper method to calculate a height based on line spacing
@@ -35,6 +60,8 @@ namespace PHEnergyCorrelator {
       return height;
 
     }  // end 'GetHeight(std::size_t, float x 2)'
+
+
 
     // ------------------------------------------------------------------------
     //! Open file and check if good
@@ -61,6 +88,8 @@ namespace PHEnergyCorrelator {
       return file;
 
     }  // end 'OpenFile(std::string&, std::string&)'
+
+
 
     // ------------------------------------------------------------------------
     //! Grab an object from a file

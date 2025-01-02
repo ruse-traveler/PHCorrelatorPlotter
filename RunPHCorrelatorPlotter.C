@@ -56,6 +56,7 @@ void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
   plotter.CompareSpectra(
     CS::Inputs(),
     CS::PlotRange(),
+    CS::NormRange(),
     CS::Canvas(),
     ofile
   );

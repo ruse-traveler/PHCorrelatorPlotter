@@ -121,6 +121,22 @@ namespace CompareSpectra {
 
 
   // ==========================================================================
+  //! Define normalization range
+  // ==========================================================================
+  PHEC::Range NormRange() {
+
+    // grab plot range
+    PHEC::Range plot_range = PlotRange();
+
+    // set normalization range
+    PHEC::Range range = PHEC::Range(plot_range.x);
+    return range;
+
+  }  // end 'NormRange()'
+
+
+
+  // ==========================================================================
   //! Define canvas
   // ==========================================================================
   PHEC::Canvas Canvas() {
@@ -159,6 +175,19 @@ namespace CompareSpectra {
     return std::string("Reconstructed [Max p_{T}^{jet}]");
 
   }  // end 'Header()'
+
+
+
+  // ==========================================================================
+  //! Define normalization
+  // ==========================================================================
+  /*! Used to set what value to normalize to.
+   */
+  double Norm() {
+
+    return 1.0;
+
+  }  // end 'Norm()'
 
 }  // end EnergySepctra namespace
 

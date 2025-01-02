@@ -95,18 +95,24 @@ namespace PHEnergyCorrelator {
       /*! Compares a variety of ENC (or otherwise) spectra from different
        *  sources.
        *
-       *  \param[in]  inputs list of objects to plot and their details
-       *  \param[in]  range  (x, y) ranges to plot
-       *  \param[in]  canvas definition of the canvas to draw on
-       *  \param[out] ofile  file to write to
-       *  \param[in]  header optionally, can provide header for legend
+       *  \param[in]  inputs      list of objects to plot and their details
+       *  \param[in]  plot_range  (x, y) ranges to plot
+       *  \param[in]  norm_range  (x) to normalize histogram to
+       *  \param[in]  canvas      definition of the canvas to draw on
+       *  \param[out] ofile       file to write to
+       *  \param[in]  header      optionally, can provide header for legend
+       *  \param[in]  norm_to     optionally, can set what to normalize to
+       *  \param[in]  do_norm     optionally, turn normalization on/off
        */
       void CompareSpectra(
         const Inputs& inputs,
-        const Range& range,
+        const Range& plot_range,
+        const Range& norm_range,
         const Canvas& canvas,
         TFile* ofile,
-        const std::string& header = ""
+        const std::string& header = "",
+        const double norm_to = 1.0,
+        const double do_norm = true
       ) const {
 
         // announce start
@@ -131,6 +137,15 @@ namespace PHEnergyCorrelator {
                     << "      Hist = " << inputs[iin].object
                     << std::endl;
 
+          // normalize input if need be
+          if (do_norm) {
+            Tools::NormalizeByIntegral(
+              ihists.back(),
+              norm_to,
+              norm_range.x.first,
+              norm_range.x.second
+            );
+          }
         }  // end input loop
 
         // define legend dimensions
@@ -165,8 +180,8 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( range.x.first, range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( range.y.first, range.y.second );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
         }
 
         // set legend/text styles
