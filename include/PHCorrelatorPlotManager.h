@@ -7,8 +7,8 @@
  */
 /// ===========================================================================
 
-#ifndef PHCORRELATORPLOTMANAGER_HXX
-#define PHCORRELATORPLOTMANAGER_HXX
+#ifndef PHCORRELATORPLOTMANAGER_H
+#define PHCORRELATORPLOTMANAGER_H
 
 // c++ utilities
 #include <iostream>

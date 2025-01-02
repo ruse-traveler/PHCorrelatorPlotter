@@ -7,8 +7,8 @@
  */
 /// ===========================================================================
 
-#ifndef PHCORRELATORLEGEND_HXX
-#define PHCORRELATORLEGEND_HXX
+#ifndef PHCORRELATORLEGEND_H
+#define PHCORRELATORLEGEND_H
 
 // c++ utilities
 #include <string>
