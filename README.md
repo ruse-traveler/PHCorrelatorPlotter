@@ -1,4 +1,4 @@
 # PHCorrelatorPlotter
 
-A small class to consolidate various plotting operations associated with
-PHENIX N-Point Energy Correlator analyses.
+A lightweight, header-only library to consolidate plotting operations
+associated with the PHENIX ENC analysis.
