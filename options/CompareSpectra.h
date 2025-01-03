@@ -33,12 +33,15 @@ namespace CompareSpectra {
   // --------------------------------------------------------------------------
   /*! For convenience, all inputs files you'll need can
    *  be collected here.
+   *
+   *  FIXME it might be useful to create an input file list
+   *  as part of the plotter...
    */
   std::vector<std::string> LoadInputFiles() {
 
     // load vector of inputs
     std::vector<std::string> input_files;
-    input_files.push_back("./input/ppRun15_simReco_iter0.d12m11y2024.hists.root");
+    input_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
 
     // return vector
     return input_files;
@@ -71,28 +74,37 @@ namespace CompareSpectra {
     inputs.push_back(
       PHEC::PlotInput(
         input_files[0],
-        "hMR_pt5cf00",
-        "hMaxReco_pt5cf00",
-        "p_{T}^{jet} #in (5, 10) GeV/c, CF < 0.5",
-        PHEC::Style::Plot(899, 21, 0)
+        "hDataJetEECStat_pt1cf0spBD",
+        "hDataEEC_BlueDown_ptJet10",
+        "B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        PHEC::Style::Plot(863, 20, 0)
       )
     );
     inputs.push_back(
       PHEC::PlotInput(
         input_files[0],
-        "hMR_pt10cf00",
-        "hMaxReco_pt10cf00",
-        "p_{T}^{jet} #in (10, 15) GeV/c, CF < 0.5",
-        PHEC::Style::Plot(879, 22, 0)
+        "hDataJetEECStat_pt1cf0spBU",
+        "hDataEEC_BlueUp_ptJet10",
+        "B#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        PHEC::Style::Plot(859, 24, 0)
       )
     );
     inputs.push_back(
       PHEC::PlotInput(
         input_files[0],
-        "hMR_pt15cf00",
-        "hMaxReco_pt15cf00",
-        "p_{T}^{jet} #in (15, 20) GeV/c, CF < 0.5",
-        PHEC::Style::Plot(859, 23, 0)
+        "hDataJetEECStat_pt1cf0spYD",
+        "hDataEEC_YellDown_ptJet10",
+        "Y#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        PHEC::Style::Plot(803, 21, 0)
+      )
+    );
+    inputs.push_back(
+      PHEC::PlotInput(
+        input_files[0],
+        "hDataJetEECStat_pt1cf0spYU",
+        "hDataEEC_YellUp_ptJet10",
+        "Y#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        PHEC::Style::Plot(799, 25, 0)
       )
     );
     return inputs;
