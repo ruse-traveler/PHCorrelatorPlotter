@@ -1,15 +1,15 @@
 /// ===========================================================================
-/*! \file   CompareSpectra.h
+/*! \file   SpectraVsBaseline.h
  *  \author Derek Anderson
- *  \date   12.27.2024
+ *  \date   01.23.2024
  *
  *  A small namespace to define inputs to the
- *  ENC spectra plotting routine.
+ *  ENC spectra vs. baseline plotting routine.
  */
 /// ===========================================================================
 
-#ifndef COMPARESPECTRA_H
-#define COMPARESPECTRA_H
+#ifndef SPECTRAVSBASELINE_H
+#define SPECTRAVSBASLINE_H
 
 // c++ utilities
 #include <string>
@@ -21,12 +21,12 @@
 
 
 // ============================================================================
-//! Spectra Comparison Options
+//! Spectra vs. Baseline Comparison Options
 // ============================================================================
 /*! This namespace collects all the parameters associated with
- *  the `PHCorrelatorPlotter::CompareSpectra` routines. 
+ *  the `PHCorrelatorPlotter::CompareSpectraToBaseline` routines. 
  */
-namespace CompareSpectra {
+namespace SpectraVsBaseline {
 
   // --------------------------------------------------------------------------
   //! Input files
@@ -42,6 +42,7 @@ namespace CompareSpectra {
     // load vector of inputs
     std::vector<std::string> input_files;
     input_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
+    input_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
 
     // return vector
     return input_files;
@@ -51,11 +52,11 @@ namespace CompareSpectra {
 
 
   // ==========================================================================
-  //! Create input list for ENC spectra
+  //! Create denominator input
   // ==========================================================================
   /*! This method collects all information needed to plot
-   *  various energy spectra. Additional inputs can be added
-   *  or removed. Needed information:
+   *  the baseline to be compared against. Needed
+   *  information:
    *
    *    .file   = file object to be drawn is located in,
    *    .object = name of object to be drawn
@@ -64,52 +65,67 @@ namespace CompareSpectra {
    *    .style  = color, marker, line, and fill style
    *              (grouped into a PlotHelper::Style::Plot struct)
    */
-  std::vector<PHEC::PlotInput> Inputs() {
+  PHEC::PlotInput Denominator() {
 
     // load input files
     std::vector<std::string> input_files = LoadInputFiles();
 
-    // collect input information
-    std::vector<PHEC::PlotInput> inputs;
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spBD",
-        "hSpectra_DataEEC_BlueDown_ptJet10",
-        "B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(863, 20, 0)
-      )
+    // collect information
+    PHEC::PlotInput denominator = PHEC::PlotInput(
+      input_files[1],
+      "hTrueJetEECStat_pt1cf0spBD",
+      "hSpectraVsBaseline_TrueEEC_BlueDown_ptJet10",
+      "#bf{[Truth]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
+      PHEC::Style::Plot(923, 29, 0)
     );
-    inputs.push_back(
+    return denominator;
+
+  }  // end 'Denominator()'
+
+
+
+  // ==========================================================================
+  //! Create numerator input list
+  // ==========================================================================
+  /*! This method collects all information needed to plot
+   *  the spectra to compare against the baseline. Needed
+   *  information:
+   *
+   *    .file   = file object to be drawn is located in,
+   *    .object = name of object to be drawn
+   *    .rename = what to rename object to when saving to output
+   *    .legend = what object's entry in a TLegend will say
+   *    .style  = color, marker, line, and fill style
+   *              (grouped into a PlotHelper::Style::Plot struct)
+   */
+  std::vector<PHEC::PlotInput> Numerators() {
+
+    // load input files
+    std::vector<std::string> input_files = LoadInputFiles();
+
+    // collect numerator information
+    std::vector<PHEC::PlotInput> numerators;
+    numerators.push_back(
       PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spBU",
-        "hSpectra_DataEEC_BlueUp_ptJet10",
-        "B#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        input_files[1],
+        "hRecoJetEECStat_pt1cf0spBD",
+        "hSpectraVsBaseline_RecoEEC_BlueDown_ptJet10",
+        "#bf{[Reco.]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
         PHEC::Style::Plot(859, 24, 0)
       )
     );
-    inputs.push_back(
+    numerators.push_back(
       PHEC::PlotInput(
         input_files[0],
-        "hDataJetEECStat_pt1cf0spYD",
-        "hSpectra_DataEEC_YellDown_ptJet10",
-        "Y#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(803, 21, 0)
+        "hDataJetEECStat_pt1cf0spBD",
+        "hSpectraVsBaseline_DataEEC_BlueDown_ptJet10",
+        "#bf{[Data]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
+        PHEC::Style::Plot(899, 25, 0)
       )
     );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spYU",
-        "hSpectra_DataEEC_YellUp_ptJet10",
-        "Y#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(799, 25, 0)
-      )
-    );
-    return inputs;
+    return numerators;
 
-  }  // end 'Inputs()'
+  }  // end 'Numerators()'
 
 
 
@@ -154,21 +170,44 @@ namespace CompareSpectra {
   PHEC::Canvas Canvas() {
 
     // grab default pad options, and
-    // turn on log y
-    PHEC::PadOpts opts = PHEC::PadOpts();
-    opts.logx = 1;
-    opts.logy = 1;
+    // turn on log y/x when necessary
+    PHEC::PadOpts ratio_opts = PHEC::PadOpts();
+    ratio_opts.logx = 1;
 
-    // set margins
-    PHEC::Type::Margins margins;
-    margins.push_back(0.02);
-    margins.push_back(0.02);
-    margins.push_back(0.15);
-    margins.push_back(0.15);
+    PHEC::PadOpts spect_opts = PHEC::PadOpts();
+    spect_opts.logx = 1;
+    spect_opts.logy = 1;
+
+    // set pad vertices
+    PHEC::Type::Vertices ratio_vtxs;
+    ratio_vtxs.push_back(0.00);
+    ratio_vtxs.push_back(0.00);
+    ratio_vtxs.push_back(1.00);
+    ratio_vtxs.push_back(0.35);
+
+    PHEC::Type::Vertices spect_vtxs;
+    spect_vtxs.push_back(0.00);
+    spect_vtxs.push_back(0.35);
+    spect_vtxs.push_back(1.00);
+    spect_vtxs.push_back(1.00);
+
+    // set spectra margins
+    PHEC::Type::Margins ratio_margins;
+    ratio_margins.push_back(0.005);
+    ratio_margins.push_back(0.02);
+    ratio_margins.push_back(0.25);
+    ratio_margins.push_back(0.15);
+
+    PHEC::Type::Margins spect_margins;
+    spect_margins.push_back(0.02);
+    spect_margins.push_back(0.02);
+    spect_margins.push_back(0.005);
+    spect_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas("cSpectra", "", std::make_pair(950, 950), opts);
-    canvas.SetMargins( margins );
+    PHEC::Canvas canvas = PHEC::Canvas("cSpectraVsBaseline", "", std::make_pair(950, 1568), PHEC::PadOpts());
+    canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts) );
+    canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
     return canvas;
 
   }  // end 'Canvas()'
@@ -180,11 +219,11 @@ namespace CompareSpectra {
   // ==========================================================================
   /*! Note that the header is optional parameter that
    *  can be provided as the last argument of
-   *  `PHCorrelatorPlotterlotter::DoCompareSpectra`.
+   *  `PHCorrelatorPlotterlotter::DoSpectraVsBaseline`.
    */
   std::string Header() {
 
-    return std::string("Reconstructed [Max p_{T}^{jet}]");
+    return std::string("Data vs. Sim. [Max p_{T}^{jet}]");
 
   }  // end 'Header()'
 

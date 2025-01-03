@@ -32,6 +32,7 @@ namespace PHEnergyCorrelator {
     typedef std::vector<std::string>            TextList;
     typedef std::vector<std::string>            LabelList;
     typedef std::map<std::string, std::size_t>  LabelToIndexMap;
+    typedef std::map<std::string, std::string>  FileMap;
     typedef std::pair<float, float>             Interval;
     typedef std::pair<std::size_t, std::size_t> Dimensions;
 
