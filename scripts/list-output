@@ -8,5 +8,6 @@
 # =============================================================================
 
 ls -ll /gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC/*
+ls -ll /gpfs/mnt/gpfs02/phenix/mpcex/lajoie/ISU/new_unfolding/Run15/EEC_pAu/*
 
 # end =========================================================================
