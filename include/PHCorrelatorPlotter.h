@@ -117,7 +117,7 @@ namespace PHEnergyCorrelator {
        *
        *  \param[in]  inputs      list of objects to plot and their details
        *  \param[in]  plot_range  (x, y) ranges to plot
-       *  \param[in]  norm_range  (x) to normalize histogram to
+       *  \param[in]  norm_range  (x) range to normalize histogram to
        *  \param[in]  canvas      definition of the canvas to draw on
        *  \param[out] ofile       file to write to
        *  \param[in]  header      optionally, can provide header for legend
@@ -251,7 +251,7 @@ namespace PHEnergyCorrelator {
        *  \param[in]  in_denom    baseline to compare against and its info
        *  \param[in]  in_numers   spectra to compare against baseline and their info
        *  \param[in]  plot_range  (x, y) ranges to plot
-       *  \param[in]  norm_range  (x) to normalize histograms to
+       *  \param[in]  norm_range  (x) range to normalize histograms to
        *  \param[in]  canvas      definition of the canvas to draw on
        *  \param[out] ofile       file to write to
        *  \param[in]  header      optionally, can provide header for legend
@@ -440,7 +440,124 @@ namespace PHEnergyCorrelator {
         /* TODO fill in */
         return;
 
-      }  // end 'CompareRatios(Inputs&, Inputs&, PHEC::Range&, PHEC::Canvas&, TFile*, std::string&)'
+      }  // end 'CompareRatios(...)'
+
+      // ----------------------------------------------------------------------
+      //! Compare various 2D spectra
+      // ----------------------------------------------------------------------
+      /*! Compares a variety of 2D spectra from different sources.
+       *
+       *  \param[in]  inputs      list of objects to plot and their details
+       *  \param[in]  plot_range  (x, y, z) ranges to plot
+       *  \param[in]  norm_range  (x, y) to normalize histogram to
+       *  \param[in]  canvas      definition of the canvas to draw on
+       *  \param[out] ofile       file to write to
+       *  \param[in]  norm_to     optionally, can set what to normalize to
+       *  \param[in]  do_norm     optionally, turn normalization on/off
+       */
+      void CompareSpectra2D(
+        const Inputs& inputs,
+        const Range& plot_range,
+        const Range& norm_range,
+        const Canvas& canvas,
+        TFile* ofile,
+        const double norm_to = 1.0,
+        const double do_norm = false
+      ) const {
+
+        // announce start
+        std::cout << "\n -------------------------------- \n"
+                  << "  Beginning 2D spectra plotting!\n"
+                  << "    Opening inputs:"
+                  << std::endl;
+
+        // open inputs
+        std::vector<TFile*> ifiles;
+        std::vector<TH2*>   ihists;
+        for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
+
+          ifiles.push_back(
+            Tools::OpenFile(inputs[iin].file, "read")
+          );
+          ihists.push_back(
+            (TH2*) Tools::GrabObject( inputs[iin].object, ifiles.back() )
+          );
+          ihists.back() -> SetName( inputs[iin].rename.data() );
+          ihists.back() -> SetTitle( inputs[iin].legend.data() );
+          std::cout << "      File = " << inputs[iin].file << "\n"
+                    << "      Hist = " << inputs[iin].object
+                    << std::endl;
+
+          // normalize input if need be
+          if (do_norm) {
+            Tools::NormalizeByIntegral(
+              ihists.back(),
+              norm_to,
+              norm_range.x.first,
+              norm_range.x.second,
+              norm_range.y.first,
+              norm_range.y.second
+            );
+          }
+        }  // end input loop
+
+        // create text box
+        TPaveText* text = m_textBox.MakeTPaveText();
+        m_baseTextStyle.Apply( text );
+        std::cout << "    Created text box." << std::endl;
+
+        // set hist styles
+        Styles styles = GenerateStyles( inputs );
+        for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
+          styles[ihst].SetPlotStyle( inputs[ihst].style );
+          styles[ihst].Apply( ihists[ihst] );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
+          ihists[ihst] -> GetZaxis() -> SetRangeUser( plot_range.z.first, plot_range.z.second );
+        }
+        std::cout << "    Set styles." << std::endl;
+
+        // draw plot
+        PlotManager manager = PlotManager( canvas );
+        manager.MakePlot();
+        manager.Draw();
+
+        // throw error if not enough pads are present for histograms
+        if (manager.GetTPads().size() < ihists.size()) {
+          std::cerr << "PANIC: more histograms to draw than pads in " << manager.GetTCanvas() -> GetName() << "!" << std::endl;
+          assert(manager.GetTPads().size() >= ihists.size());
+        }
+
+        // otherwise draw 1 histogram per pad and
+        // text box on last pad
+        //   - FIXME need to be able to specify labels from macro
+        //   - FIXME draw options should be configurable from macro
+        for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
+          manager.GetTPad(ihst) -> cd();
+          ihists[ihst] -> Draw("colz");
+        }
+        manager.GetTPads().back() -> cd();
+        text -> Draw();
+        std:: cout << "    Made plot." << std::endl;
+
+        // save output
+        ofile -> cd();
+        for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
+          ihists[ihst] -> Write();
+        }
+        manager.Write();
+        manager.Close();
+        std::cout << "    Saved output." << std::endl;
+
+        // announce end
+        std::cout << "  Finished 2D spectra plotting!\n"
+                  << " -------------------------------- \n"
+                  << std::endl;
+
+        // exit routine
+        return;
+
+      }  // end 'ComparSpectra2D(...)'
 
       // ----------------------------------------------------------------------
       //! default ctor/dtor

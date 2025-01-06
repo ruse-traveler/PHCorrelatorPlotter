@@ -15,6 +15,7 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <utility>
 // root libraries
 #include <TFile.h>
 #include <TH1.h>
@@ -27,13 +28,37 @@ namespace PHEnergyCorrelator {
   namespace Tools {
 
     // ------------------------------------------------------------------------
-    //! Normalize a histogram by integral
+    //! Wrapper function for max possible value of double
+    // ------------------------------------------------------------------------
+    /*! FIXME this should be in Constants */
+    double MaxDouble() {
+
+      return std::numeric_limits<double>::max();
+
+    }  // end 'MaxDouble()'
+
+
+
+    // ------------------------------------------------------------------------
+    //! Wrapper function for max negative possible value of double
+    // ------------------------------------------------------------------------
+    /*! FIXME this should be in Constants */
+    double MinDouble() {
+
+      return -1. * std::numeric_limits<double>::max();
+
+    }  // end 'MinDouble()'
+
+
+
+    // ------------------------------------------------------------------------
+    //! Normalize a 1D histogram by integral
     // ------------------------------------------------------------------------
     void NormalizeByIntegral(
       TH1* hist,
       const double norm = 1.0,
-      const double start = -1. * std::numeric_limits<double>::max(),
-      const double stop = std::numeric_limits<double>::max()
+      const double start = MinDouble(),
+      const double stop = MaxDouble()
     ) {
 
       // calculate integral over provided range
@@ -47,6 +72,32 @@ namespace PHEnergyCorrelator {
 
     }  // end 'NormalizeByIntegral(TH1*, double, double)'
 
+
+
+    // ------------------------------------------------------------------------
+    //! Normalize a 2D histogram by integral
+    // ------------------------------------------------------------------------
+    void NormalizeByIntegral(
+      TH2* hist,
+      const double norm = 1.0,
+      const double startx = MinDouble(),
+      const double stopx = MaxDouble(),
+      const double starty = MinDouble(),
+      const double stopy = MaxDouble()
+    ) {
+
+      // calculate integral over provided range
+      const int    istartx  = hist -> GetXaxis() -> FindBin(startx);
+      const int    istarty  = hist -> GetYaxis() -> FindBin(starty);
+      const int    istopx   = hist -> GetXaxis() -> FindBin(stopx);
+      const int    istopy   = hist -> GetYaxis() -> FindBin(stopy);
+      const double integral = hist -> Integral(istartx, istopx, istarty, istopy);
+
+      // apply if nonzero
+      if (integral > 0.) hist -> Scale(norm / integral);
+      return;
+
+    }  // end 'NormalizeByIntegral(TH1*, double, double)'
 
 
     // ------------------------------------------------------------------------

@@ -22,11 +22,13 @@
 // plotting options
 #include "options/BaseOptions.h"
 #include "options/CompareSpectra.h"
+#include "options/CompareSpectra2D.h"
 #include "options/SpectraVsBaseline.h"
 
 // abbreviate common namespaces
 namespace BO = BaseOptions;
 namespace CS = CompareSpectra;
+namespace C2 = CompareSpectra2D;
 namespace SB = SpectraVsBaseline;
 
 
@@ -63,6 +65,17 @@ void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
     ofile
   );
   std::cout << "    Ran spectra comparison routines." << std::endl;
+
+  // compare 2d spectra -------------------------------------------------------
+
+  plotter.CompareSpectra2D(
+    C2::Inputs(),
+    C2::PlotRange(),
+    C2::NormRange(),
+    C2::Canvas(),
+    ofile
+  );
+  std::cout << "    Ran 2d spectra comparison routines." << std::endl;
 
   // spectra vs. baseline -----------------------------------------------------
 

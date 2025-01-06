@@ -31,6 +31,7 @@ namespace PHEnergyCorrelator {
     // members
     std::size_t logx;
     std::size_t logy;
+    std::size_t logz;
     std::size_t tickx;
     std::size_t ticky;
     std::size_t gridx;
@@ -46,6 +47,7 @@ namespace PHEnergyCorrelator {
 
       canvas -> SetLogx(logx);
       canvas -> SetLogy(logy);
+      canvas -> SetLogz(logz);
       canvas -> SetTicks(tickx, ticky);
       canvas -> SetGrid(gridx, gridy);
       canvas -> SetBorderMode(bmode);
@@ -62,6 +64,7 @@ namespace PHEnergyCorrelator {
 
       pad -> SetLogx(logx);
       pad -> SetLogy(logy);
+      pad -> SetLogz(logz);
       pad -> SetTicks(tickx, ticky);
       pad -> SetGrid(gridx, gridy);
       pad -> SetBorderMode(bmode);
@@ -77,6 +80,7 @@ namespace PHEnergyCorrelator {
     PadOpts() {
       logx  = 0;
       logy  = 0;
+      logz  = 0;
       tickx = 1;
       ticky = 1;
       gridx = 0;
@@ -104,6 +108,7 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! ctor accepting all arguments
     // ------------------------------------------------------------------------
+    /*! FIXME also need to allow for log z */
     PadOpts(
       const std::pair<std::size_t, std::size_t> log,
       const std::pair<std::size_t, std::size_t> tick,
