@@ -74,7 +74,7 @@ namespace CompareSpectra {
     }
     return inputs;
 
-  }  // end 'Inputs(std::string&, std::vector<IO::Opts>&)'
+  }  // end 'Inputs(std::vector<IO::Opts>&)'
 
 
 

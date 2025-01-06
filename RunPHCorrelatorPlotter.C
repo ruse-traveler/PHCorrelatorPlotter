@@ -44,7 +44,9 @@ void RunPHCorrelatorPlotter() {
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
 
-  // open outputs & load inputs -----------------------------------------------
+  // --------------------------------------------------------------------------
+  // open outputs & load inputs
+  // --------------------------------------------------------------------------
 
   // open output files
   TFile* ofile = PHEC::Tools::OpenFile("simVsReco.ppRun15.d5m1y2025.root", "recreate");
@@ -70,72 +72,83 @@ void RunPHCorrelatorPlotter() {
   );
   std::cout << "    Made plotter." << std::endl;
 
-  // compare sim vs. data distributions ---------------------------------------
-
-  // compare sim vs. data EEC spectra
+  // --------------------------------------------------------------------------
+  // compare sim vs. data distributions
+  // --------------------------------------------------------------------------
   for (std::size_t ico = 0; ico < spe_hist.size(); ++ico) {
     for (std::size_t ipt = 0; ipt < pt_hist.size(); ++ipt) {
       for (std::size_t isp = 0; isp < spin_hist.size(); ++isp) {
 
-        // make hist tag & canvas name
+        // only consider blue polarizations for pAu
+        if (ico == IO::PAu) {
+          if ((isp != IO::BU) || (isp != IO::BD) || (isp != IO::Int)) continue;
+        }
+
+        // make hist tag
         const std::string tag    = "DataVsSim" + spe_hist[ico] + "_";
-        const std::string canvas = IO::MakeCanvasName("cDataVsSimEEC", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
 
-        // build hist names
-        std::string dat_hist = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
-        std::string rec_hist = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
-        std::string tru_hist = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
+        // make EEC comparison ------------------------------------------------
+        {
 
-        // build hist renames
-        std::string dat_name = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
-        std::string rec_name = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
-        std::string tru_name = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
+          // make canvas name
+          const std::string eec_canvas = IO::MakeCanvasName("cDataVsSimEEC", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
 
-        // build hist legends
-        std::string dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
-        std::string rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
-        std::string tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+          // build hist names
+          std::string eec_dat_hist = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+          std::string eec_rec_hist = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+          std::string eec_tru_hist = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
 
-        // bundle input options
-        IO::Opts dat_opt = IO::Opts(
-          in_files[ico][IO::Data],
-          dat_hist,
-          dat_name,
-          dat_leg,
-          899,
-          20
-        );
-        IO::Opts rec_opt = IO::Opts(
-          in_files[ico][IO::Reco],
-          rec_hist,
-          rec_name,
-          rec_leg,
-          859,
-          21
-        );
-        IO::Opts tru_opt = IO::Opts(
-          in_files[ico][IO::True],
-          tru_hist,
-          tru_name,
-          tru_leg,
-          923,
-          29
-        );
+          // build hist renames
+          std::string eec_dat_name = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+          std::string eec_rec_name = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+          std::string eec_tru_name = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
 
-        // load into vector
-        std::vector<IO::Opts> opts;
-        opts.push_back( dat_opt );
-        opts.push_back( rec_opt );
-        opts.push_back( tru_opt );
+          // build hist legends
+          std::string eec_dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+          std::string eec_rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+          std::string eec_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
-        // FIXME change to baseline
-        plotter.CompareSpectra(
-          CS::Inputs(opts),
-          CS::PlotRange(CS::Side),
-          CS::NormRange(CS::Side),
-          CS::Canvas(canvas, CS::Side),
-          ofile
-        );
+          // bundle input options
+          IO::Opts eec_dat_opt = IO::Opts(
+            in_files[ico][IO::Data],
+            eec_dat_hist,
+            eec_dat_name,
+            eec_dat_leg,
+            899,
+            24
+          );
+          IO::Opts eec_rec_opt = IO::Opts(
+            in_files[ico][IO::Reco],
+            eec_rec_hist,
+            eec_rec_name,
+            eec_rec_leg,
+            859,
+            25
+          );
+          IO::Opts eec_tru_opt = IO::Opts(
+            in_files[ico][IO::True],
+            eec_tru_hist,
+            eec_tru_name,
+            eec_tru_leg,
+            923,
+            29
+          );
+
+          // load into vector
+          std::vector<IO::Opts> eec_num_opts;
+          eec_num_opts.push_back( eec_dat_opt );
+          eec_num_opts.push_back( eec_rec_opt );
+
+          // make plot
+          plotter.CompareSpectraToBaseline(
+            SB::Denominator(eec_tru_opt),
+            SB::Numerators(eec_num_opts),
+            SB::PlotRange(SB::Side),
+            SB::NormRange(SB::Side),
+            SB::Canvas(eec_canvas, SB::Side),
+            ofile
+          );
+        }  // end eec sim vs. reco plot
 
         /* TODO add angle comparisons here */
         /* TODO add 2d comparisons here */

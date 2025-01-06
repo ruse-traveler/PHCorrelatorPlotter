@@ -9,7 +9,7 @@
 /// ===========================================================================
 
 #ifndef SPECTRAVSBASELINE_H
-#define SPECTRAVSBASLINE_H
+#define SPECTRAVSBASELINE_H
 
 // c++ utilities
 #include <string>
@@ -17,6 +17,8 @@
 #include <utility>
 // plotting utilities
 #include "../include/PHCorrelatorPlotting.h"
+// plotting options
+#include "InputOutput.h"
 
 
 
@@ -29,25 +31,9 @@
 namespace SpectraVsBaseline {
 
   // --------------------------------------------------------------------------
-  //! Input files
+  // Options for ranges
   // --------------------------------------------------------------------------
-  /*! For convenience, all inputs files you'll need can
-   *  be collected here.
-   *
-   *  FIXME it might be useful to create an input file list
-   *  as part of the plotter...
-   */
-  std::vector<std::string> LoadInputFiles() {
-
-    // load vector of inputs
-    std::vector<std::string> input_files;
-    input_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
-    input_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
-
-    // return vector
-    return input_files;
-
-  }  // end 'LoadInputFiles()'
+  enum RangeOpt {Side, Angle};
 
 
 
@@ -65,22 +51,25 @@ namespace SpectraVsBaseline {
    *    .style  = color, marker, line, and fill style
    *              (grouped into a PlotHelper::Style::Plot struct)
    */
-  PHEC::PlotInput Denominator() {
-
-    // load input files
-    std::vector<std::string> input_files = LoadInputFiles();
+  PHEC::PlotInput Denominator(const InputOutput::Opts& denom_options) {
 
     // collect information
     PHEC::PlotInput denominator = PHEC::PlotInput(
-      input_files[1],
-      "hTrueJetEECStat_pt1cf0spBD",
-      "hSpectraVsBaseline_TrueEEC_BlueDown_ptJet10",
-      "#bf{[Truth]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-      PHEC::Style::Plot(923, 29, 0)
+      PHEC::PlotInput(
+        denom_options.file,
+        denom_options.hist,
+        denom_options.name,
+        denom_options.leg,
+        PHEC::Style::Plot(
+          denom_options.col,
+          denom_options.mar,
+          0
+        )
+      )
     );
     return denominator;
 
-  }  // end 'Denominator()'
+  }  // end 'Denominator(IO::Opts&)'
 
 
 
@@ -98,31 +87,26 @@ namespace SpectraVsBaseline {
    *    .style  = color, marker, line, and fill style
    *              (grouped into a PlotHelper::Style::Plot struct)
    */
-  std::vector<PHEC::PlotInput> Numerators() {
+  std::vector<PHEC::PlotInput> Numerators(
+    const std::vector<InputOutput::Opts>& numer_options
+  ) {
 
-    // load input files
-    std::vector<std::string> input_files = LoadInputFiles();
-
-    // collect numerator information
     std::vector<PHEC::PlotInput> numerators;
-    numerators.push_back(
-      PHEC::PlotInput(
-        input_files[1],
-        "hRecoJetEECStat_pt1cf0spBD",
-        "hSpectraVsBaseline_RecoEEC_BlueDown_ptJet10",
-        "#bf{[Reco.]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(859, 24, 0)
-      )
-    );
-    numerators.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spBD",
-        "hSpectraVsBaseline_DataEEC_BlueDown_ptJet10",
-        "#bf{[Data]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(899, 25, 0)
-      )
-    );
+    for (std::size_t iopt = 0; iopt < numer_options.size(); ++iopt) {
+      numerators.push_back(
+        PHEC::PlotInput(
+          numer_options[iopt].file,
+          numer_options[iopt].hist,
+          numer_options[iopt].name,
+          numer_options[iopt].leg,
+          PHEC::Style::Plot(
+            numer_options[iopt].col,
+            numer_options[iopt].mar,
+            0
+          )
+        )
+      );
+    }
     return numerators;
 
   }  // end 'Numerators()'
@@ -136,12 +120,31 @@ namespace SpectraVsBaseline {
    *    first  = x range to plot
    *    second = y range to plot
    */ 
-  PHEC::Range PlotRange() {
+  PHEC::Range PlotRange(const int opt = Side) {
 
-    PHEC::Range range = PHEC::Range(
-      std::make_pair(0.003, 3.),
-      std::make_pair(0.00003, 0.7)
-    );
+    PHEC::Range range;
+    switch (opt) {
+
+      case Side:
+        range = PHEC::Range(
+          std::make_pair(0.003, 3.),
+          std::make_pair(0.00003, 0.7)
+        );
+        break;
+
+      case Angle:
+        range = PHEC::Range(
+          std::make_pair(-3.15, 3.15),
+          std::make_pair(0.00, 1.50)
+        );
+        break;
+
+      default:
+        range = PHEC::Range();
+        std::cout << "WARNING: unknown option " << opt << "!" << std::endl;
+        break;
+
+    }
     return range;
 
   }  // end 'PlotRange()'
@@ -151,32 +154,33 @@ namespace SpectraVsBaseline {
   // ==========================================================================
   //! Define normalization range
   // ==========================================================================
-  PHEC::Range NormRange() {
+  PHEC::Range NormRange(const int opt = Side) {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange();
+    PHEC::Range plot_range = PlotRange(opt);
 
     // set normalization range
     PHEC::Range range = PHEC::Range(plot_range.x);
     return range;
 
-  }  // end 'NormRange()'
+  }  // end 'NormRange(int)'
 
 
 
   // ==========================================================================
   //! Define canvas
   // ==========================================================================
-  PHEC::Canvas Canvas() {
+  PHEC::Canvas Canvas(const std::string& name = "cSpectraVsBaseline", const int opt = Side) {
 
     // grab default pad options, and
     // turn on log y/x when necessary
     PHEC::PadOpts ratio_opts = PHEC::PadOpts();
-    ratio_opts.logx = 1;
-
     PHEC::PadOpts spect_opts = PHEC::PadOpts();
-    spect_opts.logx = 1;
-    spect_opts.logy = 1;
+    if (opt == Side) {
+      ratio_opts.logx = 1;
+      spect_opts.logx = 1;
+      spect_opts.logy = 1;
+    }
 
     // set pad vertices
     PHEC::Type::Vertices ratio_vtxs;
@@ -205,7 +209,7 @@ namespace SpectraVsBaseline {
     spect_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas("cSpectraVsBaseline", "", std::make_pair(950, 1568), PHEC::PadOpts());
+    PHEC::Canvas canvas = PHEC::Canvas(name, "", std::make_pair(950, 1568), PHEC::PadOpts());
     canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts) );
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
     return canvas;

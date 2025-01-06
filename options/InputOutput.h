@@ -45,7 +45,7 @@ namespace InputOutput {
   enum Species {PP, PAu};
   enum Level   {Data, Reco, True};
   enum PtJet   {Pt5, Pt10, Pt15};
-  enum Spin    {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD};
+  enum Spin    {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, Int};
   enum What    {Hist, Leg};
 
 
@@ -238,6 +238,7 @@ namespace InputOutput {
         strings.push_back("spBUYD");
         strings.push_back("spBDYU");
         strings.push_back("spBDYD");
+        strings.push_back("spInt");
         break;
 
       case Leg:
@@ -249,6 +250,7 @@ namespace InputOutput {
         strings.push_back("B#uparrowY#downarrow");
         strings.push_back("B#downarrowY#uparrow");
         strings.push_back("B#downarrowY#downarrow");
+        strings.push_back("Integrated");
         break;
 
       default:
