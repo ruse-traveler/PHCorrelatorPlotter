@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 // root libraries
 #include <TFile.h>
 #include <TSystem.h>
@@ -23,12 +24,14 @@
 #include "options/BaseOptions.h"
 #include "options/CompareSpectra.h"
 #include "options/CompareSpectra2D.h"
+#include "options/InputOutput.h"
 #include "options/SpectraVsBaseline.h"
 
 // abbreviate common namespaces
 namespace BO = BaseOptions;
 namespace CS = CompareSpectra;
 namespace C2 = CompareSpectra2D;
+namespace IO = InputOutput;
 namespace SB = SpectraVsBaseline;
 
 
@@ -36,16 +39,28 @@ namespace SB = SpectraVsBaseline;
 // ============================================================================
 //! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
+void RunPHCorrelatorPlotter() {
 
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
 
-  // open output & create plotter ---------------------------------------------
+  // open outputs & load inputs -----------------------------------------------
 
-  // open output file
-  TFile* ofile = PHEC::Tools::OpenFile(out_file, "recreate");
+  // open output files
+  TFile* ofile = PHEC::Tools::OpenFile("simVsReco.ppRun15.d5m1y2025.root", "recreate");
   std::cout << "    Opened output file" << std::endl;
+
+  // load input options
+  IO::InFiles in_files  = IO::LoadInputFiles();
+  IO::Strings spe_hist  = IO::LoadSpeciesStrings(IO::Hist);
+  IO::Strings spe_legs  = IO::LoadSpeciesStrings(IO::Leg);
+  IO::Strings lvl_hist  = IO::LoadLevelStrings(IO::Hist);
+  IO::Strings lvl_legs  = IO::LoadLevelStrings(IO::Leg);
+  IO::Strings pt_hist   = IO::LoadPtStrings(IO::Hist);
+  IO::Strings pt_legs   = IO::LoadPtStrings(IO::Leg);
+  IO::Strings spin_hist = IO::LoadSpinStrings(IO::Hist);
+  IO::Strings spin_legs = IO::LoadSpinStrings(IO::Leg);
+  std::cout << "    Loaded input options." << std::endl;
 
   // create plotter
   PHEC::PHCorrelatorPlotter plotter = PHEC::PHCorrelatorPlotter(
@@ -55,39 +70,84 @@ void RunPHCorrelatorPlotter( const std::string out_file = "test.root" ) {
   );
   std::cout << "    Made plotter." << std::endl;
 
-  // compare spectra ----------------------------------------------------------
+  // compare sim vs. data distributions ---------------------------------------
 
-  plotter.CompareSpectra(
-    CS::Inputs(),
-    CS::PlotRange(),
-    CS::NormRange(),
-    CS::Canvas(),
-    ofile
-  );
-  std::cout << "    Ran spectra comparison routines." << std::endl;
+  // compare sim vs. data EEC spectra
+  for (std::size_t ico = 0; ico < spe_hist.size(); ++ico) {
+    for (std::size_t ipt = 0; ipt < pt_hist.size(); ++ipt) {
+      for (std::size_t isp = 0; isp < spin_hist.size(); ++isp) {
 
-  // compare 2d spectra -------------------------------------------------------
+        // make hist tag & canvas name
+        const std::string tag    = "DataVsSim" + spe_hist[ico] + "_";
+        const std::string canvas = IO::MakeCanvasName("cDataVsSimEEC", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
 
-  plotter.CompareSpectra2D(
-    C2::Inputs(),
-    C2::PlotRange(),
-    C2::NormRange(),
-    C2::Canvas(),
-    ofile
-  );
-  std::cout << "    Ran 2d spectra comparison routines." << std::endl;
+        // build hist names
+        std::string dat_hist = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+        std::string rec_hist = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+        std::string tru_hist = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
 
-  // spectra vs. baseline -----------------------------------------------------
+        // build hist renames
+        std::string dat_name = IO::MakeHistName("EEC", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+        std::string rec_name = IO::MakeHistName("EEC", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+        std::string tru_name = IO::MakeHistName("EEC", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
 
-  plotter.CompareSpectraToBaseline(
-    SB::Denominator(),
-    SB::Numerators(),
-    SB::PlotRange(),
-    SB::NormRange(),
-    SB::Canvas(),
-    ofile
-  );
-  std::cout << "    Ran spectra vs. baseline routines." << std::endl;
+        // build hist legends
+        std::string dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+        std::string rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+        std::string tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+
+        // bundle input options
+        IO::Opts dat_opt = IO::Opts(
+          in_files[ico][IO::Data],
+          dat_hist,
+          dat_name,
+          dat_leg,
+          899,
+          20
+        );
+        IO::Opts rec_opt = IO::Opts(
+          in_files[ico][IO::Reco],
+          rec_hist,
+          rec_name,
+          rec_leg,
+          859,
+          21
+        );
+        IO::Opts tru_opt = IO::Opts(
+          in_files[ico][IO::True],
+          tru_hist,
+          tru_name,
+          tru_leg,
+          923,
+          29
+        );
+
+        // load into vector
+        std::vector<IO::Opts> opts;
+        opts.push_back( dat_opt );
+        opts.push_back( rec_opt );
+        opts.push_back( tru_opt );
+
+        // FIXME change to baseline
+        plotter.CompareSpectra(
+          CS::Inputs(opts),
+          CS::PlotRange(CS::Side),
+          CS::NormRange(CS::Side),
+          CS::Canvas(canvas, CS::Side),
+          ofile
+        );
+
+        /* TODO add angle comparisons here */
+        /* TODO add 2d comparisons here */
+
+      }  // end spin loop
+    }  // end pt jet loop
+  }  // end species loop
+
+  /* TODO add EEC vs. pt comparison here */
+  /* TODO add EEC pp vs. pau comparison here */
+
+  std::cout << "    Completed sim vs. reco plots." << std::endl;
 
   // close files & exit -------------------------------------------------------
 

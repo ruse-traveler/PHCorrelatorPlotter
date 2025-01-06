@@ -17,6 +17,9 @@
 #include <utility>
 // plotting utilities
 #include "../include/PHCorrelatorPlotting.h"
+// plotting options
+#include "InputOutput.h"
+
 
 
 
@@ -29,24 +32,9 @@
 namespace CompareSpectra {
 
   // --------------------------------------------------------------------------
-  //! Input files
+  // Options for ranges
   // --------------------------------------------------------------------------
-  /*! For convenience, all inputs files you'll need can
-   *  be collected here.
-   *
-   *  FIXME it might be useful to create an input file list
-   *  as part of the plotter...
-   */
-  std::vector<std::string> LoadInputFiles() {
-
-    // load vector of inputs
-    std::vector<std::string> input_files;
-    input_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
-
-    // return vector
-    return input_files;
-
-  }  // end 'LoadInputFiles()'
+  enum RangeOpt {Side, Angle};
 
 
 
@@ -64,52 +52,29 @@ namespace CompareSpectra {
    *    .style  = color, marker, line, and fill style
    *              (grouped into a PlotHelper::Style::Plot struct)
    */
-  std::vector<PHEC::PlotInput> Inputs() {
+  std::vector<PHEC::PlotInput> Inputs(
+    const std::vector<InputOutput::Opts>& in_options
+  ) {
 
-    // load input files
-    std::vector<std::string> input_files = LoadInputFiles();
-
-    // collect input information
     std::vector<PHEC::PlotInput> inputs;
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spBD",
-        "hSpectra_DataEEC_BlueDown_ptJet10",
-        "B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(863, 20, 0)
-      )
-    );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spBU",
-        "hSpectra_DataEEC_BlueUp_ptJet10",
-        "B#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(859, 24, 0)
-      )
-    );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spYD",
-        "hSpectra_DataEEC_YellDown_ptJet10",
-        "Y#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(803, 21, 0)
-      )
-    );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hDataJetEECStat_pt1cf0spYU",
-        "hSpectra_DataEEC_YellUp_ptJet10",
-        "Y#uparrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(799, 25, 0)
-      )
-    );
+    for (std::size_t iopt = 0; iopt < in_options.size(); ++iopt) {
+      inputs.push_back(
+        PHEC::PlotInput(
+          in_options[iopt].file,
+          in_options[iopt].hist,
+          in_options[iopt].name,
+          in_options[iopt].leg,
+          PHEC::Style::Plot(
+            in_options[iopt].col,
+            in_options[iopt].mar,
+            0
+          )
+        )
+      );
+    }
     return inputs;
 
-  }  // end 'Inputs()'
+  }  // end 'Inputs(std::string&, std::vector<IO::Opts>&)'
 
 
 
@@ -120,12 +85,31 @@ namespace CompareSpectra {
    *    first  = x range to plot
    *    second = y range to plot
    */ 
-  PHEC::Range PlotRange() {
+  PHEC::Range PlotRange(const int opt = Side) {
 
-    PHEC::Range range = PHEC::Range(
-      std::make_pair(0.003, 3.),
-      std::make_pair(0.00003, 0.7)
-    );
+    PHEC::Range range;
+    switch (opt) {
+
+      case Side:
+        range = PHEC::Range(
+          std::make_pair(0.003, 3.),
+          std::make_pair(0.00003, 0.7)
+        );
+        break;
+
+      case Angle:
+        range = PHEC::Range(
+          std::make_pair(-3.15, 3.15),
+          std::make_pair(0.00, 1.50)
+        );
+        break;
+
+      default:
+        range = PHEC::Range();
+        std::cout << "WARNING: unknown option " << opt << "!" << std::endl;
+        break;
+
+    }
     return range;
 
   }  // end 'PlotRange()'
@@ -135,29 +119,31 @@ namespace CompareSpectra {
   // ==========================================================================
   //! Define normalization range
   // ==========================================================================
-  PHEC::Range NormRange() {
+  PHEC::Range NormRange(const int opt = Side) {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange();
+    PHEC::Range plot_range = PlotRange(opt);
 
     // set normalization range
     PHEC::Range range = PHEC::Range(plot_range.x);
     return range;
 
-  }  // end 'NormRange()'
+  }  // end 'NormRange(int)'
 
 
 
   // ==========================================================================
   //! Define canvas
   // ==========================================================================
-  PHEC::Canvas Canvas() {
+  PHEC::Canvas Canvas(const std::string& name = "cSpectra", const int opt = Side) {
 
     // grab default pad options, and
     // turn on log y
     PHEC::PadOpts opts = PHEC::PadOpts();
-    opts.logx = 1;
-    opts.logy = 1;
+    if (opt == Side) {
+      opts.logx = 1;
+      opts.logy = 1;
+    }
 
     // set margins
     PHEC::Type::Margins margins;
@@ -167,11 +153,11 @@ namespace CompareSpectra {
     margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas("cSpectra", "", std::make_pair(950, 950), opts);
+    PHEC::Canvas canvas = PHEC::Canvas(name, "", std::make_pair(950, 950), opts);
     canvas.SetMargins( margins );
     return canvas;
 
-  }  // end 'Canvas()'
+  }  // end 'Canvas(std::string&, int)'
 
 
 
@@ -201,7 +187,7 @@ namespace CompareSpectra {
 
   }  // end 'Norm()'
 
-}  // end EnergySepctra namespace
+}  // end CompareSepctra namespace
 
 #endif
 
