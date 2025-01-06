@@ -358,6 +358,8 @@ namespace PHEnergyCorrelator {
         }
 
         // create root objects
+        //   - FIXME line should be configurable
+        TLine*     line   = new TLine( plot_range.x.first, 1.0, plot_range.x.second, 1.0 );
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -380,6 +382,11 @@ namespace PHEnergyCorrelator {
           rhists[inum] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
         }
 
+        // set line styles
+        //   - FIXME line should be configurable
+        line -> SetLineStyle(9);
+        line -> SetLineColor(923);
+
         // set legend/text styles
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
@@ -395,6 +402,7 @@ namespace PHEnergyCorrelator {
         for (std::size_t inum = 1; inum < nhists.size(); ++inum) {
           rhists[inum] -> Draw("same");
         }
+        line -> Draw();
         manager.GetTPad(1) -> cd();
         dhist -> Draw();
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
