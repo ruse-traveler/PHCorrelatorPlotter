@@ -30,27 +30,6 @@
  */
 namespace CompareSpectra2D {
 
-  // --------------------------------------------------------------------------
-  //! Input files
-  // --------------------------------------------------------------------------
-  /*! For convenience, all inputs files you'll need can
-   *  be collected here.
-   *
-   *  FIXME it might be useful to create an input file list
-   *  as part of the plotter...
-   */
-  std::vector<std::string> LoadInputFiles() {
-
-    // load vector of inputs
-    std::vector<std::string> input_files;
-    input_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
-    input_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
-
-    // return vector
-    return input_files;
-
-  }  // end 'LoadInputFiles()'
-
 
 
   // ==========================================================================
@@ -67,44 +46,29 @@ namespace CompareSpectra2D {
    *    .style  = color, marker, line, and fill style
    *              (grouped into a PlotHelper::Style::Plot struct)
    */
-  std::vector<PHEC::PlotInput> Inputs() {
+  std::vector<PHEC::PlotInput> Inputs(
+    const std::vector<InputOutput::Opts>& in_options
+  ) {
 
-    // load input files
-    std::vector<std::string> input_files = LoadInputFiles();
-
-    // collect input information
-    //   - n.b. marker and color aren't used here
     std::vector<PHEC::PlotInput> inputs;
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hTrueJetEECCollinsBlueVsRStat_pt1cf0spBD",
-        "hSpectra2D_CollinsVsR_BlueDown_ptJet10",
-        "#bf{[Truth]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(1, 1, 0)
-      )
-    );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[0],
-        "hRecoJetEECCollinsBlueVsRStat_pt1cf0spBD",
-        "hSpectra2D_CollinsVsR_BlueDown_ptJet10",
-        "#bf{[Reco.]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(1, 1, 0)
-      )
-    );
-    inputs.push_back(
-      PHEC::PlotInput(
-        input_files[1],
-        "hDataJetEECCollinsBlueVsRStat_pt1cf0spBD",
-        "hSpectra2D_CollinsVsR_BlueDown_ptJet10",
-        "#bf{[Data]} B#downarrow, p_{T}^{jet} #in (10, 15) GeV/c",
-        PHEC::Style::Plot(1, 1, 0)
-      )
-    );
+    for (std::size_t iopt = 0; iopt < in_options.size(); ++iopt) {
+      inputs.push_back(
+        PHEC::PlotInput(
+          in_options[iopt].file,
+          in_options[iopt].hist,
+          in_options[iopt].name,
+          in_options[iopt].leg,
+          PHEC::Style::Plot(
+            in_options[iopt].col,
+            in_options[iopt].mar,
+            0
+          )
+        )
+      );
+    }
     return inputs;
 
-  }  // end 'Inputs()'
+  }  // end 'Inputs(std::vector<IO::Opts>&)'
 
 
 
@@ -148,30 +112,31 @@ namespace CompareSpectra2D {
   // ==========================================================================
   //! Define canvas
   // ==========================================================================
-  PHEC::Canvas Canvas() {
-
-    // load inputs
-    std::vector<PHEC::PlotInput> inputs = Inputs();
+  PHEC::Canvas Canvas(
+    const std::string& name = "cSpectra2D",
+    const std::vector<InputOutput::Opts>& in_options = std::vector<InputOutput::Opts>()
+  ) {
 
     // grab default pad options, and
     // turn on log z
     PHEC::PadOpts opts = PHEC::PadOpts();
+    opts.logx = 1;
     opts.logz = 1;
 
     // determine canvas dimensions
     //   - FIXME layout of canvas should be configurable
     const PHEC::Type::Dimensions dimensions = std::make_pair(
-      950 * inputs.size(),
+      950 * in_options.size(),
       950
     );
 
     // determine vertices of pads
     std::vector<PHEC::Type::Vertices> pad_vtxs;    
-    for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
+    for (std::size_t iin = 0; iin < in_options.size(); ++iin) {
 
       // set x vertices
-      const double startx = iin * (1.0 / inputs.size());
-      const double stopx  = (iin + 1) * (1.0 / inputs.size());
+      const double startx = iin * (1.0 / in_options.size());
+      const double stopx  = (iin + 1) * (1.0 / in_options.size());
 
       // add to vector
       pad_vtxs.push_back( PHEC::Type::Vertices() );
@@ -189,8 +154,8 @@ namespace CompareSpectra2D {
     pad_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas("cSpectra2D", "", dimensions, PHEC::PadOpts());
-    for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
+    PHEC::Canvas canvas = PHEC::Canvas(name, "", dimensions, PHEC::PadOpts());
+    for (std::size_t iin = 0; iin < in_options.size(); ++iin) {
 
       // create name
       TString tname("pSpec");
@@ -209,7 +174,7 @@ namespace CompareSpectra2D {
     }
     return canvas;
 
-  }  // end 'Canvas()'
+  }  // end 'Canvas(std::string&, std::vector<IO::Opts>&)'
 
 
 

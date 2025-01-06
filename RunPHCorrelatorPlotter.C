@@ -49,9 +49,11 @@ void RunPHCorrelatorPlotter() {
   // --------------------------------------------------------------------------
 
   // open output files
-  TFile* simdata_eec_ofile  = PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d5m1y2025.root", "recreate");
-  TFile* simdata_coll_ofile = PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d5m1y2025.root", "recreate");
-  TFile* simdata_havg_ofile = PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d5m1y2025.root", "recreate");
+  TFile* simdata_eec_ofile    = PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d6m1y2025.root", "recreate");
+  TFile* simdata_coll_ofile   = PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d6m1y2025.root", "recreate");
+  TFile* simdata_havg_ofile   = PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d6m1y2025.root", "recreate");
+  TFile* simdata_coll2d_ofile = PHEC::Tools::OpenFile("simVsRecoCollins2D.ppRun15.d6m1y2025.root", "recreate");
+  TFile* simdata_havg2d_ofile = PHEC::Tools::OpenFile("simVsRecoHadAvg2D.ppRun15.d6m1y2025.root", "recreate");
   std::cout << "    Opened output file" << std::endl;
 
   // load input options
@@ -405,7 +407,257 @@ void RunPHCorrelatorPlotter() {
           );
         }  // end colly sim vs. reco plot
 
-        /* TODO add 2d comparisons here */
+        // make 2d collins angle (blue) comparison ----------------------------
+        {
+
+          // make canvas name
+          const std::string coll2db_canvas = IO::MakeCanvasName("cDataVsSimCollinsVsRB", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
+
+          // build hist names
+          std::string coll2db_dat_hist = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+          std::string coll2db_rec_hist = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+          std::string coll2db_tru_hist = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
+
+          // build hist renames
+          std::string coll2db_dat_name = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+          std::string coll2db_rec_name = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+          std::string coll2db_tru_name = IO::MakeHistName("EECCollinsBlueVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
+
+          // build hist legends
+          std::string coll2db_dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+          std::string coll2db_rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+          std::string coll2db_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+
+          // bundle input options
+          IO::Opts coll2db_dat_opt = IO::Opts(
+            in_files[ico][IO::Data],
+            coll2db_dat_hist,
+            coll2db_dat_name,
+            coll2db_dat_leg,
+            899,
+            24
+          );
+          IO::Opts coll2db_rec_opt = IO::Opts(
+            in_files[ico][IO::Reco],
+            coll2db_rec_hist,
+            coll2db_rec_name,
+            coll2db_rec_leg,
+            859,
+            25
+          );
+          IO::Opts coll2db_tru_opt = IO::Opts(
+            in_files[ico][IO::True],
+            coll2db_tru_hist,
+            coll2db_tru_name,
+            coll2db_tru_leg,
+            923,
+            29
+          );
+
+          // load into vector
+          std::vector<IO::Opts> coll2db_opts;
+          coll2db_opts.push_back( coll2db_dat_opt );
+          coll2db_opts.push_back( coll2db_rec_opt );
+          coll2db_opts.push_back( coll2db_tru_opt );
+
+          // make plot
+          plotter.CompareSpectra2D(
+            C2::Inputs(coll2db_opts),
+            C2::PlotRange(),
+            C2::NormRange(),
+            C2::Canvas(coll2db_canvas, coll2db_opts),
+            simdata_coll2d_ofile
+          );
+        }  // end coll2db sim vs. reco plot
+
+        // make coll2dins angle (yellow) comparison -----------------------------
+        if (ico != IO::PAu) {
+
+          // make canvas name
+          const std::string coll2dy_canvas = IO::MakeCanvasName("cDataVsSimCollinsVsRY", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
+
+          // build hist names
+          std::string coll2dy_dat_hist = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+          std::string coll2dy_rec_hist = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+          std::string coll2dy_tru_hist = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
+
+          // build hist renames
+          std::string coll2dy_dat_name = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+          std::string coll2dy_rec_name = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+          std::string coll2dy_tru_name = IO::MakeHistName("EECCollinsYellVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
+
+          // build hist legends
+          std::string coll2dy_dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+          std::string coll2dy_rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+          std::string coll2dy_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+
+          // bundle input options
+          IO::Opts coll2dy_dat_opt = IO::Opts(
+            in_files[ico][IO::Data],
+            coll2dy_dat_hist,
+            coll2dy_dat_name,
+            coll2dy_dat_leg,
+            899,
+            24
+          );
+          IO::Opts coll2dy_rec_opt = IO::Opts(
+            in_files[ico][IO::Reco],
+            coll2dy_rec_hist,
+            coll2dy_rec_name,
+            coll2dy_rec_leg,
+            859,
+            25
+          );
+          IO::Opts coll2dy_tru_opt = IO::Opts(
+            in_files[ico][IO::True],
+            coll2dy_tru_hist,
+            coll2dy_tru_name,
+            coll2dy_tru_leg,
+            923,
+            29
+          );
+
+          // load into vector
+          std::vector<IO::Opts> coll2dy_opts;
+          coll2dy_opts.push_back( coll2dy_dat_opt );
+          coll2dy_opts.push_back( coll2dy_rec_opt );
+          coll2dy_opts.push_back( coll2dy_tru_opt );
+
+          // make plot
+          plotter.CompareSpectra2D(
+            C2::Inputs(coll2dy_opts),
+            C2::PlotRange(),
+            C2::NormRange(),
+            C2::Canvas(coll2dy_canvas, coll2dy_opts),
+            simdata_coll2d_ofile
+          );
+        }  // end coll2dy sim vs. reco plot
+
+        // make 2d hadron average angle (blue) comparison ---------------------
+        {
+
+          // make canvas name
+          const std::string havg2db_canvas = IO::MakeCanvasName("cDataVsSimHadAvgVsRB", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
+
+          // build hist names
+          std::string havg2db_dat_hist = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+          std::string havg2db_rec_hist = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+          std::string havg2db_tru_hist = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
+
+          // build hist renames
+          std::string havg2db_dat_name = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+          std::string havg2db_rec_name = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+          std::string havg2db_tru_name = IO::MakeHistName("EECHadAvgBlueVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
+
+          // build hist legends
+          std::string havg2db_dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+          std::string havg2db_rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+          std::string havg2db_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+
+          // bundle input options
+          IO::Opts havg2db_dat_opt = IO::Opts(
+            in_files[ico][IO::Data],
+            havg2db_dat_hist,
+            havg2db_dat_name,
+            havg2db_dat_leg,
+            899,
+            24
+          );
+          IO::Opts havg2db_rec_opt = IO::Opts(
+            in_files[ico][IO::Reco],
+            havg2db_rec_hist,
+            havg2db_rec_name,
+            havg2db_rec_leg,
+            859,
+            25
+          );
+          IO::Opts havg2db_tru_opt = IO::Opts(
+            in_files[ico][IO::True],
+            havg2db_tru_hist,
+            havg2db_tru_name,
+            havg2db_tru_leg,
+            923,
+            29
+          );
+
+          // load into vector
+          std::vector<IO::Opts> havg2db_opts;
+          havg2db_opts.push_back( havg2db_dat_opt );
+          havg2db_opts.push_back( havg2db_rec_opt );
+          havg2db_opts.push_back( havg2db_tru_opt );
+
+          // make plot
+          plotter.CompareSpectra2D(
+            C2::Inputs(havg2db_opts),
+            C2::PlotRange(),
+            C2::NormRange(),
+            C2::Canvas(havg2db_canvas, havg2db_opts),
+            simdata_havg2d_ofile
+          );
+        }  // end havg2db sim vs. reco plot
+
+        // make 2d hardon average angle (yellow) comparion ----------------------
+        if (ico != IO::PAu) {
+
+          // make canvas name
+          const std::string havg2dy_canvas = IO::MakeCanvasName("cDataVsSimHadAvgVsRY", pt_hist[ipt], spin_hist[isp], "", spe_hist[ico]);
+
+          // build hist names
+          std::string havg2dy_dat_hist = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp]);
+          std::string havg2dy_rec_hist = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp]);
+          std::string havg2dy_tru_hist = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp]);
+
+          // build hist renames
+          std::string havg2dy_dat_name = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::Data], pt_hist[ipt], spin_hist[isp], tag);
+          std::string havg2dy_rec_name = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::Reco], pt_hist[ipt], spin_hist[isp], tag);
+          std::string havg2dy_tru_name = IO::MakeHistName("EECHadAvgYellVsR", lvl_hist[IO::True], pt_hist[ipt], spin_hist[isp], tag);
+
+          // build hist legends
+          std::string havg2dy_dat_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Data]);
+          std::string havg2dy_rec_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::Reco]);
+          std::string havg2dy_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
+
+          // bundle input options
+          IO::Opts havg2dy_dat_opt = IO::Opts(
+            in_files[ico][IO::Data],
+            havg2dy_dat_hist,
+            havg2dy_dat_name,
+            havg2dy_dat_leg,
+            899,
+            24
+          );
+          IO::Opts havg2dy_rec_opt = IO::Opts(
+            in_files[ico][IO::Reco],
+            havg2dy_rec_hist,
+            havg2dy_rec_name,
+            havg2dy_rec_leg,
+            859,
+            25
+          );
+          IO::Opts havg2dy_tru_opt = IO::Opts(
+            in_files[ico][IO::True],
+            havg2dy_tru_hist,
+            havg2dy_tru_name,
+            havg2dy_tru_leg,
+            923,
+            29
+          );
+
+          // load into vector
+          std::vector<IO::Opts> havg2dy_opts;
+          havg2dy_opts.push_back( havg2dy_dat_opt );
+          havg2dy_opts.push_back( havg2dy_rec_opt );
+          havg2dy_opts.push_back( havg2dy_tru_opt );
+
+          // make plot
+          plotter.CompareSpectra2D(
+            C2::Inputs(havg2dy_opts),
+            C2::PlotRange(),
+            C2::NormRange(),
+            C2::Canvas(havg2dy_canvas, havg2dy_opts),
+            simdata_havg2d_ofile
+          );
+        }  // end havg2dy sim vs. reco plot
 
       }  // end spin loop
     }  // end pt jet loop
