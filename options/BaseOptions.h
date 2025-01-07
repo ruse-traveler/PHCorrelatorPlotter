@@ -13,10 +13,13 @@
 #define BASEOPTIONS_H
 
 // c++ utilities
+#include <iostream>
 #include <string>
 #include <vector>
 // plotting utilities
 #include "../include/PHCorrelatorPlotting.h"
+// plotting options
+#include "InputOutput.h"
 
 
 
@@ -94,12 +97,25 @@ namespace BaseOptions {
    *  which holds information (e.g. about which
    *  simulation was used for the plots).
    */ 
-  PHEC::TextBox Text() {
+  PHEC::TextBox Text(const int species = InputOutput::PP) {
 
-    // text to display
+    std::string system("");
+    switch (species) {
+      case InputOutput::PP:
+        system += "p+p collisions";
+        break;
+      case InputOutput::PAu:
+        system += "p+Au collisions";
+        break;
+      default:
+        std::cerr << "WARNING: unknown option " << species << "!" << std::endl;
+        break;
+    }
+
+    // set text to display
     PHEC::Type::TextList lines;
-    lines.push_back("#bf{#it{PHENIX}} simulation");
-    lines.push_back("PYTHIA-8, Run 15 Geom.");
+    lines.push_back("#bf{#it{PHENIX}} Run-15");
+    lines.push_back(system);
 
     // grab base text style for line spacing
     const PHEC::Style& style = BaseTextStyle();
@@ -120,7 +136,7 @@ namespace BaseOptions {
     // return text box definition
     return PHEC::TextBox(lines, vertices);
 
-  }  // end 'Text()'
+  }  // end 'Text(int)'
 
 }  // end BaseOptions namespace
 

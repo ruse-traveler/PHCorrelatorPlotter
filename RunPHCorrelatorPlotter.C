@@ -80,6 +80,17 @@ void RunPHCorrelatorPlotter() {
   // compare sim vs. data distributions
   // --------------------------------------------------------------------------
 
+  // colors for data, reco, and truth levels
+  const std::size_t dat_col = 899;
+  const std::size_t rec_col = 859;
+  const std::size_t tru_col = 923;
+
+  // markers for data, reco, and truth levels
+  const std::size_t dat_mar = 24;
+  const std::size_t rec_mar = 25;
+  const std::size_t tru_mar = 29;
+
+  // loop through all combinations of species, jet pt, and spin
   for (std::size_t ico = 0; ico < spe_hist.size(); ++ico) {
     for (std::size_t ipt = 0; ipt < pt_hist.size(); ++ipt) {
       for (std::size_t isp = 0; isp < spin_hist.size(); ++isp) {
@@ -89,6 +100,9 @@ void RunPHCorrelatorPlotter() {
           const bool isOnlyBlue = ((isp == IO::BU) || (isp == IO::BD) || (isp == IO::Int));
           if (!isOnlyBlue) continue;
         }
+
+        // make sure collision system is correct
+        if (ico == IO::PAu) plotter.SetTextBox( BO::Text(ico) );
 
         // make hist tag
         const std::string tag = "DataVsSim" + spe_hist[ico] + "_";
@@ -123,8 +137,8 @@ void RunPHCorrelatorPlotter() {
             eec_dat_name,
             eec_dat_leg,
             PHEC::Style::Plot(
-              899,
-              24
+              dat_col,
+              dat_mar
             )
           );
           PHEC::PlotInput eec_rec_opt = PHEC::PlotInput(
@@ -133,8 +147,8 @@ void RunPHCorrelatorPlotter() {
             eec_rec_name,
             eec_rec_leg,
             PHEC::Style::Plot(
-              859,
-              25
+              rec_col,
+              rec_mar
             )
           );
           PHEC::PlotInput eec_tru_opt = PHEC::PlotInput(
@@ -143,8 +157,8 @@ void RunPHCorrelatorPlotter() {
             eec_tru_name,
             eec_tru_leg,
             PHEC::Style::Plot(
-              923,
-              29
+              tru_col,
+              tru_mar
             )
           );
 
@@ -194,8 +208,8 @@ void RunPHCorrelatorPlotter() {
             collb_dat_name,
             collb_dat_leg,
             PHEC::Style::Plot(
-              899,
-              24
+              dat_col,
+              dat_mar
             )
           );
           PHEC::PlotInput collb_rec_opt = PHEC::PlotInput(
@@ -204,8 +218,8 @@ void RunPHCorrelatorPlotter() {
             collb_rec_name,
             collb_rec_leg,
             PHEC::Style::Plot(
-              859,
-              25
+              rec_col,
+              rec_mar
             )
           );
           PHEC::PlotInput collb_tru_opt = PHEC::PlotInput(
@@ -214,8 +228,8 @@ void RunPHCorrelatorPlotter() {
             collb_tru_name,
             collb_tru_leg,
             PHEC::Style::Plot(
-              923,
-              29
+              tru_col,
+              tru_mar
             )
           );
 
@@ -265,8 +279,8 @@ void RunPHCorrelatorPlotter() {
             colly_dat_name,
             colly_dat_leg,
             PHEC::Style::Plot(
-              899,
-              24
+              dat_col,
+              dat_mar
             )
           );
           PHEC::PlotInput colly_rec_opt = PHEC::PlotInput(
@@ -275,8 +289,8 @@ void RunPHCorrelatorPlotter() {
             colly_rec_name,
             colly_rec_leg,
             PHEC::Style::Plot(
-              859,
-              25
+              rec_col,
+              rec_mar
             )
           );
           PHEC::PlotInput colly_tru_opt = PHEC::PlotInput(
@@ -285,8 +299,8 @@ void RunPHCorrelatorPlotter() {
             colly_tru_name,
             colly_tru_leg,
             PHEC::Style::Plot(
-              923,
-              29
+              tru_col,
+              tru_mar
             )
           );
 
@@ -336,8 +350,8 @@ void RunPHCorrelatorPlotter() {
             havgb_dat_name,
             havgb_dat_leg,
             PHEC::Style::Plot(
-              899,
-              24
+              dat_col,
+              dat_mar
             )
           );
           PHEC::PlotInput havgb_rec_opt = PHEC::PlotInput(
@@ -346,8 +360,8 @@ void RunPHCorrelatorPlotter() {
             havgb_rec_name,
             havgb_rec_leg,
             PHEC::Style::Plot(
-              859,
-              25
+              rec_col,
+              rec_mar
             )
           );
           PHEC::PlotInput havgb_tru_opt = PHEC::PlotInput(
@@ -356,8 +370,8 @@ void RunPHCorrelatorPlotter() {
             havgb_tru_name,
             havgb_tru_leg,
             PHEC::Style::Plot(
-              923,
-              29
+              tru_col,
+              tru_mar
             )
           );
 
@@ -407,8 +421,8 @@ void RunPHCorrelatorPlotter() {
             havgy_dat_name,
             havgy_dat_leg,
             PHEC::Style::Plot(
-              899,
-              24
+              dat_col,
+              dat_mar
             )
           );
           PHEC::PlotInput havgy_rec_opt = PHEC::PlotInput(
@@ -417,8 +431,8 @@ void RunPHCorrelatorPlotter() {
             havgy_rec_name,
             havgy_rec_leg,
             PHEC::Style::Plot(
-              859,
-              25
+              rec_col,
+              rec_mar
             )
           );
           PHEC::PlotInput havgy_tru_opt = PHEC::PlotInput(
@@ -427,8 +441,8 @@ void RunPHCorrelatorPlotter() {
             havgy_tru_name,
             havgy_tru_leg,
             PHEC::Style::Plot(
-              923,
-              29
+              tru_col,
+              tru_mar
             )
           );
 
