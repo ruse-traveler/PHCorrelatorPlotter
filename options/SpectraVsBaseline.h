@@ -38,82 +38,6 @@ namespace SpectraVsBaseline {
 
 
   // --------------------------------------------------------------------------
-  //! Create denominator input
-  // --------------------------------------------------------------------------
-  /*! This method collects all information needed to plot
-   *  the baseline to be compared against. Needed
-   *  information:
-   *
-   *    .file   = file object to be drawn is located in,
-   *    .object = name of object to be drawn
-   *    .rename = what to rename object to when saving to output
-   *    .legend = what object's entry in a TLegend will say
-   *    .style  = color, marker, line, and fill style
-   *              (grouped into a PlotHelper::Style::Plot struct)
-   */
-  PHEC::PlotInput Denominator(const InputOutput::Opts& denom_options) {
-
-    // collect information
-    PHEC::PlotInput denominator = PHEC::PlotInput(
-      PHEC::PlotInput(
-        denom_options.file,
-        denom_options.hist,
-        denom_options.name,
-        denom_options.leg,
-        PHEC::Style::Plot(
-          denom_options.col,
-          denom_options.mar,
-          0
-        )
-      )
-    );
-    return denominator;
-
-  }  // end 'Denominator(IO::Opts&)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Create numerator input list
-  // --------------------------------------------------------------------------
-  /*! This method collects all information needed to plot
-   *  the spectra to compare against the baseline. Needed
-   *  information:
-   *
-   *    .file   = file object to be drawn is located in,
-   *    .object = name of object to be drawn
-   *    .rename = what to rename object to when saving to output
-   *    .legend = what object's entry in a TLegend will say
-   *    .style  = color, marker, line, and fill style
-   *              (grouped into a PlotHelper::Style::Plot struct)
-   */
-  std::vector<PHEC::PlotInput> Numerators(
-    const std::vector<InputOutput::Opts>& numer_options
-  ) {
-
-    std::vector<PHEC::PlotInput> numerators;
-    for (std::size_t iopt = 0; iopt < numer_options.size(); ++iopt) {
-      numerators.push_back(
-        PHEC::PlotInput(
-          numer_options[iopt].file,
-          numer_options[iopt].hist,
-          numer_options[iopt].name,
-          numer_options[iopt].leg,
-          PHEC::Style::Plot(
-            numer_options[iopt].col,
-            numer_options[iopt].mar,
-            0
-          )
-        )
-      );
-    }
-    return numerators;
-
-  }  // end 'Numerators()'
-
-
-
-  // --------------------------------------------------------------------------
   //! Define plot range
   // --------------------------------------------------------------------------
   /*! Plot range arguments:
@@ -154,13 +78,13 @@ namespace SpectraVsBaseline {
   // --------------------------------------------------------------------------
   //! Define normalization range
   // --------------------------------------------------------------------------
-  PHEC::Range NormRange(const int opt - Side) {
+  PHEC::Range NormRange(const int opt = Side) {
 
     // grab plot range
-    PHEC::Range plot_range - PlotRange(opt);
+    PHEC::Range plot_range = PlotRange(opt);
 
     // set normalization range
-    PHEC::Range range - PHEC::Range(plot_range.x);
+    PHEC::Range range = PHEC::Range(plot_range.x);
     return range;
 
   }  // end 'NormRange(int)'

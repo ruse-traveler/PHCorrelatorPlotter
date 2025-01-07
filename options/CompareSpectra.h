@@ -39,46 +39,6 @@ namespace CompareSpectra {
 
 
   // --------------------------------------------------------------------------
-  //! Create input list for ENC spectra
-  // --------------------------------------------------------------------------
-  /*! This method collects all information needed to plot
-   *  various ENC spectra. Additional inputs can be added
-   *  or removed. Needed information:
-   *
-   *    .file   = file object to be drawn is located in,
-   *    .object = name of object to be drawn
-   *    .rename = what to rename object to when saving to output
-   *    .legend = what object's entry in a TLegend will say
-   *    .style  = color, marker, line, and fill style
-   *              (grouped into a PlotHelper::Style::Plot struct)
-   */
-  std::vector<PHEC::PlotInput> Inputs(
-    const std::vector<InputOutput::Opts>& in_options
-  ) {
-
-    std::vector<PHEC::PlotInput> inputs;
-    for (std::size_t iopt = 0; iopt < in_options.size(); ++iopt) {
-      inputs.push_back(
-        PHEC::PlotInput(
-          in_options[iopt].file,
-          in_options[iopt].hist,
-          in_options[iopt].name,
-          in_options[iopt].leg,
-          PHEC::Style::Plot(
-            in_options[iopt].col,
-            in_options[iopt].mar,
-            0
-          )
-        )
-      );
-    }
-    return inputs;
-
-  }  // end 'Inputs(std::vector<IO::Opts>&)'
-
-
-
-  // --------------------------------------------------------------------------
   //! Define plot range
   // --------------------------------------------------------------------------
   /*! Plot range arguments:

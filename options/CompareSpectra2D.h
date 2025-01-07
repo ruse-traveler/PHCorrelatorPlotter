@@ -31,46 +31,6 @@
 namespace CompareSpectra2D {
 
   // --------------------------------------------------------------------------
-  //! Create input list for 2D spectra
-  // --------------------------------------------------------------------------
-  /*! This method collects all information needed to plot
-   *  various 2D spectra. Additional inputs can be added
-   *  or removed. Needed information:
-   *
-   *    .file   = file object to be drawn is located in,
-   *    .object = name of object to be drawn
-   *    .rename = what to rename object to when saving to output
-   *    .legend = what object's entry in a TLegend will say
-   *    .style  = color, marker, line, and fill style
-   *              (grouped into a PlotHelper::Style::Plot struct)
-   */
-  std::vector<PHEC::PlotInput> Inputs(
-    const std::vector<InputOutput::Opts>& in_options
-  ) {
-
-    std::vector<PHEC::PlotInput> inputs;
-    for (std::size_t iopt = 0; iopt < in_options.size(); ++iopt) {
-      inputs.push_back(
-        PHEC::PlotInput(
-          in_options[iopt].file,
-          in_options[iopt].hist,
-          in_options[iopt].name,
-          in_options[iopt].leg,
-          PHEC::Style::Plot(
-            in_options[iopt].col,
-            in_options[iopt].mar,
-            0
-          )
-        )
-      );
-    }
-    return inputs;
-
-  }  // end 'Inputs(std::vector<IO::Opts>&)'
-
-
-
-  // --------------------------------------------------------------------------
   //! Define plot range
   // --------------------------------------------------------------------------
   /*! Plot range arguments:
@@ -110,9 +70,13 @@ namespace CompareSpectra2D {
   // --------------------------------------------------------------------------
   //! Define canvas
   // --------------------------------------------------------------------------
+  /*! The 2nd parameter determines how many panels
+   *  to create on the canvas: nominally should be
+   *  1 for each histogram to draw.
+   */ 
   PHEC::Canvas Canvas(
     const std::string& name = "cSpectra2D",
-    const std::vector<InputOutput::Opts>& in_options = std::vector<InputOutput::Opts>()
+    const std::vector<PHEC::PlotInput>& inputs = std::vector<PHEC::PlotInput>()
   ) {
 
     // grab default pad options, and
@@ -124,17 +88,17 @@ namespace CompareSpectra2D {
     // determine canvas dimensions
     //   - FIXME layout of canvas should be configurable
     const PHEC::Type::Dimensions dimensions = std::make_pair(
-      950 * in_options.size(),
+      950 * inputs.size(),
       950
     );
 
     // determine vertices of pads
     std::vector<PHEC::Type::Vertices> pad_vtxs;    
-    for (std::size_t iin = 0; iin < in_options.size(); ++iin) {
+    for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
 
       // set x vertices
-      const double startx = iin * (1.0 / in_options.size());
-      const double stopx  = (iin + 1) * (1.0 / in_options.size());
+      const double startx = iin * (1.0 / inputs.size());
+      const double stopx  = (iin + 1) * (1.0 / inputs.size());
 
       // add to vector
       pad_vtxs.push_back( PHEC::Type::Vertices() );
@@ -153,7 +117,7 @@ namespace CompareSpectra2D {
 
     // define canvas (use default pad options)
     PHEC::Canvas canvas = PHEC::Canvas(name, "", dimensions, PHEC::PadOpts());
-    for (std::size_t iin = 0; iin < in_options.size(); ++iin) {
+    for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
 
       // create name
       TString tname("pSpec");
@@ -172,7 +136,7 @@ namespace CompareSpectra2D {
     }
     return canvas;
 
-  }  // end 'Canvas(std::string&, std::vector<IO::Opts>&)'
+  }  // end 'Canvas(std::string&, std::vector<PHEC::PlotInput>&)'
 
 
 

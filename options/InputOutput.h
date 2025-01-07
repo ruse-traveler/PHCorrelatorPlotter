@@ -51,55 +51,10 @@ namespace InputOutput {
 
 
   // --------------------------------------------------------------------------
-  //! Input options
-  // --------------------------------------------------------------------------
-  /*! Tiny struct to bundle various information for
-   *  defining inputs.
-   *
-   *  FIXME probably could just use the usual PHEC::PlotInput
-   */ 
-  struct Opts {
-
-    // members
-    std::string file;
-    std::string hist;
-    std::string name;
-    std::string leg;
-    std::size_t col;
-    std::size_t mar;
-
-    // default ctor/dtor
-    Opts()  {};
-    ~Opts() {};
-
-    // ctor accepting arguments
-    Opts(
-      const std::string farg,
-      const std::string harg,
-      const std::string narg,
-      const std::string larg,
-      const std::size_t carg,
-      const std::size_t marg
-    ) {
-      file = farg;
-      hist = harg;
-      name = narg;
-      leg  = larg;
-      col  = carg;
-      mar  = marg;
-    }
-
-  };
-
-
-  // --------------------------------------------------------------------------
   //! Input files
   // --------------------------------------------------------------------------
   /*! For convenience, all inputs files you'll need can
    *  be collected here.
-   *
-   *  FIXME it might be useful to create an input file list
-   *  as part of the plotter...
    */
   InFiles LoadInputFiles() {
 

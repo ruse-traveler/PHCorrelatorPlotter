@@ -77,7 +77,7 @@ namespace PHEnergyCorrelator {
         Plot(
           const std::size_t col_arg,
           const std::size_t mar_arg,
-          const std::size_t fil_arg,
+          const std::size_t fil_arg = 0,
           const std::size_t lin_arg = 1,
           const std::size_t lin_wid = 1
         ) {

@@ -49,11 +49,11 @@ void RunPHCorrelatorPlotter() {
   // --------------------------------------------------------------------------
 
   // open output files
-  TFile* simdata_eec_ofile    = PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d6m1y2025.root", "recreate");
-  TFile* simdata_coll_ofile   = PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d6m1y2025.root", "recreate");
-  TFile* simdata_havg_ofile   = PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d6m1y2025.root", "recreate");
-  TFile* simdata_coll2d_ofile = PHEC::Tools::OpenFile("simVsRecoCollins2D.ppRun15.d6m1y2025.root", "recreate");
-  TFile* simdata_havg2d_ofile = PHEC::Tools::OpenFile("simVsRecoHadAvg2D.ppRun15.d6m1y2025.root", "recreate");
+  TFile* simdata_eec_ofile    = PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d7m1y2025.root", "recreate");
+  TFile* simdata_coll_ofile   = PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d7m1y2025.root", "recreate");
+  TFile* simdata_havg_ofile   = PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d7m1y2025.root", "recreate");
+  TFile* simdata_coll2d_ofile = PHEC::Tools::OpenFile("simVsRecoCollins2D.ppRun15.d7m1y2025.root", "recreate");
+  TFile* simdata_havg2d_ofile = PHEC::Tools::OpenFile("simVsRecoHadAvg2D.ppRun15.d7m1y2025.root", "recreate");
   std::cout << "    Opened output file" << std::endl;
 
   // load input options
@@ -117,40 +117,46 @@ void RunPHCorrelatorPlotter() {
           std::string eec_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts eec_dat_opt = IO::Opts(
+          PHEC::PlotInput eec_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             eec_dat_hist,
             eec_dat_name,
             eec_dat_leg,
-            899,
-            24
+            PHEC::Style::Plot(
+              899,
+              24
+            )
           );
-          IO::Opts eec_rec_opt = IO::Opts(
+          PHEC::PlotInput eec_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             eec_rec_hist,
             eec_rec_name,
             eec_rec_leg,
-            859,
-            25
+            PHEC::Style::Plot(
+              859,
+              25
+            )
           );
-          IO::Opts eec_tru_opt = IO::Opts(
+          PHEC::PlotInput eec_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             eec_tru_hist,
             eec_tru_name,
             eec_tru_leg,
-            923,
-            29
+            PHEC::Style::Plot(
+              923,
+              29
+            )
           );
 
           // load into vector
-          std::vector<IO::Opts> eec_num_opts;
-          eec_num_opts.push_back( eec_dat_opt );
-          eec_num_opts.push_back( eec_rec_opt );
+          std::vector<PHEC::PlotInput> eec_num_input;
+          eec_num_input.push_back( eec_dat_opt );
+          eec_num_input.push_back( eec_rec_opt );
 
           // make plot
           plotter.CompareSpectraToBaseline(
-            SB::Denominator(eec_tru_opt),
-            SB::Numerators(eec_num_opts),
+            eec_tru_opt,
+            eec_num_input,
             SB::PlotRange(SB::Side),
             SB::NormRange(SB::Side),
             SB::Canvas(eec_canvas, SB::Side),
@@ -182,40 +188,46 @@ void RunPHCorrelatorPlotter() {
           std::string collb_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts collb_dat_opt = IO::Opts(
+          PHEC::PlotInput collb_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             collb_dat_hist,
             collb_dat_name,
             collb_dat_leg,
-            899,
-            24
+            PHEC::Style::Plot(
+              899,
+              24
+            )
           );
-          IO::Opts collb_rec_opt = IO::Opts(
+          PHEC::PlotInput collb_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             collb_rec_hist,
             collb_rec_name,
             collb_rec_leg,
-            859,
-            25
+            PHEC::Style::Plot(
+              859,
+              25
+            )
           );
-          IO::Opts collb_tru_opt = IO::Opts(
+          PHEC::PlotInput collb_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             collb_tru_hist,
             collb_tru_name,
             collb_tru_leg,
-            923,
-            29
+            PHEC::Style::Plot(
+              923,
+              29
+            )
           );
 
           // load into vector
-          std::vector<IO::Opts> collb_num_opts;
-          collb_num_opts.push_back( collb_dat_opt );
-          collb_num_opts.push_back( collb_rec_opt );
+          std::vector<PHEC::PlotInput> collb_num_input;
+          collb_num_input.push_back( collb_dat_opt );
+          collb_num_input.push_back( collb_rec_opt );
 
           // make plot
           plotter.CompareSpectraToBaseline(
-            SB::Denominator(collb_tru_opt),
-            SB::Numerators(collb_num_opts),
+            collb_tru_opt,
+            collb_num_input,
             SB::PlotRange(SB::Angle),
             SB::NormRange(SB::Angle),
             SB::Canvas(collb_canvas, SB::Angle),
@@ -247,40 +259,46 @@ void RunPHCorrelatorPlotter() {
           std::string colly_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts colly_dat_opt = IO::Opts(
+          PHEC::PlotInput colly_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             colly_dat_hist,
             colly_dat_name,
             colly_dat_leg,
-            899,
-            24
+            PHEC::Style::Plot(
+              899,
+              24
+            )
           );
-          IO::Opts colly_rec_opt = IO::Opts(
+          PHEC::PlotInput colly_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             colly_rec_hist,
             colly_rec_name,
             colly_rec_leg,
-            859,
-            25
+            PHEC::Style::Plot(
+              859,
+              25
+            )
           );
-          IO::Opts colly_tru_opt = IO::Opts(
+          PHEC::PlotInput colly_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             colly_tru_hist,
             colly_tru_name,
             colly_tru_leg,
-            923,
-            29
+            PHEC::Style::Plot(
+              923,
+              29
+            )
           );
 
           // load into vector
-          std::vector<IO::Opts> colly_num_opts;
-          colly_num_opts.push_back( colly_dat_opt );
-          colly_num_opts.push_back( colly_rec_opt );
+          std::vector<PHEC::PlotInput> colly_num_input;
+          colly_num_input.push_back( colly_dat_opt );
+          colly_num_input.push_back( colly_rec_opt );
 
           // make plot
           plotter.CompareSpectraToBaseline(
-            SB::Denominator(colly_tru_opt),
-            SB::Numerators(colly_num_opts),
+            colly_tru_opt,
+            colly_num_input,
             SB::PlotRange(SB::Angle),
             SB::NormRange(SB::Angle),
             SB::Canvas(colly_canvas, SB::Angle),
@@ -312,40 +330,46 @@ void RunPHCorrelatorPlotter() {
           std::string havgb_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts havgb_dat_opt = IO::Opts(
+          PHEC::PlotInput havgb_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             havgb_dat_hist,
             havgb_dat_name,
             havgb_dat_leg,
-            899,
-            24
+            PHEC::Style::Plot(
+              899,
+              24
+            )
           );
-          IO::Opts havgb_rec_opt = IO::Opts(
+          PHEC::PlotInput havgb_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             havgb_rec_hist,
             havgb_rec_name,
             havgb_rec_leg,
-            859,
-            25
+            PHEC::Style::Plot(
+              859,
+              25
+            )
           );
-          IO::Opts havgb_tru_opt = IO::Opts(
+          PHEC::PlotInput havgb_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             havgb_tru_hist,
             havgb_tru_name,
             havgb_tru_leg,
-            923,
-            29
+            PHEC::Style::Plot(
+              923,
+              29
+            )
           );
 
           // load into vector
-          std::vector<IO::Opts> havgb_num_opts;
-          havgb_num_opts.push_back( havgb_dat_opt );
-          havgb_num_opts.push_back( havgb_rec_opt );
+          std::vector<PHEC::PlotInput> havgb_num_input;
+          havgb_num_input.push_back( havgb_dat_opt );
+          havgb_num_input.push_back( havgb_rec_opt );
 
           // make plot
           plotter.CompareSpectraToBaseline(
-            SB::Denominator(havgb_tru_opt),
-            SB::Numerators(havgb_num_opts),
+            havgb_tru_opt,
+            havgb_num_input,
             SB::PlotRange(SB::Angle),
             SB::NormRange(SB::Angle),
             SB::Canvas(havgb_canvas, SB::Angle),
@@ -377,40 +401,46 @@ void RunPHCorrelatorPlotter() {
           std::string havgy_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts havgy_dat_opt = IO::Opts(
+          PHEC::PlotInput havgy_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             havgy_dat_hist,
             havgy_dat_name,
             havgy_dat_leg,
-            899,
-            24
+            PHEC::Style::Plot(
+              899,
+              24
+            )
           );
-          IO::Opts havgy_rec_opt = IO::Opts(
+          PHEC::PlotInput havgy_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             havgy_rec_hist,
             havgy_rec_name,
             havgy_rec_leg,
-            859,
-            25
+            PHEC::Style::Plot(
+              859,
+              25
+            )
           );
-          IO::Opts havgy_tru_opt = IO::Opts(
+          PHEC::PlotInput havgy_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             havgy_tru_hist,
             havgy_tru_name,
             havgy_tru_leg,
-            923,
-            29
+            PHEC::Style::Plot(
+              923,
+              29
+            )
           );
 
           // load into vector
-          std::vector<IO::Opts> havgy_num_opts;
-          havgy_num_opts.push_back( havgy_dat_opt );
-          havgy_num_opts.push_back( havgy_rec_opt );
+          std::vector<PHEC::PlotInput> havgy_num_input;
+          havgy_num_input.push_back( havgy_dat_opt );
+          havgy_num_input.push_back( havgy_rec_opt );
 
           // make plot
           plotter.CompareSpectraToBaseline(
-            SB::Denominator(havgy_tru_opt),
-            SB::Numerators(havgy_num_opts),
+            havgy_tru_opt,
+            havgy_num_input,
             SB::PlotRange(SB::Angle),
             SB::NormRange(SB::Angle),
             SB::Canvas(havgy_canvas, SB::Angle),
@@ -442,43 +472,37 @@ void RunPHCorrelatorPlotter() {
           std::string coll2db_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts coll2db_dat_opt = IO::Opts(
+          PHEC::PlotInput coll2db_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             coll2db_dat_hist,
             coll2db_dat_name,
-            coll2db_dat_leg,
-            899,
-            24
+            coll2db_dat_leg
           );
-          IO::Opts coll2db_rec_opt = IO::Opts(
+          PHEC::PlotInput coll2db_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             coll2db_rec_hist,
             coll2db_rec_name,
-            coll2db_rec_leg,
-            859,
-            25
+            coll2db_rec_leg
           );
-          IO::Opts coll2db_tru_opt = IO::Opts(
+          PHEC::PlotInput coll2db_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             coll2db_tru_hist,
             coll2db_tru_name,
-            coll2db_tru_leg,
-            923,
-            29
+            coll2db_tru_leg
           );
 
           // load into vector
-          std::vector<IO::Opts> coll2db_opts;
-          coll2db_opts.push_back( coll2db_dat_opt );
-          coll2db_opts.push_back( coll2db_rec_opt );
-          coll2db_opts.push_back( coll2db_tru_opt );
+          std::vector<PHEC::PlotInput> coll2db_input;
+          coll2db_input.push_back( coll2db_dat_opt );
+          coll2db_input.push_back( coll2db_rec_opt );
+          coll2db_input.push_back( coll2db_tru_opt );
 
           // make plot
           plotter.CompareSpectra2D(
-            C2::Inputs(coll2db_opts),
+            coll2db_input,
             C2::PlotRange(),
             C2::NormRange(),
-            C2::Canvas(coll2db_canvas, coll2db_opts),
+            C2::Canvas(coll2db_canvas, coll2db_input),
             simdata_coll2d_ofile
           );
         }  // end 2d collins (blue) sim vs. reco plot
@@ -507,43 +531,37 @@ void RunPHCorrelatorPlotter() {
           std::string coll2dy_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts coll2dy_dat_opt = IO::Opts(
+          PHEC::PlotInput coll2dy_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             coll2dy_dat_hist,
             coll2dy_dat_name,
-            coll2dy_dat_leg,
-            899,
-            24
+            coll2dy_dat_leg
           );
-          IO::Opts coll2dy_rec_opt = IO::Opts(
+          PHEC::PlotInput coll2dy_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             coll2dy_rec_hist,
             coll2dy_rec_name,
-            coll2dy_rec_leg,
-            859,
-            25
+            coll2dy_rec_leg
           );
-          IO::Opts coll2dy_tru_opt = IO::Opts(
+          PHEC::PlotInput coll2dy_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             coll2dy_tru_hist,
             coll2dy_tru_name,
-            coll2dy_tru_leg,
-            923,
-            29
+            coll2dy_tru_leg
           );
 
           // load into vector
-          std::vector<IO::Opts> coll2dy_opts;
-          coll2dy_opts.push_back( coll2dy_dat_opt );
-          coll2dy_opts.push_back( coll2dy_rec_opt );
-          coll2dy_opts.push_back( coll2dy_tru_opt );
+          std::vector<PHEC::PlotInput> coll2dy_input;
+          coll2dy_input.push_back( coll2dy_dat_opt );
+          coll2dy_input.push_back( coll2dy_rec_opt );
+          coll2dy_input.push_back( coll2dy_tru_opt );
 
           // make plot
           plotter.CompareSpectra2D(
-            C2::Inputs(coll2dy_opts),
+            coll2dy_input,
             C2::PlotRange(),
             C2::NormRange(),
-            C2::Canvas(coll2dy_canvas, coll2dy_opts),
+            C2::Canvas(coll2dy_canvas, coll2dy_input),
             simdata_coll2d_ofile
           );
         }  // end 2d collins (yellow) sim vs. reco plot
@@ -572,43 +590,37 @@ void RunPHCorrelatorPlotter() {
           std::string havg2db_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts havg2db_dat_opt = IO::Opts(
+          PHEC::PlotInput havg2db_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             havg2db_dat_hist,
             havg2db_dat_name,
-            havg2db_dat_leg,
-            899,
-            24
+            havg2db_dat_leg
           );
-          IO::Opts havg2db_rec_opt = IO::Opts(
+          PHEC::PlotInput havg2db_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             havg2db_rec_hist,
             havg2db_rec_name,
-            havg2db_rec_leg,
-            859,
-            25
+            havg2db_rec_leg
           );
-          IO::Opts havg2db_tru_opt = IO::Opts(
+          PHEC::PlotInput havg2db_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             havg2db_tru_hist,
             havg2db_tru_name,
-            havg2db_tru_leg,
-            923,
-            29
+            havg2db_tru_leg
           );
 
           // load into vector
-          std::vector<IO::Opts> havg2db_opts;
-          havg2db_opts.push_back( havg2db_dat_opt );
-          havg2db_opts.push_back( havg2db_rec_opt );
-          havg2db_opts.push_back( havg2db_tru_opt );
+          std::vector<PHEC::PlotInput> havg2db_input;
+          havg2db_input.push_back( havg2db_dat_opt );
+          havg2db_input.push_back( havg2db_rec_opt );
+          havg2db_input.push_back( havg2db_tru_opt );
 
           // make plot
           plotter.CompareSpectra2D(
-            C2::Inputs(havg2db_opts),
+            havg2db_input,
             C2::PlotRange(),
             C2::NormRange(),
-            C2::Canvas(havg2db_canvas, havg2db_opts),
+            C2::Canvas(havg2db_canvas, havg2db_input),
             simdata_havg2d_ofile
           );
         }  // end 2d hadron-average (blue) sim vs. reco plot
@@ -637,43 +649,37 @@ void RunPHCorrelatorPlotter() {
           std::string havg2dy_tru_leg = IO::MakeLegend(pt_legs[ipt], spin_legs[isp], lvl_legs[IO::True]);
 
           // bundle input options
-          IO::Opts havg2dy_dat_opt = IO::Opts(
+          PHEC::PlotInput havg2dy_dat_opt = PHEC::PlotInput(
             in_files[ico][IO::Data],
             havg2dy_dat_hist,
             havg2dy_dat_name,
-            havg2dy_dat_leg,
-            899,
-            24
+            havg2dy_dat_leg
           );
-          IO::Opts havg2dy_rec_opt = IO::Opts(
+          PHEC::PlotInput havg2dy_rec_opt = PHEC::PlotInput(
             in_files[ico][IO::Reco],
             havg2dy_rec_hist,
             havg2dy_rec_name,
-            havg2dy_rec_leg,
-            859,
-            25
+            havg2dy_rec_leg
           );
-          IO::Opts havg2dy_tru_opt = IO::Opts(
+          PHEC::PlotInput havg2dy_tru_opt = PHEC::PlotInput(
             in_files[ico][IO::True],
             havg2dy_tru_hist,
             havg2dy_tru_name,
-            havg2dy_tru_leg,
-            923,
-            29
+            havg2dy_tru_leg
           );
 
           // load into vector
-          std::vector<IO::Opts> havg2dy_opts;
-          havg2dy_opts.push_back( havg2dy_dat_opt );
-          havg2dy_opts.push_back( havg2dy_rec_opt );
-          havg2dy_opts.push_back( havg2dy_tru_opt );
+          std::vector<PHEC::PlotInput> havg2dy_input;
+          havg2dy_input.push_back( havg2dy_dat_opt );
+          havg2dy_input.push_back( havg2dy_rec_opt );
+          havg2dy_input.push_back( havg2dy_tru_opt );
 
           // make plot
           plotter.CompareSpectra2D(
-            C2::Inputs(havg2dy_opts),
+            havg2dy_input,
             C2::PlotRange(),
             C2::NormRange(),
-            C2::Canvas(havg2dy_canvas, havg2dy_opts),
+            C2::Canvas(havg2dy_canvas, havg2dy_input),
             simdata_havg2d_ofile
           );
         }  // end 2d hadron-average (yellow) sim vs. reco plot
