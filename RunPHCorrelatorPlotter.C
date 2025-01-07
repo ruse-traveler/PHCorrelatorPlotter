@@ -79,6 +79,7 @@ void RunPHCorrelatorPlotter() {
   // --------------------------------------------------------------------------
   // compare sim vs. data distributions
   // --------------------------------------------------------------------------
+
   for (std::size_t ico = 0; ico < spe_hist.size(); ++ico) {
     for (std::size_t ipt = 0; ipt < pt_hist.size(); ++ipt) {
       for (std::size_t isp = 0; isp < spin_hist.size(); ++isp) {
@@ -90,9 +91,11 @@ void RunPHCorrelatorPlotter() {
         }
 
         // make hist tag
-        const std::string tag    = "DataVsSim" + spe_hist[ico] + "_";
+        const std::string tag = "DataVsSim" + spe_hist[ico] + "_";
 
-        // make EEC comparison ------------------------------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco EEC comparison
+        // --------------------------------------------------------------------
         {
 
           // make canvas name
@@ -155,7 +158,9 @@ void RunPHCorrelatorPlotter() {
           );
         }  // end eec sim vs. reco plot
 
-        // make collins angle (blue) comparison -------------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco collins angle (blue) comparison
+        // --------------------------------------------------------------------
         {
 
           // make canvas name
@@ -216,9 +221,11 @@ void RunPHCorrelatorPlotter() {
             SB::Canvas(collb_canvas, SB::Angle),
             simdata_coll_ofile
           );
-        }  // end collb sim vs. reco plot
+        }  // end collins (blue) sim vs. reco plot
 
-        // make collins angle (yellow) comparison -----------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco collins angle (yellow) comparison
+        // --------------------------------------------------------------------
         if (ico != IO::PAu) {
 
           // make canvas name
@@ -279,9 +286,11 @@ void RunPHCorrelatorPlotter() {
             SB::Canvas(colly_canvas, SB::Angle),
             simdata_coll_ofile
           );
-        }  // end colly sim vs. reco plot
+        }  // end collins (yellow) sim vs. reco plot
 
-        // make hadron-average angle (blue) comparison ------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco hadron-average angle (blue) comparison
+        // --------------------------------------------------------------------
         {
 
           // make canvas name
@@ -342,9 +351,11 @@ void RunPHCorrelatorPlotter() {
             SB::Canvas(havgb_canvas, SB::Angle),
             simdata_havg_ofile
           );
-        }  // end havgb sim vs. reco plot
+        }  // end hadron-average (blue) sim vs. reco plot
 
-        // make collins angle (yellow) comparison -----------------------------
+        // --------------------------------------------------------------------
+        // make hadron-average angle (yellow) comparison
+        // --------------------------------------------------------------------
         if (ico != IO::PAu) {
 
           // make canvas name
@@ -405,9 +416,11 @@ void RunPHCorrelatorPlotter() {
             SB::Canvas(havgy_canvas, SB::Angle),
             simdata_havg_ofile
           );
-        }  // end colly sim vs. reco plot
+        }  // end hadron-average (yellow) sim vs. reco plot
 
-        // make 2d collins angle (blue) comparison ----------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco 2d collins angle (blue) comparison
+        // --------------------------------------------------------------------
         {
 
           // make canvas name
@@ -468,9 +481,11 @@ void RunPHCorrelatorPlotter() {
             C2::Canvas(coll2db_canvas, coll2db_opts),
             simdata_coll2d_ofile
           );
-        }  // end coll2db sim vs. reco plot
+        }  // end 2d collins (blue) sim vs. reco plot
 
-        // make coll2dins angle (yellow) comparison -----------------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco 2d collins angle (yellow) comparison
+        // --------------------------------------------------------------------
         if (ico != IO::PAu) {
 
           // make canvas name
@@ -531,9 +546,11 @@ void RunPHCorrelatorPlotter() {
             C2::Canvas(coll2dy_canvas, coll2dy_opts),
             simdata_coll2d_ofile
           );
-        }  // end coll2dy sim vs. reco plot
+        }  // end 2d collins (yellow) sim vs. reco plot
 
-        // make 2d hadron average angle (blue) comparison ---------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco 2d hadron-average angle (blue) comparison
+        // --------------------------------------------------------------------
         {
 
           // make canvas name
@@ -594,9 +611,11 @@ void RunPHCorrelatorPlotter() {
             C2::Canvas(havg2db_canvas, havg2db_opts),
             simdata_havg2d_ofile
           );
-        }  // end havg2db sim vs. reco plot
+        }  // end 2d hadron-average (blue) sim vs. reco plot
 
-        // make 2d hardon average angle (yellow) comparion ----------------------
+        // --------------------------------------------------------------------
+        // make sim vs. reco 2d hadron-average angle (yellow) comparion
+        // --------------------------------------------------------------------
         if (ico != IO::PAu) {
 
           // make canvas name
@@ -657,7 +676,7 @@ void RunPHCorrelatorPlotter() {
             C2::Canvas(havg2dy_canvas, havg2dy_opts),
             simdata_havg2d_ofile
           );
-        }  // end havg2dy sim vs. reco plot
+        }  // end 2d hadron-average (yellow) sim vs. reco plot
 
       }  // end spin loop
     }  // end pt jet loop

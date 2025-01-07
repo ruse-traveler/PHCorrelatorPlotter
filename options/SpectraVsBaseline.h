@@ -37,9 +37,9 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Create denominator input
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   /*! This method collects all information needed to plot
    *  the baseline to be compared against. Needed
    *  information:
@@ -73,9 +73,9 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Create numerator input list
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   /*! This method collects all information needed to plot
    *  the spectra to compare against the baseline. Needed
    *  information:
@@ -113,9 +113,9 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Define plot range
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   /*! Plot range arguments:
    *    first  = x range to plot
    *    second = y range to plot
@@ -151,25 +151,25 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Define normalization range
-  // ==========================================================================
-  PHEC::Range NormRange(const int opt = Side) {
+  // --------------------------------------------------------------------------
+  PHEC::Range NormRange(const int opt - Side) {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange(opt);
+    PHEC::Range plot_range - PlotRange(opt);
 
     // set normalization range
-    PHEC::Range range = PHEC::Range(plot_range.x);
+    PHEC::Range range - PHEC::Range(plot_range.x);
     return range;
 
   }  // end 'NormRange(int)'
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Define canvas
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   PHEC::Canvas Canvas(const std::string& name = "cSpectraVsBaseline", const int opt = Side) {
 
     // grab default pad options, and
@@ -218,9 +218,9 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Define legend header
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   /*! Note that the header is optional parameter that
    *  can be provided as the last argument of
    *  `PHCorrelatorPlotterlotter::DoSpectraVsBaseline`.
@@ -233,9 +233,9 @@ namespace SpectraVsBaseline {
 
 
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   //! Define normalization
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   /*! Used to set what value to normalize to.
    */
   double Norm() {
