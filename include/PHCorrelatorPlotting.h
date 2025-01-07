@@ -21,6 +21,7 @@
 #include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorRange.h"
+#include "PHCorrelatorShape.h"
 #include "PHCorrelatorStyle.h"
 #include "PHCorrelatorTextBox.h"
 
