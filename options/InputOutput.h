@@ -102,7 +102,7 @@ namespace InputOutput {
 
       default:
         strings.push_back("");
-        std::cout << "WARNING: unknown option " << what << "!" << std::endl;
+        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
         break;
 
     }
@@ -134,7 +134,7 @@ namespace InputOutput {
 
       default:
         strings.push_back("");
-        std::cout << "WARNING: unknown option " << what << "!" << std::endl;
+        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
         break;
 
     }
@@ -166,7 +166,7 @@ namespace InputOutput {
 
       default:
         strings.push_back("");
-        std::cout << "WARNING: unknown option " << what << "!" << std::endl;
+        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
         break;
 
     }
@@ -210,7 +210,7 @@ namespace InputOutput {
 
       default:
         strings.push_back("");
-        std::cout << "WARNING: unknown option " << what << "!" << std::endl;
+        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
         break;
 
     }
