@@ -1,15 +1,15 @@
 /// ===========================================================================
-/*! \file   SpectraVsBaseline.h
+/*! \file   CompareRatios.h
  *  \author Derek Anderson
- *  \date   01.23.2024
+ *  \date   01.08.2024
  *
  *  A small namespace to define inputs to the
- *  ENC spectra vs. baseline plotting routine.
+ *  ENC ratio plotting routine.
  */
 /// ===========================================================================
 
-#ifndef SPECTRAVSBASELINE_H
-#define SPECTRAVSBASELINE_H
+#ifndef COMPARERATIOS_H
+#define COMPARERATIOS_H
 
 // c++ utilities
 #include <string>
@@ -22,13 +22,14 @@
 
 
 
+
 // ============================================================================
-//! Spectra vs. Baseline Comparison Options
+//! Ratio Comparison Options
 // ============================================================================
 /*! This namespace collects all the parameters associated with
- *  the `PHCorrelatorPlotter::CompareSpectraToBaseline` routines. 
+ *  the `PHCorrelatorPlotter::CompareRatios` routines. 
  */
-namespace SpectraVsBaseline {
+namespace CompareRatios {
 
   // --------------------------------------------------------------------------
   // Options for ranges
@@ -94,7 +95,7 @@ namespace SpectraVsBaseline {
   // --------------------------------------------------------------------------
   //! Define canvas
   // --------------------------------------------------------------------------
-  PHEC::Canvas Canvas(const std::string& name = "cSpectraVsBaseline", const int opt = Side) {
+  PHEC::Canvas Canvas(const std::string& name = "cRatios", const int opt = Side) {
 
     // grab default pad options, and
     // turn on log y/x when necessary
@@ -147,11 +148,11 @@ namespace SpectraVsBaseline {
   // --------------------------------------------------------------------------
   /*! Note that the header is optional parameter that
    *  can be provided as the last argument of
-   *  `PHCorrelatorPlotter::CompareSpectraToBaseline`.
+   *  `PHCorrelatorPlotter::CompareRatios`.
    */
   std::string Header() {
 
-    return std::string("Data vs. Sim. [Max p_{T}^{jet}]");
+    return std::string("Reconstructed [Max p_{T}^{jet}]");
 
   }  // end 'Header()'
 
@@ -168,7 +169,7 @@ namespace SpectraVsBaseline {
 
   }  // end 'Norm()'
 
-}  // end SpectraVsBaseline namespace
+}  // end CompareRatios namespace
 
 #endif
 

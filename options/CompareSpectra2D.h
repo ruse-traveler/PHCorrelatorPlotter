@@ -151,7 +151,7 @@ namespace CompareSpectra2D {
 
   }  // end 'Norm()'
 
-}  // end EnergySepctra namespace
+}  // end CompareSpectra2D namespace
 
 #endif
 

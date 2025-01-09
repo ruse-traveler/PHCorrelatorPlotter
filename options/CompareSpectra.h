@@ -126,7 +126,7 @@ namespace CompareSpectra {
   // --------------------------------------------------------------------------
   /*! Note that the header is optional parameter that
    *  can be provided as the last argument of
-   *  `PHCorrelatorPlotterlotter::DoCompareSpectra`.
+   *  `PHCorrelatorPlotter::CompareSpectra`.
    */
   std::string Header() {
 

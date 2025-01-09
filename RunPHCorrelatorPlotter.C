@@ -34,29 +34,34 @@ namespace PM = PlotsToMake;
 // ============================================================================
 //! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
+//void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
+void RunPHCorrelatorPlotter(const int plot = PM::PPVsPAu) {
 
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   // open outputs & load inputs
-  // ==========================================================================
-
-  // open relevant output files
+  // --------------------------------------------------------------------------
   std::vector<TFile*> ofiles;
   switch (plot) {
 
     case PM::SimVsReco:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d7m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d7m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d7m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoHadAvg.ppRun15.d9m1y2025.root", "recreate") );
       break;
 
     case PM::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15.d7m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15.d7m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetHadAvg.ppRun15.d7m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetHadAvg.ppRun15.d9m1y2025.root", "recreate") );
+      break;
+
+    case PM::PPVsPAu:
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15.d9m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuHadAvg.ppRun15.d9m1y2025.root", "recreate") );
       break;
 
     default:
@@ -78,9 +83,9 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   );
   std::cout << "    Made plotter." << std::endl;
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   // compare sim vs. data distributions
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   if (plot == PM::SimVsReco) {
 
     // loop through all combinations of species, jet pt, and spin
@@ -121,9 +126,9 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   }  // end SimVsReco plot
   std::cout << "    Completed sim vs. reco plots." << std::endl;
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   // compare distributions as a function of pt jet
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   if (plot == PM::VsPtJet) {
 
     // loop through all combinations of species, level, and spin
@@ -162,11 +167,33 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
     }  // end species loop
   }  // end VsPtJet plot
 
-  /* TODO add EEC pp vs. pau comparison here */
+  // --------------------------------------------------------------------------
+  // compare pp vs. pau distributions
+  // --------------------------------------------------------------------------
+  if (plot == PM::PPVsPAu) {
 
-  // close files & exit -------------------------------------------------------
+    // loop through all combinations of level and spin
+    for (std::size_t ilv = 0; ilv < io.Files().GetLevelTags().size(); ++ilv) {
+      for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
 
-  // close output file
+        // only consider blue polarizations for pAu
+        const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
+        if (!isOnlyBlue) continue;
+
+        // create comparisons for each desired 1D histogram
+        PM::PPVsPAu1D("EEC", ilv, isp, SB::Side, io, plotter, ofiles[0]);
+        PM::PPVsPAu1D("SpinCollinsBlue", ilv, isp, SB::Angle, io, plotter, ofiles[1]);
+        PM::PPVsPAu1D("SpinHadAvgBlue", ilv, isp, SB::Angle, io, plotter, ofiles[2]);
+
+        /* TODO add 2D comparison */
+
+      }  // end spin loop
+    }  // end level loop
+  }  // end PPVsPAu plot
+
+  // --------------------------------------------------------------------------
+  // close files & exit
+  // --------------------------------------------------------------------------
   for (std::size_t iout = 0; iout < ofiles.size(); ++iout) {
     ofiles[iout] -> cd();
     ofiles[iout] -> Close();
