@@ -34,7 +34,7 @@ namespace PM = PlotsToMake;
 // ============================================================================
 //! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter(const int plot = PM::VsPtJet) {
+void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
 
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
