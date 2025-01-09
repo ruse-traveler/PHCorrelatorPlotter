@@ -60,7 +60,7 @@ namespace CompareSpectra {
       case Angle:
         range = PHEC::Range(
           std::make_pair(-3.15, 3.15),
-          std::make_pair(0.00, 1.50)
+          std::make_pair(-0.007, 0.017)
         );
         break;
 

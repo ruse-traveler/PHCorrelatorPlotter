@@ -1,9 +1,9 @@
 /// ===========================================================================
 /*! \file   InputOutput.h
  *  \author Derek Anderson
- *  \date   01.25.2025
+ *  \date   01.05.2025
  *
- *  A small namespace to define inputs/outputs for
+ *  Helper classes to facilitate I/O operations
  *  all plotting routines (e.g. input file names,
  *  output files, histograms to grab, etc.)
  */
@@ -13,280 +13,421 @@
 #define INPUTOUTPUT_H
 
 // c++ utilities
-#include <iostream>
-#include <map>
 #include <string>
 #include <vector>
-#include <utility>
-// root libraries
-#include <TFile.h>
+
+// Useful aliases
+typedef std::string String;
+typedef std::vector<std::string> Strings;
+typedef std::vector<std::vector<std::string> > Files;
+
+
+
+// ============================================================================
+//! Input files database
+// ============================================================================
+/*! A small helper class to manage input files and associated strings.
+ */
+class InFiles {
+
+  public:
+
+    // ------------------------------------------------------------------------
+    // Accessors for vectors
+    // ------------------------------------------------------------------------
+    enum Species {PP, PAu};
+    enum Level   {Data, Reco, True};
+
+  private:
+
+    // data members
+    Files   m_files;
+    Strings m_tags_species;
+    Strings m_tags_levels;
+    Strings m_legs_species;
+    Strings m_legs_levels;
+
+    // ------------------------------------------------------------------------
+    //! Define input files
+    // ------------------------------------------------------------------------
+    /*! All inputs files you'll need are defined here should
+     *  be defined here. Then files can be retrieved via the
+     *  accessor functions.
+     */
+    void LoadInputFiles() {
+
+      // define input files for pp
+      std::vector<std::string> pp_files;
+      pp_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
+      pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
+      pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
+
+      // define input files for pAu
+      std::vector<std::string> pa_files;
+      pa_files.push_back("./input/paRun15_dataWithSpin_r0_30_0_84.d26m12y2024.root");
+      pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
+      pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
+
+      // load vector of inputs
+      m_files.clear();
+      m_files.push_back(pp_files);
+      m_files.push_back(pa_files);
+      return;
+
+    }  // end 'LoadInputFiles()'
+
+    // ------------------------------------------------------------------------
+    //! Define species hist tags and legends
+    // ------------------------------------------------------------------------
+    /*! The histogram tags and legend associated with the
+     *  "species" (pp vs. pAu) should be defined here,
+     *  and then retrived via the accessor functions.
+     */
+    void LoadSpeciesStrings() {
+
+      // define tags
+      m_tags_species.clear();
+      m_tags_species.push_back("PP");
+      m_tags_species.push_back("PAu");
+
+      // define legends
+      m_legs_species.clear();
+      m_legs_species.push_back("#bf{[p+p]}");
+      m_legs_species.push_back("#bf{[p+Au]}");
+      return;
+
+    }  // end 'LoadSpeciesStrings()'
+
+    // ------------------------------------------------------------------------
+    //! Define level hist tags and legend text
+    // ------------------------------------------------------------------------
+    /*! The histogram tags and legend associated with the
+     *  "level" (data, sim reco, sim truth) should be
+     *  defined here, and then retrived via the accessor
+     *  functions.
+     */
+    void LoadLevelStrings() {
+
+      // define tags
+      m_tags_levels.clear();
+      m_tags_levels.push_back("DataJet");
+      m_tags_levels.push_back("RecoJet");
+      m_tags_levels.push_back("TrueJet");
+
+      // define legends
+      m_legs_levels.clear();
+      m_legs_levels.push_back("#bf{[Data]}");
+      m_legs_levels.push_back("#bf{[Reco.]}");
+      m_legs_levels.push_back("#bf{[Truth]}");
+      return;
+
+    }  // end 'LoadLevelStrings()'
+
+  public:
+
+    // ------------------------------------------------------------------------
+    //! Setters
+    // ------------------------------------------------------------------------
+    void SetFiles(const Files& files)           {m_files        = files;}
+    void SetSpeciesTags(const Strings& tags)    {m_tags_species = tags;}
+    void SetLevelTags(const Strings& tags)      {m_tags_levels  = tags;}
+    void SetSpeciesLegends(const Strings& legs) {m_legs_species = legs;}
+    void SetLevelLegends(const Strings& legs)   {m_legs_levels  = legs;}
+
+    // ------------------------------------------------------------------------
+    //! Getters
+    // ------------------------------------------------------------------------
+    Files   GetFiles()          const {return m_files;}
+    Strings GetSpeciesTags()    const {return m_tags_species;}
+    Strings GetLevelTags()      const {return m_tags_levels;}
+    Strings GetSpeciesLegends() const {return m_legs_species;}
+    Strings GetLeveLegends()    const {return m_legs_levels;}
+
+    // ------------------------------------------------------------------------
+    //! Get a particular tag, legend text
+    // ------------------------------------------------------------------------
+    String GetSpeciesTag(const int species)    const {return m_tags_species.at(species);}
+    String GetLevelTag(const int level)        const {return m_tags_levels.at(level);}
+    String GetSpeciesLegend(const int species) const {return m_legs_species.at(species);}
+    String GetLevelLegend(const int level)     const {return m_legs_levels.at(level);}
+
+    // ------------------------------------------------------------------------
+    //! Get files for a specific species
+    // ------------------------------------------------------------------------
+    Strings GetFiles(const int species) const {
+
+      return m_files.at(species);
+
+    }  // end 'GetFiles(int)'
+
+    // ------------------------------------------------------------------------
+    //! Get a particular file
+    // ------------------------------------------------------------------------
+    String GetFile(const int species, const int level) const {
+
+      return m_files.at(species).at(level);
+
+    }  // end 'GetFile(int, int)'
+
+    // ------------------------------------------------------------------------
+    //! default ctor
+    // ------------------------------------------------------------------------
+    InFiles() {
+
+      LoadInputFiles();
+      LoadSpeciesStrings();
+      LoadLevelStrings();
+
+    };  // end ctor()
+
+    // ------------------------------------------------------------------------
+    //! default dtor
+    // ------------------------------------------------------------------------
+    ~InFiles() {};
+
+};  // end InFiles
+
+
+
+// ============================================================================
+//! Input histogram database
+// ============================================================================
+/*! A small helper class to manage histograms
+ *  and associated strings.
+ */
+class InHists {
+
+  public:
+
+    enum PtJet {Pt5, Pt10, Pt15};
+    enum Spin  {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, Int};
+
+  private:
+
+    // data members
+    Strings m_tags_pt;
+    Strings m_tags_sp;
+    Strings m_legs_pt;
+    Strings m_legs_sp;
+
+    // ------------------------------------------------------------------------
+    //! Define pt hist tags and legend text
+    // ------------------------------------------------------------------------
+    /*! All histogram tags and legend entries associated
+     *  with the jet pt should be defined here, and then
+     *  retrieved with the accessor functions.
+     */ 
+    void LoadPtStrings() {
+
+      // define tags
+      m_tags_pt.clear();
+      m_tags_pt.push_back("pt0");
+      m_tags_pt.push_back("pt1");
+      m_tags_pt.push_back("pt2");
+
+      // define legends
+      m_legs_pt.clear();
+      m_legs_pt.push_back("p_{T}^{jet} #in (5, 10) GeV/c");
+      m_legs_pt.push_back("p_{T}^{jet} #in (10, 15) GeV/c");
+      m_legs_pt.push_back("p_{T}^{jet} #in (15, 20) GeV/c");
+      return;
+
+    }  // end 'LoadPtStrings()'
+
+    // ------------------------------------------------------------------------
+    //! Load spin hist tags and legend text
+    // ------------------------------------------------------------------------
+    /*! All histogram tags and legend entries associated
+     *  with the spin should be defined here, and then
+     *  retrieved with the accessor functions.
+     */ 
+    void LoadSpinStrings() {
+
+      // define tags
+      m_tags_sp.clear();
+      m_tags_sp.push_back("spBU");
+      m_tags_sp.push_back("spBD");
+      m_tags_sp.push_back("spYU");
+      m_tags_sp.push_back("spYD");
+      m_tags_sp.push_back("spBUYU");
+      m_tags_sp.push_back("spBUYD");
+      m_tags_sp.push_back("spBDYU");
+      m_tags_sp.push_back("spBDYD");
+      m_tags_sp.push_back("spInt");
+
+      // define legends
+      m_legs_sp.clear();
+      m_legs_sp.push_back("B#uparrow");
+      m_legs_sp.push_back("B#downarrow");
+      m_legs_sp.push_back("Y#uparrow");
+      m_legs_sp.push_back("Y#downarrow");
+      m_legs_sp.push_back("B#uparrowY#uparrow");
+      m_legs_sp.push_back("B#uparrowY#downarrow");
+      m_legs_sp.push_back("B#downarrowY#uparrow");
+      m_legs_sp.push_back("B#downarrowY#downarrow");
+      m_legs_sp.push_back("Integrated");
+      return;
+
+    }  // end 'LoadSpinStrings()'
+
+  public:
+
+    // ------------------------------------------------------------------------
+    //! Setters
+    // ------------------------------------------------------------------------
+    void SetPtTags(Strings& tags)      {m_tags_pt = tags;}
+    void SetSpinTags(Strings& tags)    {m_tags_sp = tags;}
+    void SetPtLegends(Strings& legs)   {m_legs_pt = legs;}
+    void SetSpinLegends(Strings& legs) {m_legs_sp = legs;}
+
+    // ------------------------------------------------------------------------
+    //! Getters
+    // ------------------------------------------------------------------------
+    Strings GetPtTags()      const {return m_tags_pt;}
+    Strings GetSpinTags()    const {return m_tags_sp;}
+    Strings GetPtLegends()   const {return m_legs_pt;}
+    Strings GetSpinLegends() const {return m_legs_sp;}
+
+    // ------------------------------------------------------------------------
+    //! Get a particular tag, legend text
+    // ------------------------------------------------------------------------
+    String GetPtTag(const int pt)      const {return m_tags_pt.at(pt);}
+    String GetSpinTag(const int sp)    const {return m_tags_sp.at(sp);}
+    String GetPtLegend(const int pt)   const {return m_legs_pt.at(pt);}
+    String GetSpinLegend(const int sp) const {return m_legs_sp.at(sp);}
+
+    // ------------------------------------------------------------------------
+    //! default ctor
+    // ------------------------------------------------------------------------
+    InHists() {
+
+      LoadPtStrings();
+      LoadSpinStrings();
+
+    };  // end ctor()
+
+    // ------------------------------------------------------------------------
+    //! default dtor
+    // ------------------------------------------------------------------------
+    ~InHists() {};
+
+};  // end InHists
 
 
 
 // ============================================================================
 //! Plotting Input/Output Options
 // ============================================================================
-/*! This namespace collects all inupt/output options
- *  for various plotting routines.
+/*! Wrapper class to hold and interface with InFiles and
+ *  InHists objects.
  */
-namespace InputOutput {
-
-  // --------------------------------------------------------------------------
-  // Useful aliases
-  // --------------------------------------------------------------------------
-  typedef std::vector<std::string> Strings;
-  typedef std::vector<std::vector<std::string> > InFiles;
-
-
-
-  // --------------------------------------------------------------------------
-  // Accessors for vectors
-  // --------------------------------------------------------------------------
-  enum Species {PP, PAu};
-  enum Level   {Data, Reco, True};
-  enum PtJet   {Pt5, Pt10, Pt15};
-  enum Spin    {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, Int};
-  enum What    {Hist, Leg};
-
-
-
-  // --------------------------------------------------------------------------
-  //! Input files
-  // --------------------------------------------------------------------------
-  /*! For convenience, all inputs files you'll need can
-   *  be collected here.
-   */
-  InFiles LoadInputFiles() {
-
-    // input files for pp
-    std::vector<std::string> pp_files;
-    pp_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
-    pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
-    pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
-
-    // input files for pAu
-    std::vector<std::string> pa_files;
-    pa_files.push_back("./input/paRun15_dataWithSpin_r0_30_0_84.d26m12y2024.root");
-    pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
-    pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
-
-    // load vector of inputs
-    InFiles input_files;
-    input_files.push_back(pp_files);
-    input_files.push_back(pa_files);
-
-    // return vector
-    return input_files;
-
-  }  // end 'LoadInputFiles()'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Load species strings
-  // --------------------------------------------------------------------------
-  Strings LoadSpeciesStrings(const int what) {
-
-    Strings strings;
-    switch (what) {
-
-      case Hist:
-        strings.push_back("PP");
-        strings.push_back("PAu");
-        break;
-
-      case Leg:
-        strings.push_back("#bf{[p+p]}");
-        strings.push_back("#bf{[p+Au]}");
-        break;
-
-      default:
-        strings.push_back("");
-        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
-        break;
-
-    }
-    return strings;
-
-  }  // end 'LoadSpeciesStrings(int)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Load level strings
-  // --------------------------------------------------------------------------
-  Strings LoadLevelStrings(const int what) {
-
-    Strings strings;
-    switch (what) {
-
-      case Hist:
-        strings.push_back("DataJet");
-        strings.push_back("RecoJet");
-        strings.push_back("TrueJet");
-        break;
-
-      case Leg:
-        strings.push_back("#bf{[Data]}");
-        strings.push_back("#bf{[Reco.]}");
-        strings.push_back("#bf{[Truth]}");
-        break;
-
-      default:
-        strings.push_back("");
-        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
-        break;
-
-    }
-    return strings;
-
-  }  // end 'LoadPtStrings(int)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Load pt strings
-  // --------------------------------------------------------------------------
-  Strings LoadPtStrings(const int what) {
-
-    Strings strings;
-    switch (what) {
-
-      case Hist:
-        strings.push_back("pt0");
-        strings.push_back("pt1");
-        strings.push_back("pt2");
-        break;
-
-      case Leg:
-        strings.push_back("p_{T}^{jet} #in (5, 10) GeV/c");
-        strings.push_back("p_{T}^{jet} #in (10, 15) GeV/c");
-        strings.push_back("p_{T}^{jet} #in (15, 20) GeV/c");
-        break;
-
-      default:
-        strings.push_back("");
-        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
-        break;
-
-    }
-    return strings;
-
-  }  // end 'LoadPtStrings(int)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Load spin strings
-  // --------------------------------------------------------------------------
-  std::vector<std::string> LoadSpinStrings(const int what) {
-
-    Strings strings;
-    switch (what) {
-
-      case Hist:
-        strings.push_back("spBU");
-        strings.push_back("spBD");
-        strings.push_back("spYU");
-        strings.push_back("spYD");
-        strings.push_back("spBUYU");
-        strings.push_back("spBUYD");
-        strings.push_back("spBDYU");
-        strings.push_back("spBDYD");
-        strings.push_back("spInt");
-        break;
-
-      case Leg:
-        strings.push_back("B#uparrow");
-        strings.push_back("B#downarrow");
-        strings.push_back("Y#uparrow");
-        strings.push_back("Y#downarrow");
-        strings.push_back("B#uparrowY#uparrow");
-        strings.push_back("B#uparrowY#downarrow");
-        strings.push_back("B#downarrowY#uparrow");
-        strings.push_back("B#downarrowY#downarrow");
-        strings.push_back("Integrated");
-        break;
-
-      default:
-        strings.push_back("");
-        std::cerr << "WARNING: unknown option " << what << "!" << std::endl;
-        break;
-
-    }
-    return strings;
-
-  }  // end 'LoadSpinStrings(int)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Make a histogram name
-  // --------------------------------------------------------------------------
-  std::string MakeHistName(
-    const std::string& var,
-    const std::string& lvl,
-    const std::string& pt,
-    const std::string& spin,
-    const std::string& tag = ""
-  ) {
-
-    return "h" + tag + lvl + var + "Stat_" + pt + "cf0" + spin;
-
-  }  // end 'MakeHistName(std::string& x 5)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Make a histogram legend
-  // --------------------------------------------------------------------------
-  std::string MakeLegend(
-    const std::string& pt,
-    const std::string& spin,
-    const std::string& lvl = "",
-    const std::string& spe = ""
-  ) {
-
-    std::string legend;
-    if (!spe.empty()) {
-      legend += spe + " ";
-    }
-    if (!lvl.empty()) {
-      legend += lvl + " ";
-    }
-
-    legend += spin + ", " + pt;
-    return legend;
-
-  }  // end 'MakeLegend(std::string& x 5)'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Make canvas name
-  // --------------------------------------------------------------------------
-  std::string MakeCanvasName(
-   const std::string& base,
-   const std::string& pt,
-   const std::string& spin,
-   const std::string& lvl = "",
-   const std::string& spe = ""
-  ) {
-
-    std::string name = base;
-    if (!spe.empty()) {
-      name += "_" + spe;
-    }
-    if (!lvl.empty()) {
-      name += lvl;
-    }
-
-    name += "_" + pt + spin;
-    return name;
-
-  }  // end 'MakeCanvasName(std::string& x 5)'
-
-}  // end InputOutput namespace
+class InputOutput {
+
+  private:
+
+    // data members
+    InFiles m_files;
+    InHists m_hists;
+
+  public:
+
+    // ------------------------------------------------------------------------
+    //! Setters
+    // ------------------------------------------------------------------------
+    void Files(const InFiles& files) {m_files = files;}
+    void Hists(const InHists& hists) {m_hists = hists;}
+
+    // ------------------------------------------------------------------------
+    //! Getters
+    // ------------------------------------------------------------------------
+    InFiles Files() const {return m_files;}
+    InHists Hists() const {return m_hists;}
+
+    // ------------------------------------------------------------------------
+    //! Make a variable + species tag
+    // ------------------------------------------------------------------------
+    String MakeSpeciesTag(const String& base, const int spe) const {
+
+      return base + m_files.GetSpeciesTag(spe);
+
+    }  // 'MakeSpeciesTag(String&, int)'
+
+    // ------------------------------------------------------------------------
+    //! Make a histogram name
+    // ------------------------------------------------------------------------
+    String MakeHistName(
+      const String& var,
+      const int lvl,
+      const int pt,
+      const int sp,
+      const String& tag = ""
+    ) const {
+
+      const String base  = "h" + tag + m_files.GetLevelTag(lvl) + var + "Stat_";
+      const String index = m_hists.GetPtTag(pt) + "cf0" + m_hists.GetSpinTag(sp);
+      return base + index;
+
+    }  // end 'MakeHistName(String&, int x 4, String&)'
+
+    // ------------------------------------------------------------------------
+    //! Make a histogram legend
+    // ------------------------------------------------------------------------
+    String MakeLegend(
+      const int pt,
+      const int sp,
+      const int lvl = -1,
+      const int spe = -1
+    ) const {
+
+      String legend;
+      if (spe > -1) {
+        legend += m_files.GetSpeciesLegend(spe) + " ";
+      }
+      if (lvl > -1) {
+        legend += m_files.GetLevelLegend(lvl) + " ";
+      }
+      legend += m_hists.GetSpinLegend(sp) + ", " + m_hists.GetPtLegend(pt);
+      return legend;
+
+    }  // end 'MakeLegend(int x 5)'
+
+    // ------------------------------------------------------------------------
+    //! Make canvas name
+    // ------------------------------------------------------------------------
+    String MakeCanvasName(
+      const String& base,
+      const int pt  = -1,
+      const int sp  = -1,
+      const int lvl = -1,
+      const int spe = -1
+    ) const {
+
+      String name = base;
+      if (spe > -1) {
+        name += "_" + m_files.GetSpeciesTag(spe);
+      }
+      if (lvl > -1) {
+        name += m_files.GetLevelTag(lvl);
+      }
+      name += "_";
+
+      if (pt > -1) {
+        name += m_hists.GetPtTag(pt);
+      }
+      if (sp > -1) {
+        name += m_hists.GetSpinTag(sp);
+      }
+      return name;
+
+    }  // end 'MakeCanvasName(int x 5)'
+
+    // ------------------------------------------------------------------------
+    // default ctor/dtor
+    // ------------------------------------------------------------------------
+    InputOutput()  {};
+    ~InputOutput() {};
+
+};  // end InputOutput
 
 #endif
 
