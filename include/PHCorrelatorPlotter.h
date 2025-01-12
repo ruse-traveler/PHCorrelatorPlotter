@@ -27,19 +27,24 @@
 #include "PHCorrelatorLegend.h"
 #include "PHCorrelatorPlotInput.h"
 #include "PHCorrelatorPlotManager.h"
+#include "PHCorrelatorPlotOpts.h"
 #include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorRange.h"
 #include "PHCorrelatorStyle.h"
 #include "PHCorrelatorTextBox.h"
 
-// useful aliases
-typedef std::vector<PHEnergyCorrelator::PlotInput> Inputs;
-typedef std::vector<PHEnergyCorrelator::Style> Styles;
-
 
 
 namespace PHEnergyCorrelator {
+
+  // --------------------------------------------------------------------------
+  // Useful aliases
+  // ---------------------------------------------------------------------------
+  typedef std::vector<PlotInput> Inputs;
+  typedef std::vector<Style> Styles;
+
+
 
   // ============================================================================
   //! ENC Plotter
@@ -115,24 +120,14 @@ namespace PHEnergyCorrelator {
       /*! Compares a variety of ENC (or otherwise) spectra from different
        *  sources.
        *
-       *  \param[in]  inputs      list of objects to plot and their details
-       *  \param[in]  plot_range  (x, y) ranges to plot
-       *  \param[in]  norm_range  (x) range to normalize histogram to
-       *  \param[in]  canvas      definition of the canvas to draw on
-       *  \param[out] ofile       file to write to
-       *  \param[in]  header      optionally, can provide header for legend
-       *  \param[in]  norm_to     optionally, can set what to normalize to
-       *  \param[in]  do_norm     optionally, turn normalization on/off
+       *  \param[in]  inputs list of objects to plot and their details
+       *  \param[in]  opts   auxilliary plot options
+       *  \param[out] ofile  file to write to
        */
       void CompareSpectra(
         const Inputs& inputs,
-        const Range& plot_range,
-        const Range& norm_range,
-        const Canvas& canvas,
-        TFile* ofile,
-        const std::string& header = "",
-        const double norm_to = 1.0,
-        const double do_norm = true
+        const PlotOpts& opts,
+        TFile* ofile
       ) const {
 
         // announce start
@@ -158,18 +153,18 @@ namespace PHEnergyCorrelator {
                     << std::endl;
 
           // normalize input if need be
-          if (do_norm) {
+          if (opts.do_norm) {
             Tools::NormalizeByIntegral(
               ihists.back(),
-              norm_to,
-              norm_range.x.first,
-              norm_range.x.second
+              opts.norm_to,
+              opts.norm_range.x.first,
+              opts.norm_range.x.second
             );
           }
         }  // end input loop
 
         // define legend dimensions
-        const std::size_t nlines    = !header.empty() ? ihists.size() + 1 : ihists.size();
+        const std::size_t nlines    = !opts.header.empty() ? ihists.size() + 1 : ihists.size();
         const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
         const float       legheight = Tools::GetHeight(nlines, spacing);
 
@@ -186,8 +181,8 @@ namespace PHEnergyCorrelator {
           legdef.AddEntry( Legend::Entry(ihists[ihst], inputs[ihst].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!header.empty()) {
-          legdef.SetHeader( header );
+        if (!opts.header.empty()) {
+          legdef.SetHeader( opts.header );
         }
 
         // create root objects
@@ -200,8 +195,8 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
         }
 
         // set legend/text styles
@@ -210,7 +205,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( canvas );
+        PlotManager manager = PlotManager( opts.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTCanvas() -> cd();
@@ -248,26 +243,16 @@ namespace PHEnergyCorrelator {
        *  sources to a baseline. Uppder panel shows spectra, lower panel
        *  shows ratio of spectra to baseline.
        *
-       *  \param[in]  in_denom    baseline to compare against and its info
-       *  \param[in]  in_numers   spectra to compare against baseline and their info
-       *  \param[in]  plot_range  (x, y) ranges to plot
-       *  \param[in]  norm_range  (x) range to normalize histograms to
-       *  \param[in]  canvas      definition of the canvas to draw on
-       *  \param[out] ofile       file to write to
-       *  \param[in]  header      optionally, can provide header for legend
-       *  \param[in]  norm_to     optionally, can set what to normalize to
-       *  \param[in]  do_norm     optionally, turn normalization on/off
+       *  \param[in]  in_denom  baseline to compare against and its info
+       *  \param[in]  in_numers spectra to compare against baseline and their info
+       *  \param[in]  opts      auxilliary plot options
+       *  \param[out] ofile     file to write to
        */
       void CompareSpectraToBaseline(
         const PlotInput& in_denom,
         const Inputs& in_numers,
-        const Range& plot_range,
-        const Range& norm_range,
-        const Canvas& canvas,
-        TFile* ofile,
-        const std::string& header = "",
-        const double norm_to = 1.0,
-        const double do_norm = true
+        const PlotOpts& opts,
+        TFile* ofile
       ) const {
 
         // announce start
@@ -285,12 +270,12 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // normalize denominator if need be
-        if (do_norm) {
+        if (opts.do_norm) {
           Tools::NormalizeByIntegral(
             dhist,
-            norm_to,
-            norm_range.x.first,
-            norm_range.x.second
+            opts.norm_to,
+            opts.norm_range.x.first,
+            opts.norm_range.x.second
           );
         }
 
@@ -311,12 +296,12 @@ namespace PHEnergyCorrelator {
                     << std::endl;
 
           // normalize numerator if need be
-          if (do_norm) {
+          if (opts.do_norm) {
             Tools::NormalizeByIntegral(
               nhists.back(),
-              norm_to,
-              norm_range.x.first,
-              norm_range.x.second
+              opts.norm_to,
+              opts.norm_range.x.first,
+              opts.norm_range.x.second
             );
           }
         }  // end numerator loop
@@ -335,7 +320,7 @@ namespace PHEnergyCorrelator {
         }
 
         // define legend dimensions
-        const std::size_t nlines    = !header.empty() ? nhists.size() + 2 : nhists.size() + 1;
+        const std::size_t nlines    = !opts.header.empty() ? nhists.size() + 2 : nhists.size() + 1;
         const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
         const float       legheight = Tools::GetHeight(nlines, spacing);
 
@@ -353,14 +338,14 @@ namespace PHEnergyCorrelator {
           legdef.AddEntry( Legend::Entry(nhists[inum], in_numers[inum].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!header.empty()) {
-          legdef.SetHeader( header );
+        if (!opts.header.empty()) {
+          legdef.SetHeader( opts.header );
         }
 
         // create root objects
         //   - FIXME line should be configurable
         //   - FIXME need to add check on x-axis vs. plot range
-        TLine*     line   = new TLine( plot_range.x.first, 1.0, plot_range.x.second, 1.0 );
+        TLine*     line   = new TLine( opts.plot_range.x.first, 1.0, opts.plot_range.x.second, 1.0 );
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -369,8 +354,8 @@ namespace PHEnergyCorrelator {
         Style den_style = m_basePlotStyle;
         den_style.SetPlotStyle( in_denom.style );
         den_style.Apply( dhist );
-        dhist -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-        dhist -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
+        dhist -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+        dhist -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
 
         // set numerator and ratio styles
         Styles num_styles = GenerateStyles( in_numers );
@@ -378,9 +363,9 @@ namespace PHEnergyCorrelator {
           num_styles[inum].SetPlotStyle( in_numers[inum].style );
           num_styles[inum].Apply( nhists[inum] );
           num_styles[inum].Apply( rhists[inum] );
-          nhists[inum] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-          nhists[inum] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
-          rhists[inum] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
+          nhists[inum] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          nhists[inum] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+          rhists[inum] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
         }
 
         // set line styles
@@ -395,7 +380,7 @@ namespace PHEnergyCorrelator {
 
         // draw plot
         //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( canvas );
+        PlotManager manager = PlotManager( opts.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTPad(0) -> cd();
@@ -441,26 +426,16 @@ namespace PHEnergyCorrelator {
        *  different sources and their ratios. Uppder panel shows spectra,
        *  lower panel shows ratios.
        *
-       *  \param[in]  in_denoms   denominator spectra and their info
-       *  \param[in]  in_numers   numerator spectra and their info
-       *  \param[in]  plot_range  (x, y) ranges to plot
-       *  \param[in]  norm_range  (x) range to normalize histograms to
-       *  \param[in]  canvas      definition of the canvas to draw on
-       *  \param[out] ofile       file to write to
-       *  \param[in]  header      optionally, can provide header for legend
-       *  \param[in]  norm_to     optionally, can set what to normalize to
-       *  \param[in]  do_norm     optionally, turn normalization on/off
+       *  \param[in]  in_denoms denominator spectra and their info
+       *  \param[in]  in_numers numerator spectra and their info
+       *  \param[in]  opts      auxilliary plot options
+       *  \param[out] ofile     file to write to
        */
       void CompareRatios(
         const Inputs& in_denoms,
         const Inputs& in_numers,
-        const Range& plot_range,
-        const Range& norm_range,
-        const Canvas& canvas,
-        TFile* ofile,
-        const std::string& header = "",
-        const double norm_to = 1.0,
-        const double do_norm = true
+        const PlotOpts& opts,
+        TFile* ofile
       ) const {
 
         // announce start
@@ -495,12 +470,12 @@ namespace PHEnergyCorrelator {
                     << std::endl;
 
           // normalize denominaotr if need be
-          if (do_norm) {
+          if (opts.do_norm) {
             Tools::NormalizeByIntegral(
               dhists.back(),
-              norm_to,
-              norm_range.x.first,
-              norm_range.x.second
+              opts.norm_to,
+              opts.norm_range.x.first,
+              opts.norm_range.x.second
             );
           }
         }  // end denominator loop
@@ -522,12 +497,12 @@ namespace PHEnergyCorrelator {
                     << std::endl;
 
           // normalize numerator if need be
-          if (do_norm) {
+          if (opts.do_norm) {
             Tools::NormalizeByIntegral(
               nhists.back(),
-              norm_to,
-              norm_range.x.first,
-              norm_range.x.second
+              opts.norm_to,
+              opts.norm_range.x.first,
+              opts.norm_range.x.second
             );
           }
         }  // end numerator loop
@@ -546,7 +521,7 @@ namespace PHEnergyCorrelator {
         }
 
         // determine no. of legend lines
-        const std::size_t nlines = !header.empty()
+        const std::size_t nlines = !opts.header.empty()
                                  ? nhists.size() + dhists.size() + 1
                                  : nhists.size() + dhists.size();
 
@@ -568,14 +543,14 @@ namespace PHEnergyCorrelator {
           legdef.AddEntry( Legend::Entry(nhists[iden], in_numers[iden].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!header.empty()) {
-          legdef.SetHeader( header );
+        if (!opts.header.empty()) {
+          legdef.SetHeader( opts.header );
         }
 
         // create root objects
         //   - FIXME line should be configurable
         //   - FIXME need to add check on x-axis vs. plot range
-        TLine*     line   = new TLine( plot_range.x.first, 1.0, plot_range.x.second, 1.0 );
+        TLine*     line   = new TLine( opts.plot_range.x.first, 1.0, opts.plot_range.x.second, 1.0 );
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -588,18 +563,18 @@ namespace PHEnergyCorrelator {
           // set denominator style
           den_styles[iden].SetPlotStyle( in_denoms[iden].style );
           den_styles[iden].Apply( dhists[iden] );
-          dhists[iden] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-          dhists[iden] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
+          dhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          dhists[iden] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
 
           // set numerator style
           num_styles[iden].SetPlotStyle( in_numers[iden].style );
           num_styles[iden].Apply( nhists[iden] );
-          nhists[iden] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-          nhists[iden] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
+          nhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          nhists[iden] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
 
           // set ratio style
           den_styles[iden].Apply( rhists[iden] );
-          rhists[iden] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
+          rhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
         }
 
         // set line styles
@@ -614,7 +589,7 @@ namespace PHEnergyCorrelator {
 
         // draw plot
         //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( canvas );
+        PlotManager manager = PlotManager( opts.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTPad(0) -> cd();
@@ -660,22 +635,14 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       /*! Compares a variety of 2D spectra from different sources.
        *
-       *  \param[in]  inputs      list of objects to plot and their details
-       *  \param[in]  plot_range  (x, y, z) ranges to plot
-       *  \param[in]  norm_range  (x, y) to normalize histogram to
-       *  \param[in]  canvas      definition of the canvas to draw on
-       *  \param[out] ofile       file to write to
-       *  \param[in]  norm_to     optionally, can set what to normalize to
-       *  \param[in]  do_norm     optionally, turn normalization on/off
+       *  \param[in]  inputs list of objects to plot and their details
+       *  \param[in]  opts   auxilliary plot options
+       *  \param[out] ofile  file to write to
        */
       void CompareSpectra2D(
         const Inputs& inputs,
-        const Range& plot_range,
-        const Range& norm_range,
-        const Canvas& canvas,
-        TFile* ofile,
-        const double norm_to = 1.0,
-        const double do_norm = false
+        const PlotOpts& opts,
+        TFile* ofile
       ) const {
 
         // announce start
@@ -702,14 +669,14 @@ namespace PHEnergyCorrelator {
                     << std::endl;
 
           // normalize input if need be
-          if (do_norm) {
+          if (opts.do_norm) {
             Tools::NormalizeByIntegral(
               ihists.back(),
-              norm_to,
-              norm_range.x.first,
-              norm_range.x.second,
-              norm_range.y.first,
-              norm_range.y.second
+              opts.norm_to,
+              opts.norm_range.x.first,
+              opts.norm_range.x.second,
+              opts.norm_range.y.first,
+              opts.norm_range.y.second
             );
           }
         }  // end input loop
@@ -724,14 +691,14 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( plot_range.x.first, plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( plot_range.y.first, plot_range.y.second );
-          ihists[ihst] -> GetZaxis() -> SetRangeUser( plot_range.z.first, plot_range.z.second );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+          ihists[ihst] -> GetZaxis() -> SetRangeUser( opts.plot_range.z.first, opts.plot_range.z.second );
         }
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( canvas );
+        PlotManager manager = PlotManager( opts.canvas );
         manager.MakePlot();
         manager.Draw();
 

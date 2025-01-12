@@ -129,9 +129,7 @@ namespace PlotsToMake {
     plotter.CompareSpectraToBaseline(
       tru_opt,
       num_input,
-      SB::PlotRange(opt),
-      SB::NormRange(opt),
-      SB::Canvas(canvas, opt),
+      SB::Options(canvas, opt),
       ofile
     );
     return;
@@ -201,9 +199,7 @@ namespace PlotsToMake {
     // make plot
     plotter.CompareSpectra2D(
       input,
-      C2::PlotRange(),
-      C2::NormRange(),
-      C2::Canvas(canvas, input),
+      C2::Options(canvas, input),
       ofile
     );
     return;
@@ -296,9 +292,7 @@ namespace PlotsToMake {
     // make plot
     plotter.CompareSpectra(
       input,
-      CS::PlotRange(opt),
-      CS::NormRange(opt),
-      CS::Canvas(canvas, opt),
+      CS::Options(canvas, opt),
       ofile
     );
     return;
@@ -368,9 +362,7 @@ namespace PlotsToMake {
     // make plot
     plotter.CompareSpectra2D(
       input,
-      C2::PlotRange(),
-      C2::NormRange(),
-      C2::Canvas(canvas, input),
+      C2::Options(canvas, input),
       ofile
     );
     return;
@@ -523,9 +515,7 @@ namespace PlotsToMake {
     plotter.CompareRatios(
       denominator,
       numerator,
-      CR::PlotRange(opt),
-      CR::NormRange(opt),
-      CR::Canvas(canvas, opt),
+      CR::Options(canvas, opt),
       ofile
     );
     return;

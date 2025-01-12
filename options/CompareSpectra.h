@@ -45,7 +45,7 @@ namespace CompareSpectra {
    *    first  = x range to plot
    *    second = y range to plot
    */ 
-  PHEC::Range PlotRange(const int opt = Side) {
+  PHEC::Range DefinePlotRange(const int opt = Side) {
 
     PHEC::Range range;
     switch (opt) {
@@ -72,30 +72,30 @@ namespace CompareSpectra {
     }
     return range;
 
-  }  // end 'PlotRange()'
+  }  // end 'DefinePlotRange(int)'
 
 
 
   // --------------------------------------------------------------------------
   //! Define normalization range
   // --------------------------------------------------------------------------
-  PHEC::Range NormRange(const int opt = Side) {
+  PHEC::Range DefineNormRange(const int opt = Side) {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange(opt);
+    PHEC::Range plot_range = DefinePlotRange(opt);
 
     // set normalization range
     PHEC::Range range = PHEC::Range(plot_range.x);
     return range;
 
-  }  // end 'NormRange(int)'
+  }  // end 'DefineNormRange(int)'
 
 
 
   // --------------------------------------------------------------------------
   //! Define canvas
   // --------------------------------------------------------------------------
-  PHEC::Canvas Canvas(const std::string& name = "cSpectra", const int opt = Side) {
+  PHEC::Canvas DefineCanvas(const std::string& name = "cSpectra", const int opt = Side) {
 
     // grab default pad options, and
     // turn on log y
@@ -117,35 +117,24 @@ namespace CompareSpectra {
     canvas.SetMargins( margins );
     return canvas;
 
-  }  // end 'Canvas(std::string&, int)'
+  }  // end 'DefineCanvas(std::string&, int)'
 
 
 
   // --------------------------------------------------------------------------
-  //! Define legend header
+  //! Bundle options
   // --------------------------------------------------------------------------
-  /*! Note that the header is optional parameter that
-   *  can be provided as the last argument of
-   *  `PHCorrelatorPlotter::CompareSpectra`.
-   */
-  std::string Header() {
+  PHEC::PlotOpts Options(
+    const std::string& canvas_name = "cSpectra",
+    const int range_opt = Side
+  ) {
 
-    return std::string("Reconstructed [Max p_{T}^{jet}]");
+    PHEC::PlotOpts opts;
+    opts.plot_range = DefinePlotRange(range_opt);
+    opts.norm_range = DefinePlotRange(range_opt);
+    opts.canvas     = DefineCanvas(canvas_name, range_opt);
 
-  }  // end 'Header()'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Define normalization
-  // --------------------------------------------------------------------------
-  /*! Used to set what value to normalize to.
-   */
-  double Norm() {
-
-    return 1.0;
-
-  }  // end 'Norm()'
+  }  // end 'Options(std::string&, int)'
 
 }  // end CompareSepctra namespace
 

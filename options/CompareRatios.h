@@ -45,7 +45,7 @@ namespace CompareRatios {
    *    first  = x range to plot
    *    second = y range to plot
    */ 
-  PHEC::Range PlotRange(const int opt = Side) {
+  PHEC::Range DefinePlotRange(const int opt = Side) {
 
     PHEC::Range range;
     switch (opt) {
@@ -72,30 +72,30 @@ namespace CompareRatios {
     }
     return range;
 
-  }  // end 'PlotRange()'
+  }  // end 'DefinePlotRange(int)'
 
 
 
   // --------------------------------------------------------------------------
   //! Define normalization range
   // --------------------------------------------------------------------------
-  PHEC::Range NormRange(const int opt = Side) {
+  PHEC::Range DefineNormRange(const int opt = Side) {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange(opt);
+    PHEC::Range plot_range = DefinePlotRange(opt);
 
     // set normalization range
     PHEC::Range range = PHEC::Range(plot_range.x);
     return range;
 
-  }  // end 'NormRange(int)'
+  }  // end 'DefineNormRange(int)'
 
 
 
   // --------------------------------------------------------------------------
   //! Define canvas
   // --------------------------------------------------------------------------
-  PHEC::Canvas Canvas(const std::string& name = "cRatios", const int opt = Side) {
+  PHEC::Canvas DefineCanvas(const std::string& name = "cRatios", const int opt = Side) {
 
     // grab default pad options, and
     // turn on log y/x when necessary
@@ -139,35 +139,24 @@ namespace CompareRatios {
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
     return canvas;
 
-  }  // end 'Canvas()'
+  }  // end 'DefineCanvas(std::string&, int)'
 
 
 
   // --------------------------------------------------------------------------
-  //! Define legend header
+  //! Bundle options
   // --------------------------------------------------------------------------
-  /*! Note that the header is optional parameter that
-   *  can be provided as the last argument of
-   *  `PHCorrelatorPlotter::CompareRatios`.
-   */
-  std::string Header() {
+  PHEC::PlotOpts Options(
+    const std::string& canvas_name = "cRatios",
+    const int range_opt = Side
+  ) {
 
-    return std::string("Reconstructed [Max p_{T}^{jet}]");
+    PHEC::PlotOpts opts;
+    opts.plot_range = DefinePlotRange(range_opt);
+    opts.norm_range = DefinePlotRange(range_opt);
+    opts.canvas     = DefineCanvas(canvas_name, range_opt);
 
-  }  // end 'Header()'
-
-
-
-  // --------------------------------------------------------------------------
-  //! Define normalization
-  // --------------------------------------------------------------------------
-  /*! Used to set what value to normalize to.
-   */
-  double Norm() {
-
-    return 1.0;
-
-  }  // end 'Norm()'
+  }  // end 'Options(std::string&, int)'
 
 }  // end CompareRatios namespace
 

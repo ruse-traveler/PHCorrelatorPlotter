@@ -38,7 +38,7 @@ namespace CompareSpectra2D {
    *    second = y range to plot
    *    third  = z range to plot
    */ 
-  PHEC::Range PlotRange() {
+  PHEC::Range DefinePlotRange() {
 
     PHEC::Range range = PHEC::Range(
       std::make_pair(0.003, 3.),
@@ -47,23 +47,23 @@ namespace CompareSpectra2D {
     );
     return range;
 
-  }  // end 'PlotRange()'
+  }  // end 'DefinePlotRange()'
 
 
 
   // --------------------------------------------------------------------------
   //! Define normalization range
   // --------------------------------------------------------------------------
-  PHEC::Range NormRange() {
+  PHEC::Range DefineNormRange() {
 
     // grab plot range
-    PHEC::Range plot_range = PlotRange();
+    PHEC::Range plot_range = DefinePlotRange();
 
     // set normalization range
     PHEC::Range range = PHEC::Range(plot_range.x, plot_range.y);
     return range;
 
-  }  // end 'NormRange()'
+  }  // end 'DefineNormRange()'
 
 
 
@@ -74,9 +74,9 @@ namespace CompareSpectra2D {
    *  to create on the canvas: nominally should be
    *  1 for each histogram to draw.
    */ 
-  PHEC::Canvas Canvas(
+  PHEC::Canvas DefineCanvas(
     const std::string& name = "cSpectra2D",
-    const std::vector<PHEC::PlotInput>& inputs = std::vector<PHEC::PlotInput>()
+    const PHEC::Inputs& inputs = PHEC::Inputs()
   ) {
 
     // grab default pad options, and
@@ -136,20 +136,24 @@ namespace CompareSpectra2D {
     }
     return canvas;
 
-  }  // end 'Canvas(std::string&, std::vector<PHEC::PlotInput>&)'
+  }  // end 'DefineCanvas(std::string&, PHEC::Inputs&)'
 
 
 
   // --------------------------------------------------------------------------
-  //! Define normalization
+  //! Bundle options
   // --------------------------------------------------------------------------
-  /*! Used to set what value to normalize to.
-   */
-  double Norm() {
+  PHEC::PlotOpts Options(
+    const std::string& canvas_name = "cSpectra2D",
+    const PHEC::Inputs& inputs = PHEC::Inputs()
+  ) {
 
-    return 1.0;
+    PHEC::PlotOpts opts;
+    opts.plot_range = DefinePlotRange();
+    opts.norm_range = DefinePlotRange();
+    opts.canvas     = DefineCanvas(canvas_name, inputs);
 
-  }  // end 'Norm()'
+  }  // end 'Options(std::string&, PHEC::Inputs&)'
 
 }  // end CompareSpectra2D namespace
 
