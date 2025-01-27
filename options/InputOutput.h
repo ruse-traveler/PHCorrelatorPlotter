@@ -58,9 +58,9 @@ class InFiles {
 
       // define input files for pp
       std::vector<std::string> pp_files;
-      pp_files.push_back("./input/ppRun15_dataWithSpin_r0_30.d26m12y2024.root");
-      pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
-      pp_files.push_back("./input/ppRun15_simWithSpin_r0_30.d26m12y2024.root");
+      pp_files.push_back("./input/ppRun15_dataWithFixedAngleCalc_r0_30.d19m1y2025.root");
+      pp_files.push_back("./input/ppRun15_simWithFixedAngleCalc_r0_30.d19m1y2025.root");
+      pp_files.push_back("./input/ppRun15_simWithFixedAngleCalc_r0_30.d19m1y2025.root");
 
       // define input files for pAu
       std::vector<std::string> pa_files;
@@ -206,8 +206,10 @@ class InHists {
 
     // data members
     Strings m_tags_pt;
+    Strings m_tags_ch;
     Strings m_tags_sp;
     Strings m_legs_pt;
+    Strings m_legs_ch;
     Strings m_legs_sp;
 
     // ------------------------------------------------------------------------
@@ -233,6 +235,28 @@ class InHists {
       return;
 
     }  // end 'LoadPtStrings()'
+
+    // ------------------------------------------------------------------------
+    //! Define jet charge hist tags and legend text
+    // ------------------------------------------------------------------------
+    /*! All histogram tags and legend entries associated
+     *  with the jet charge should be defined here, and
+     *  then retrieved with the accessor functions.
+     */
+    void LoadChargeStrings() {
+
+      // define tags
+      m_tags_ch.clear();
+      m_tags_ch.push_back("ch0");
+      m_tags_ch.push_back("ch1");
+
+      // define legends
+      m_legs_ch.clear();
+      m_legs_ch.push_back("jet charge < 0");
+      m_legs_ch.push_back("jet charge > 0");
+      return;
+
+    }  // end 'LoadChargeStrings()'
 
     // ------------------------------------------------------------------------
     //! Load spin hist tags and legend text
@@ -275,26 +299,32 @@ class InHists {
     // ------------------------------------------------------------------------
     //! Setters
     // ------------------------------------------------------------------------
-    void SetPtTags(Strings& tags)      {m_tags_pt = tags;}
-    void SetSpinTags(Strings& tags)    {m_tags_sp = tags;}
-    void SetPtLegends(Strings& legs)   {m_legs_pt = legs;}
-    void SetSpinLegends(Strings& legs) {m_legs_sp = legs;}
+    void SetPtTags(Strings& tags)        {m_tags_pt = tags;}
+    void SetChargeTags(Strings& tags)    {m_tags_ch = tags;}
+    void SetSpinTags(Strings& tags)      {m_tags_sp = tags;}
+    void SetPtLegends(Strings& legs)     {m_legs_pt = legs;}
+    void SetChargeLegends(Strings& legs) {m_legs_ch = legs;}
+    void SetSpinLegends(Strings& legs)   {m_legs_sp = legs;}
 
     // ------------------------------------------------------------------------
     //! Getters
     // ------------------------------------------------------------------------
-    Strings GetPtTags()      const {return m_tags_pt;}
-    Strings GetSpinTags()    const {return m_tags_sp;}
-    Strings GetPtLegends()   const {return m_legs_pt;}
-    Strings GetSpinLegends() const {return m_legs_sp;}
+    Strings GetPtTags()        const {return m_tags_pt;}
+    Strings GetChargeTags()    const {return m_tags_ch;}
+    Strings GetSpinTags()      const {return m_tags_sp;}
+    Strings GetPtLegends()     const {return m_legs_pt;}
+    Strings GetChargeLegends() const {return m_legs_ch;}
+    Strings GetSpinLegends()   const {return m_legs_sp;}
 
     // ------------------------------------------------------------------------
     //! Get a particular tag, legend text
     // ------------------------------------------------------------------------
-    String GetPtTag(const int pt)      const {return m_tags_pt.at(pt);}
-    String GetSpinTag(const int sp)    const {return m_tags_sp.at(sp);}
-    String GetPtLegend(const int pt)   const {return m_legs_pt.at(pt);}
-    String GetSpinLegend(const int sp) const {return m_legs_sp.at(sp);}
+    String GetPtTag(const int pt)        const {return m_tags_pt.at(pt);}
+    String GetChargeTag(const int ch)    const {return m_tags_ch.at(ch);}
+    String GetSpinTag(const int sp)      const {return m_tags_sp.at(sp);}
+    String GetPtLegend(const int pt)     const {return m_legs_pt.at(pt);}
+    String GetChargeLegend(const int ch) const {return m_legs_ch.at(ch);}
+    String GetSpinLegend(const int sp)   const {return m_legs_sp.at(sp);}
 
     // ------------------------------------------------------------------------
     //! default ctor
@@ -302,6 +332,7 @@ class InHists {
     InHists() {
 
       LoadPtStrings();
+      LoadChargeStrings();
       LoadSpinStrings();
 
     };  // end ctor()
@@ -359,12 +390,13 @@ class InputOutput {
       const String& var,
       const int lvl,
       const int pt,
+      const int ch,
       const int sp,
       const String& tag = ""
     ) const {
 
       const String base  = "h" + tag + m_files.GetLevelTag(lvl) + var + "Stat_";
-      const String index = m_hists.GetPtTag(pt) + "cf0" + m_hists.GetSpinTag(sp);
+      const String index = m_hists.GetPtTag(pt) + "cf0" + m_hists.GetChargeTag(ch) + m_hists.GetSpinTag(sp);
       return base + index;
 
     }  // end 'MakeHistName(String&, int x 4, String&)'
@@ -374,6 +406,7 @@ class InputOutput {
     // ------------------------------------------------------------------------
     String MakeLegend(
       const int pt,
+      const int ch,
       const int sp,
       const int lvl = -1,
       const int spe = -1
@@ -386,10 +419,10 @@ class InputOutput {
       if (lvl > -1) {
         legend += m_files.GetLevelLegend(lvl) + " ";
       }
-      legend += m_hists.GetSpinLegend(sp) + ", " + m_hists.GetPtLegend(pt);
+      legend += m_hists.GetSpinLegend(sp) + ", " + m_hists.GetPtLegend(pt) + ", " + m_hists.GetChargeLegend(ch);
       return legend;
 
-    }  // end 'MakeLegend(int x 5)'
+    }  // end 'MakeLegend(int x 6)'
 
     // ------------------------------------------------------------------------
     //! Make canvas name
@@ -397,6 +430,7 @@ class InputOutput {
     String MakeCanvasName(
       const String& base,
       const int pt  = -1,
+      const int ch  = -1,
       const int sp  = -1,
       const int lvl = -1,
       const int spe = -1
@@ -414,12 +448,15 @@ class InputOutput {
       if (pt > -1) {
         name += m_hists.GetPtTag(pt);
       }
+      if (ch > -1) {
+        name += m_hists.GetChargeTag(ch);
+      }
       if (sp > -1) {
         name += m_hists.GetSpinTag(sp);
       }
       return name;
 
-    }  // end 'MakeCanvasName(int x 5)'
+    }  // end 'MakeCanvasName(int x 6)'
 
     // ------------------------------------------------------------------------
     // default ctor/dtor

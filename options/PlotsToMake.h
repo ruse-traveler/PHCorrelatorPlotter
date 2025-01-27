@@ -52,6 +52,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int species,
     const int pt,
+    const int ch,
     const int spin,
     const int opt,
     const InputOutput& io,
@@ -71,22 +72,22 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = io.MakeSpeciesTag("DataVsSim", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, pt, spin, -1, species);
+    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, pt, ch, spin, -1, species);
 
     // build hist names
-    const std::string dat_hist = io.MakeHistName(variable, InFiles::Data, pt, spin);
-    const std::string rec_hist = io.MakeHistName(variable, InFiles::Reco, pt, spin);
-    const std::string tru_hist = io.MakeHistName(variable, InFiles::True, pt, spin);
+    const std::string dat_hist = io.MakeHistName(variable, InFiles::Data, pt, ch, spin);
+    const std::string rec_hist = io.MakeHistName(variable, InFiles::Reco, pt, ch, spin);
+    const std::string tru_hist = io.MakeHistName(variable, InFiles::True, pt, ch, spin);
 
     // build hist renames
-    const std::string dat_name = io.MakeHistName(variable, InFiles::Data, pt, spin, tag);
-    const std::string rec_name = io.MakeHistName(variable, InFiles::Reco, pt, spin, tag);
-    const std::string tru_name = io.MakeHistName(variable, InFiles::True, pt, spin, tag);
+    const std::string dat_name = io.MakeHistName(variable, InFiles::Data, pt, ch, spin, tag);
+    const std::string rec_name = io.MakeHistName(variable, InFiles::Reco, pt, ch, spin, tag);
+    const std::string tru_name = io.MakeHistName(variable, InFiles::True, pt, ch, spin, tag);
 
     // build hist legends
-    const std::string dat_leg = io.MakeLegend(pt, spin, InFiles::Data);
-    const std::string rec_leg = io.MakeLegend(pt, spin, InFiles::Reco);
-    const std::string tru_leg = io.MakeLegend(pt, spin, InFiles::True);
+    const std::string dat_leg = io.MakeLegend(pt, ch, spin, InFiles::Data);
+    const std::string rec_leg = io.MakeLegend(pt, ch, spin, InFiles::Reco);
+    const std::string tru_leg = io.MakeLegend(pt, ch, spin, InFiles::True);
 
     // bundle input options
     PHEC::PlotInput dat_opt = PHEC::PlotInput(
@@ -145,6 +146,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int species,
     const int pt,
+    const int ch,
     const int spin,
     const InputOutput& io,
     const PHEC::PHCorrelatorPlotter& plotter,
@@ -153,22 +155,22 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = io.MakeSpeciesTag("DataVsSim", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, pt, spin, -1, species);
+    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, pt, ch, spin, -1, species);
 
     // build hist names
-    const std::string dat_hist = io.MakeHistName(variable, InFiles::Data, pt, spin);
-    const std::string rec_hist = io.MakeHistName(variable, InFiles::Reco, pt, spin);
-    const std::string tru_hist = io.MakeHistName(variable, InFiles::True, pt, spin);
+    const std::string dat_hist = io.MakeHistName(variable, InFiles::Data, pt, ch, spin);
+    const std::string rec_hist = io.MakeHistName(variable, InFiles::Reco, pt, ch, spin);
+    const std::string tru_hist = io.MakeHistName(variable, InFiles::True, pt, ch, spin);
 
     // build hist renames
-    const std::string dat_name = io.MakeHistName(variable, InFiles::Data, pt, spin, tag);
-    const std::string rec_name = io.MakeHistName(variable, InFiles::Reco, pt, spin, tag);
-    const std::string tru_name = io.MakeHistName(variable, InFiles::True, pt, spin, tag);
+    const std::string dat_name = io.MakeHistName(variable, InFiles::Data, pt, ch, spin, tag);
+    const std::string rec_name = io.MakeHistName(variable, InFiles::Reco, pt, ch, spin, tag);
+    const std::string tru_name = io.MakeHistName(variable, InFiles::True, pt, ch, spin, tag);
 
     // build hist legends
-    const std::string dat_leg = io.MakeLegend(pt, spin, InFiles::Data);
-    const std::string rec_leg = io.MakeLegend(pt, spin, InFiles::Reco);
-    const std::string tru_leg = io.MakeLegend(pt, spin, InFiles::True);
+    const std::string dat_leg = io.MakeLegend(pt, ch, spin, InFiles::Data);
+    const std::string rec_leg = io.MakeLegend(pt, ch, spin, InFiles::Reco);
+    const std::string tru_leg = io.MakeLegend(pt, ch, spin, InFiles::True);
 
     // bundle input options
     PHEC::PlotInput dat_opt = PHEC::PlotInput(
@@ -215,6 +217,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int species,
     const int level,
+    const int ch,
     const int spin,
     const int opt,
     const InputOutput& io,
@@ -234,22 +237,22 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = io.MakeSpeciesTag("VsPtJet", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, -1, spin, level, species);
+    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, -1, ch, spin, level, species);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  spin);
-    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, spin);
-    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, spin);
+    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  ch, spin);
+    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, ch, spin);
+    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, ch, spin);
 
     // build hist renames
-    const std::string pt5_name  = io.MakeHistName(variable, level, InHists::Pt5,  spin, tag);
-    const std::string pt10_name = io.MakeHistName(variable, level, InHists::Pt10, spin, tag);
-    const std::string pt15_name = io.MakeHistName(variable, level, InHists::Pt15, spin, tag);
+    const std::string pt5_name  = io.MakeHistName(variable, level, InHists::Pt5,  ch, spin, tag);
+    const std::string pt10_name = io.MakeHistName(variable, level, InHists::Pt10, ch, spin, tag);
+    const std::string pt15_name = io.MakeHistName(variable, level, InHists::Pt15, ch, spin, tag);
 
     // build hist legends
-    const std::string pt5_leg  = io.MakeLegend(InHists::Pt5,  spin, level);
-    const std::string pt10_leg = io.MakeLegend(InHists::Pt10, spin, level);
-    const std::string pt15_leg = io.MakeLegend(InHists::Pt15, spin, level);
+    const std::string pt5_leg  = io.MakeLegend(InHists::Pt5,  ch, spin, level);
+    const std::string pt10_leg = io.MakeLegend(InHists::Pt10, ch, spin, level);
+    const std::string pt15_leg = io.MakeLegend(InHists::Pt15, ch, spin, level);
 
     // bundle input options
     PHEC::PlotInput pt5_opt = PHEC::PlotInput(
@@ -308,6 +311,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int species,
     const int level,
+    const int ch,
     const int spin,
     const InputOutput& io,
     const PHEC::PHCorrelatorPlotter& plotter,
@@ -316,22 +320,22 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = io.MakeSpeciesTag("VsPtJet", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, -1, spin, level, species);
+    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, -1, ch, spin, level, species);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  spin);
-    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, spin);
-    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, spin);
+    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  ch, spin);
+    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, ch, spin);
+    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, ch, spin);
 
     // build hist renames
-    const std::string pt5_name  = io.MakeHistName(variable, level, InHists::Pt5,  spin, tag);
-    const std::string pt10_name = io.MakeHistName(variable, level, InHists::Pt10, spin, tag);
-    const std::string pt15_name = io.MakeHistName(variable, level, InHists::Pt15, spin, tag);
+    const std::string pt5_name  = io.MakeHistName(variable, level, InHists::Pt5,  ch, spin, tag);
+    const std::string pt10_name = io.MakeHistName(variable, level, InHists::Pt10, ch, spin, tag);
+    const std::string pt15_name = io.MakeHistName(variable, level, InHists::Pt15, ch, spin, tag);
 
     // build hist legends
-    const std::string pt5_leg  = io.MakeLegend(InHists::Pt5,  spin, level);
-    const std::string pt10_leg = io.MakeLegend(InHists::Pt10, spin, level);
-    const std::string pt15_leg = io.MakeLegend(InHists::Pt15, spin, level);
+    const std::string pt5_leg  = io.MakeLegend(InHists::Pt5,  ch, spin, level);
+    const std::string pt10_leg = io.MakeLegend(InHists::Pt10, ch, spin, level);
+    const std::string pt15_leg = io.MakeLegend(InHists::Pt15, ch, spin, level);
 
     // bundle input options
     PHEC::PlotInput pt5_opt = PHEC::PlotInput(
@@ -377,6 +381,7 @@ namespace PlotsToMake {
   void PPVsPAu1D(
     const std::string& variable,
     const int level,
+    const int ch,
     const int spin,
     const int opt,
     const InputOutput& io,
@@ -396,39 +401,39 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = "PPVsPAu_";
-    const std::string canvas = io.MakeCanvasName("cPPVsPAu" + variable, -1, spin, level);
+    const std::string canvas = io.MakeCanvasName("cPPVsPAu" + variable, -1, ch, spin, level);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  spin);
-    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, spin);
-    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, spin);
+    const std::string pt5_hist  = io.MakeHistName(variable, level, InHists::Pt5,  ch, spin);
+    const std::string pt10_hist = io.MakeHistName(variable, level, InHists::Pt10, ch, spin);
+    const std::string pt15_hist = io.MakeHistName(variable, level, InHists::Pt15, ch, spin);
 
     // build hist renames
     const StringPair pt5_name  = std::make_pair(
-      io.MakeHistName(variable, level, InHists::Pt5, spin, tag + "PP_"),
-      io.MakeHistName(variable, level, InHists::Pt5, spin, tag + "PAu)")
+      io.MakeHistName(variable, level, InHists::Pt5, ch, spin, tag + "PP_"),
+      io.MakeHistName(variable, level, InHists::Pt5, ch, spin, tag + "PAu)")
     );
     const StringPair pt10_name = std::make_pair(
-      io.MakeHistName(variable, level, InHists::Pt10, spin, tag + "PP_"),
-      io.MakeHistName(variable, level, InHists::Pt10, spin, tag + "PAu_")
+      io.MakeHistName(variable, level, InHists::Pt10, ch, spin, tag + "PP_"),
+      io.MakeHistName(variable, level, InHists::Pt10, ch, spin, tag + "PAu_")
     );
     const StringPair pt15_name = std::make_pair(
-      io.MakeHistName(variable, level, InHists::Pt15, spin, tag + "PP_"),
-      io.MakeHistName(variable, level, InHists::Pt15, spin, tag + "PAu_")
+      io.MakeHistName(variable, level, InHists::Pt15, ch, spin, tag + "PP_"),
+      io.MakeHistName(variable, level, InHists::Pt15, ch, spin, tag + "PAu_")
     );
 
     // build hist legends
     const StringPair pt5_leg  = std::make_pair(
-      io.MakeLegend(InHists::Pt5, spin, level, InFiles::PP),
-      io.MakeLegend(InHists::Pt5, spin, level, InFiles::PAu)
+      io.MakeLegend(InHists::Pt5, ch, spin, level, InFiles::PP),
+      io.MakeLegend(InHists::Pt5, ch, spin, level, InFiles::PAu)
     );
     const StringPair pt10_leg = std::make_pair(
-      io.MakeLegend(InHists::Pt10, spin, level, InFiles::PP),
-      io.MakeLegend(InHists::Pt10, spin, level, InFiles::PAu)
+      io.MakeLegend(InHists::Pt10, ch, spin, level, InFiles::PP),
+      io.MakeLegend(InHists::Pt10, ch, spin, level, InFiles::PAu)
     );
     const StringPair pt15_leg = std::make_pair(
-      io.MakeLegend(InHists::Pt15, spin, level, InFiles::PP),
-      io.MakeLegend(InHists::Pt15, spin, level, InFiles::PAu)
+      io.MakeLegend(InHists::Pt15, ch, spin, level, InFiles::PP),
+      io.MakeLegend(InHists::Pt15, ch, spin, level, InFiles::PAu)
     );
 
     // bundle input options
