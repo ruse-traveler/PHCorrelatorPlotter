@@ -157,6 +157,7 @@ namespace SpectraVsBaseline {
     opts.plot_range = DefinePlotRange(range_opt);
     opts.norm_range = DefinePlotRange(range_opt);
     opts.canvas     = DefineCanvas(canvas_name, range_opt);
+    return opts;
 
   }  // end 'Options(std::string&, int)'
 

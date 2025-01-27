@@ -232,6 +232,7 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // exit routine
+        Tools::CloseFiles(ifiles);
         return;
 
       }  // end 'CompareSpectra(...)'
@@ -415,6 +416,8 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // exit routine
+        Tools::CloseFiles(nfiles);
+        dfile -> Close();
         return;
 
       }  // end 'CompareSpectraToBaseline(...)'
@@ -626,6 +629,8 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // exit routine
+        Tools::CloseFiles(dfiles);
+        Tools::CloseFiles(nfiles);
         return;
 
       }  // end 'CompareRatios(...)'
@@ -735,6 +740,7 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // exit routine
+        Tools::CloseFiles(ifiles);
         return;
 
       }  // end 'ComparSpectra2D(...)'

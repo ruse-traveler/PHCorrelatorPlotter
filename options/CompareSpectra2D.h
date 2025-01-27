@@ -152,6 +152,7 @@ namespace CompareSpectra2D {
     opts.plot_range = DefinePlotRange();
     opts.norm_range = DefinePlotRange();
     opts.canvas     = DefineCanvas(canvas_name, inputs);
+    return opts;
 
   }  // end 'Options(std::string&, PHEC::Inputs&)'
 

@@ -100,6 +100,21 @@ namespace PHEnergyCorrelator {
     }  // end 'NormalizeByIntegral(TH1*, double, double)'
 
 
+
+    // ------------------------------------------------------------------------
+    //! Close a list of files
+    // ------------------------------------------------------------------------
+    void CloseFiles(std::vector<TFile*>& files) {
+
+      for (std::size_t ifile = 0; ifile < files.size(); ++ifile) {
+        files[ifile] -> Close();
+      }
+      return;
+
+    }  // end 'CloseFiles(std::vector<TFile*>&)'
+
+
+
     // ------------------------------------------------------------------------
     //! Helper method to calculate a height based on line spacing
     // ------------------------------------------------------------------------
@@ -229,7 +244,7 @@ namespace PHEnergyCorrelator {
     TFile* OpenFile(const std::string& name, const std::string &option) {
 
       // try to open file, throw error if not able
-      TFile* file = new TFile( name.data(), option.data() );
+      TFile* file = TFile::Open( name.data(), option.data() );
       if (!file) {
         std::cerr << "PANIC: couldn't open file!\n"
                   << "       file = " << name << "\n"
