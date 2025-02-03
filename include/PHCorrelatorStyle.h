@@ -13,6 +13,8 @@
 // c++ utilities
 #include <vector>
 // root libraries
+#include <TBox.h>
+#include <TEllipse.h>
 #include <TF1.h>
 #include <TGraph.h>
 #include <TGraph2D.h>
@@ -520,6 +522,7 @@ namespace PHEnergyCorrelator {
         text -> SetFillStyle( m_plot.fill );
         text -> SetLineColor( m_plot.color );
         text -> SetLineStyle( m_plot.line );
+        text -> SetLineWidth( m_plot.width );
         text -> SetTextColor( m_text.color );
         text -> SetTextFont( m_text.font );
         text -> SetTextAlign( m_text.align );
@@ -539,13 +542,60 @@ namespace PHEnergyCorrelator {
         leg -> SetFillStyle( m_plot.fill );
         leg -> SetLineColor( m_plot.color );
         leg -> SetLineStyle( m_plot.line );
+        leg -> SetLineWidth( m_plot.width );
         leg -> SetTextColor( m_text.color );
         leg -> SetTextFont( m_text.font );
         leg -> SetTextAlign( m_text.align );
         return;
 
       }  //  end 'Apply(TLegend*)'
-      
+
+      // ----------------------------------------------------------------------
+      //! Apply styles to a line
+      // ----------------------------------------------------------------------
+      void Apply(TLine* line) const {
+
+        line -> SetLineColor( m_plot.color );
+        line -> SetLineStyle( m_plot.line );
+        line -> SetLineWidth( m_plot.width );
+        return;
+
+      }  // end 'Apply(TLine*)'
+
+      // ----------------------------------------------------------------------
+      //! Apply styles to a box
+      // ----------------------------------------------------------------------
+      /*! n.b. this assumes the fill and border of the
+       *  TBox will be the same color.
+       */
+      void Apply(TBox* box) const {
+
+        box -> SetFillColor( m_plot.color );
+        box -> SetFillStyle( m_plot.fill );
+        box -> SetLineColor( m_plot.color );
+        box -> SetLineStyle( m_plot.line );
+        box -> SetLineWidth( m_plot.width );
+        return;
+
+      }  // end 'Apply(TBox*)'
+
+      // ----------------------------------------------------------------------
+      //! Apply styles to an ellipse
+      // ----------------------------------------------------------------------
+      /*! n.b. this assumes the fill and border of the
+       *  TEllipse will be the same color.
+       */
+      void Apply(TEllipse*ellipse) const {
+
+        ellipse -> SetFillColor( m_plot.color );
+        ellipse -> SetFillStyle( m_plot.fill );
+        ellipse -> SetLineColor( m_plot.color );
+        ellipse -> SetLineStyle( m_plot.line );
+        ellipse -> SetLineWidth( m_plot.width );
+        return;
+
+      }  // end 'Apply(TBox*)'
+
       // ----------------------------------------------------------------------
       //! default ctor/dtor
       // ----------------------------------------------------------------------
