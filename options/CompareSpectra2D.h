@@ -42,7 +42,7 @@ namespace CompareSpectra2D {
 
     PHEC::Range range = PHEC::Range(
       std::make_pair(0.003, 3.),
-      std::make_pair(-3.15, 3.15),
+      std::make_pair(0.0, 6.30),
       std::make_pair(0.00003, 33.)
     );
     return range;

@@ -59,7 +59,7 @@ namespace CompareRatios {
 
       case Angle:
         range = PHEC::Range(
-          std::make_pair(-3.15, 3.15),
+          std::make_pair(0.0, 6.30),
           std::make_pair(-0.007, 0.017)
         );
         break;
