@@ -20,7 +20,7 @@
 namespace PHEnergyCorrelator {
 
   // ==========================================================================
-  //! BHCal plot input
+  //! Plot input
   // ==========================================================================
   /*! A small struct to consolidate input for
    *  plotting routines
@@ -53,11 +53,11 @@ namespace PHEnergyCorrelator {
     //! ctor acceptingt arguments
     // ------------------------------------------------------------------------
     PlotInput(
-      const std::string farg,
-      const std::string oarg,
-      const std::string rarg,
-      const std::string larg,
-      const Style::Plot sarg = Style::Plot()
+      const std::string& farg,
+      const std::string& oarg,
+      const std::string& rarg,
+      const std::string& larg,
+      const Style::Plot& sarg = Style::Plot()
     ) {
       file   = farg;
       object = oarg;
@@ -66,7 +66,7 @@ namespace PHEnergyCorrelator {
       style  = sarg;
     };
 
-  };  // end PlotInput
+  };  // end PlotInput(std::string x 4, Style::Plot)
 
 }    // end PHEnergyCorrelator namespace
 

@@ -28,6 +28,7 @@
 #include "PHCorrelatorPlotInput.h"
 #include "PHCorrelatorPlotManager.h"
 #include "PHCorrelatorPlotOpts.h"
+#include "PHCorrelatorPlotShape.h"
 #include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorRange.h"
@@ -42,7 +43,8 @@ namespace PHEnergyCorrelator {
   // Useful aliases
   // ---------------------------------------------------------------------------
   typedef std::vector<PlotInput> Inputs;
-  typedef std::vector<Style> Styles;
+  typedef std::vector<PlotShape> Shapes;
+  typedef std::vector<Style>     Styles;
 
 
 
@@ -343,10 +345,12 @@ namespace PHEnergyCorrelator {
           legdef.SetHeader( opts.header );
         }
 
+        // determine relevant range to draw line
+        Type::Interval xline = Tools::GetDrawRange( opts.plot_range.x, rhists.front() -> GetXaxis() );
+
         // create root objects
         //   - FIXME line should be configurable
-        //   - FIXME need to add check on x-axis vs. plot range
-        TLine*     line   = new TLine( opts.plot_range.x.first, 1.0, opts.plot_range.x.second, 1.0 );
+        TLine*     line   = new TLine( xline.first, 1.0, xline.second, 1.0 );
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -550,10 +554,12 @@ namespace PHEnergyCorrelator {
           legdef.SetHeader( opts.header );
         }
 
+        // determine relevant range to draw line
+        Type::Interval xline = Tools::GetDrawRange( opts.plot_range.x, rhists.front() -> GetXaxis() );
+
         // create root objects
         //   - FIXME line should be configurable
-        //   - FIXME need to add check on x-axis vs. plot range
-        TLine*     line   = new TLine( opts.plot_range.x.first, 1.0, opts.plot_range.x.second, 1.0 );
+        TLine*     line   = new TLine( xline.first, 1.0, xline.second, 1.0 );
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;

@@ -17,10 +17,15 @@
 #include <string>
 #include <utility>
 // root libraries
+#include <TAxis.h>
 #include <TFile.h>
 #include <TH1.h>
 #include <TH2.h>
+#include <TMath.h>
 #include <TObject.h>
+// plotting utilities
+#include "PHCorrelatorPlotTools.h"
+#include "PHCorrelatorPlotTypes.h"
 
 
 
@@ -295,6 +300,28 @@ namespace PHEnergyCorrelator {
       return grabbed;
 
     }  // end 'GrabObject(std::string&, TFile*)'
+
+
+
+    // ------------------------------------------------------------------------
+    //! Get adequate range to draw on
+    // ------------------------------------------------------------------------
+    /*! Compares a provided range and a TAxis, and returns the
+     *  minimum range.  This is a tool used to make sure lines
+     *  and other other objects aren't drawn past a provided
+     *  axis.
+     */ 
+    Type::Interval GetDrawRange(const Type::Interval& range, const TAxis* axis) {
+
+      // grab total no. of bins
+      const int   nbins = axis -> GetNbins();
+      const float start = TMath::Max(range.first, (float) axis -> GetBinLowEdge(1));
+      const float stop  = TMath::Min(range.second, (float) axis -> GetBinLowEdge(nbins + 1));
+
+      // return range
+      return std::make_pair(start, stop);
+
+    }  // end 'GetDrawRange(Type::Interval&, TAxis*)'
 
   }  // end Tools namespace
 }  // end PHEnergyCorrelator namespace
