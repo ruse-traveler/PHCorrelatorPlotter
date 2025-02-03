@@ -52,6 +52,18 @@ namespace PHEnergyCorrelator {
 
 
     // ------------------------------------------------------------------------
+    //! Wrapper function for default phi range
+    // ------------------------------------------------------------------------
+    /*! FIXME this should be in constants */
+    std::pair<float, float> DefaultPhiRange() {
+
+      return std::make_pair(0.0, 360.0);
+
+    }  // end 'DefaultPhiRange()'
+
+
+
+    // ------------------------------------------------------------------------
     //! Normalize a 1D histogram by integral
     // ------------------------------------------------------------------------
     void NormalizeByIntegral(

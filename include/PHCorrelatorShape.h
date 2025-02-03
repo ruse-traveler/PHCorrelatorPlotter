@@ -11,12 +11,15 @@
 #define PHCORRELATORSHAPE_H
 
 // c++ utilities
+#include <cmath>
 #include <utility>
 // root libraries
 #include <TBox.h>
 #include <TEllipse.h>
 #include <TLine.h>
+#include <TMath.h>
 // plotting utilities
+#include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 
 
@@ -37,7 +40,9 @@ namespace PHEnergyCorrelator {
       Type::Interval m_xrange;
       Type::Interval m_yrange;
       Type::Interval m_phirange;
-      /* TODO add remaining ellipse members */
+      Type::Point    m_center;
+      Type::PairF    m_radii;
+      float          m_theta;
 
     public:
 
@@ -47,6 +52,9 @@ namespace PHEnergyCorrelator {
       Type::Interval GetXRange()   const {return m_xrange;}
       Type::Interval GetYRange()   const {return m_xrange;}
       Type::Interval GetPhiRange() const {return m_phirange;}
+      Type::Point    GetCenter()   const {return m_center;}
+      Type::PairF    GetRadii()    const {return m_radii;}
+      float          GetTheta()    const {return m_theta;}
 
       // ----------------------------------------------------------------------
       //! Setters
@@ -54,6 +62,9 @@ namespace PHEnergyCorrelator {
       void SetXRange(const Type::Interval& range)   {m_xrange   = range;}
       void SetYRange(const Type::Interval& range)   {m_yrange   = range;}
       void SetPhiRange(const Type::Interval& range) {m_phirange = range;}
+      void SetCenter(const Type::Point& point)      {m_center   = point;}
+      void SetRadii(const Type::PairF& radii)       {m_radii    = radii;}
+      void SetTheta(const float theta)              {m_theta    = theta;}
 
       // ----------------------------------------------------------------------
       //! Create a TLine
@@ -84,17 +95,38 @@ namespace PHEnergyCorrelator {
         return box;
 
       }  // end 'MakeTBox()'
- 
-      /* TODO fill in ellipse maker */ 
+
+      // ----------------------------------------------------------------------
+      //! Create a TEllipse
+      // ----------------------------------------------------------------------
+      TEllipse* MakeTEllipse() const {
+
+        TEllipse* ellipse = new TEllipse(
+          m_center.first,
+          m_center.second,
+          m_radii.first,
+          m_radii.second,
+          m_phirange.first,
+          m_phirange.second,
+          m_theta
+        );
+        return ellipse;
+
+      }  // end 'MakeTEllipse()'
 
       // ----------------------------------------------------------------------
       //! default ctor
       // ----------------------------------------------------------------------
       Shape() {
+
         m_xrange   = std::make_pair(0.0, 1.0);
         m_yrange   = std::make_pair(0.0, 1.0);
         m_phirange = std::make_pair(0.0, 360.);
-      };
+        m_center   = std::make_pair(0.5, 0.5);
+        m_radii    = std::make_pair(0.5, 0.5);
+        m_theta    = 0.0;
+
+      };  // end ctor()
  
       // ----------------------------------------------------------------------
       //! default dtor
@@ -102,9 +134,47 @@ namespace PHEnergyCorrelator {
       ~Shape() {};
 
       // ----------------------------------------------------------------------
-      //! ctor accepting arguments
+      //! ctor accepting line/box arguments
       // ----------------------------------------------------------------------
-      /* TODO fill in */
+      Shape(const Type::Interval& xrange, const Type::Interval& yrange) {
+
+        const float xradius = 0.5 * abs(xrange.second - xrange.first);
+        const float yradius = 0.5 * abs(yrange.second - yrange.first);
+        const float xcenter = xrange.first + xradius;
+        const float ycenter = yrange.first + yradius;
+
+        m_xrange   = xrange;
+        m_yrange   = yrange;
+        m_center   = std::make_pair(xcenter, ycenter);
+        m_radii    = std::make_pair(xradius, yradius);
+        m_phirange = std::make_pair(0.0, 360.);
+        m_theta    = 0.0;
+
+      }  // end ctor(Type::Interval& x 2)'
+
+      // ----------------------------------------------------------------------
+      //! ctor accepting ellipse arguments
+      // ----------------------------------------------------------------------
+      Shape(
+        const Type::Point& center,
+        const Type::PairF& radii,
+        const Type::Interval& phirange = Tools::DefaultPhiRange(),
+        const float theta = 0.0
+      ) {
+
+        const float thrad = (theta / 360.0) * TMath::TwoPi();
+        const float thinv = TMath::Pi() - thrad;
+        const float xmax  = TMath::Max( radii.first * TMath::Cos(thrad), radii.second * TMath::Cos(thinv) );
+        const float ymax  = TMath::Max( radii.first * TMath::Sin(thrad), radii.second * TMath::Sin(thinv) );
+
+        m_xrange   = std::make_pair(center.first - xmax, center.first + xmax);
+        m_yrange   = std::make_pair(center.second - ymax, center.second + ymax);
+        m_phirange = phirange;
+        m_center   = center;
+        m_radii    = radii;
+        m_theta    = theta;
+
+      }  // end ctor(Type::Point&, Type::PairF&, Type::Interval&, float)
 
   };  // end Shape
 
