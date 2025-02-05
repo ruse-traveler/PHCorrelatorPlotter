@@ -25,9 +25,9 @@
 #include <TH1.h>
 #include <TLegend.h>
 // plotting utilities
+#include "PHCorrelatorCanvasManager.h"
 #include "PHCorrelatorLegend.h"
 #include "PHCorrelatorPlotInput.h"
-#include "PHCorrelatorPlotManager.h"
 #include "PHCorrelatorPlotOpts.h"
 #include "PHCorrelatorPlotShape.h"
 #include "PHCorrelatorPlotTools.h"
@@ -330,7 +330,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( param.options.canvas );
+        CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTCanvas() -> cd();
@@ -501,17 +501,16 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( param.options.canvas );
+        CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
-        manager.GetTPad(0) -> cd();
+        manager.GetTPad( param.options.ratio_pad ) -> cd();
         rhists[0] -> Draw();
         for (std::size_t irat = 1; irat < rhists.size(); ++irat) {
           rhists[irat] -> Draw("same");
         }
         unity -> Draw();
-        manager.GetTPad(1) -> cd();
+        manager.GetTPad( param.options.spectra_pad ) -> cd();
         dhist -> Draw();
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
           nhists[inum] -> Draw("same");
@@ -708,17 +707,16 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( param.options.canvas );
+        CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
-        manager.GetTPad(0) -> cd();
+        manager.GetTPad( param.options.ratio_pad ) -> cd();
         rhists[0] -> Draw();
         for (std::size_t irat = 1; irat < rhists.size(); ++irat) {
           rhists[irat] -> Draw("same");
         }
         unity -> Draw();
-        manager.GetTPad(1) -> cd();
+        manager.GetTPad( param.options.spectra_pad ) -> cd();
         dhists[0] -> Draw();
         nhists[1] -> Draw();
         for (std::size_t iden = 1; iden < dhists.size(); ++iden) {
@@ -818,7 +816,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( param.options.canvas );
+        CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
 
@@ -830,7 +828,6 @@ namespace PHEnergyCorrelator {
 
         // otherwise draw 1 histogram per pad and
         // text box on last pad
-        //   - FIXME need to be able to specify labels from macro
         //   - FIXME draw options should be configurable from macro
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           manager.GetTPad(ihst) -> cd();

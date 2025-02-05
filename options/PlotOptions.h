@@ -291,14 +291,16 @@ namespace PlotOptions {
 
     // define canvas (use default pad options)
     PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
-    canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts) );
-    canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
+    canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts), "ratio" );
+    canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts), "spectra" );
 
     // set auxilliary options
     PHEC::PlotOpts plot_opts;
-    plot_opts.plot_range = DefinePlotRange(range_opt);
-    plot_opts.norm_range = DefineNormRange(range_opt);
-    plot_opts.canvas     = canvas;
+    plot_opts.plot_range  = DefinePlotRange(range_opt);
+    plot_opts.norm_range  = DefineNormRange(range_opt);
+    plot_opts.canvas      = canvas;
+    plot_opts.ratio_pad   = "ratio";
+    plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::SpectraVsBaselineParams params;
@@ -360,14 +362,16 @@ namespace PlotOptions {
 
     // define canvas (use default pad options)
     PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
-    canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts) );
-    canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
+    canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts), "ratio" );
+    canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts), "spectra" );
 
     // set auxilliary options
     PHEC::PlotOpts plot_opts;
-    plot_opts.plot_range = DefinePlotRange(range_opt);
-    plot_opts.norm_range = DefineNormRange(range_opt);
-    plot_opts.canvas     = canvas;
+    plot_opts.plot_range  = DefinePlotRange(range_opt);
+    plot_opts.norm_range  = DefineNormRange(range_opt);
+    plot_opts.canvas      = canvas;
+    plot_opts.ratio_pad   = "ratio";
+    plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::CompareRatiosParams params;
