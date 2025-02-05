@@ -88,7 +88,7 @@ namespace PlotOptions {
     PHEC::Range plot_range = DefinePlotRange(opt);
 
     // set normalization range
-    PHEC::Range range = PHEC::Range(plot_range.x);
+    PHEC::Range range = PHEC::Range(plot_range.GetX());
     return range;
 
   }  // end 'DefineNormRange(int)'
@@ -103,15 +103,15 @@ namespace PlotOptions {
   PHEC::PHCorrelatorPlotter::CompareSpectraParams CompareSpectra1D(
     const PHEC::Inputs& inputs,
     const std::string& canvas_name = "cSpectra",
-    const int range_opt = side
+    const int range_opt = Side
   ) {
 
     // grab default pad options, and
     // turn on log y
-    PHEC::PadOpts opts = PHEC::PadOpts();
-    if (opt == Side) {
-      opts.logx = 1;
-      opts.logy = 1;
+    PHEC::PadOpts pad_opts = PHEC::PadOpts();
+    if (range_opt == Side) {
+      pad_opts.logx = 1;
+      pad_opts.logy = 1;
     }
 
     // set margins
@@ -122,19 +122,19 @@ namespace PlotOptions {
     margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 950), opts);
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 950), pad_opts);
     canvas.SetMargins( margins );
 
     // set auxilliary options
-    PHEC::PlotOpts opts;
-    opts.plot_range = DefinePlotRange(range_opt);
-    opts.norm_range = DefineNormRange(range_opt);
-    opts.canvas     = canvas;
+    PHEC::PlotOpts plot_opts;
+    plot_opts.plot_range = DefinePlotRange(range_opt);
+    plot_opts.norm_range = DefineNormRange(range_opt);
+    plot_opts.canvas     = canvas;
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::CompareSpectraParams params;
     params.inputs  = inputs;
-    params.options = opts;
+    params.options = plot_opts;
     return params;
 
   }  // end 'CompareSpectra1D(PHEC::Inputs&, std::string&, int)'
@@ -151,9 +151,9 @@ namespace PlotOptions {
 
     // grab default pad options, and
     // turn on log z
-    PHEC::PadOpts opts = PHEC::PadOpts();
-    opts.logx = 1;
-    opts.logz = 1;
+    PHEC::PadOpts pad_opts = PHEC::PadOpts();
+    pad_opts.logx = 1;
+    pad_opts.logz = 1;
 
     // determine canvas dimensions
     //   - FIXME layout of canvas should be configurable
@@ -200,7 +200,7 @@ namespace PlotOptions {
           "",
           pad_vtxs[iin],
           pad_margins,
-          opts
+          pad_opts
         )
       );
     }
@@ -214,15 +214,15 @@ namespace PlotOptions {
     const PHEC::Range norm_range = plot_range;
 
     // set auxilliary options
-    PHEC::PlotOpts opts;
-    opts.plot_range = plot_range;
-    opts.norm_range = norm_range;
-    opts.canvas     = canvas;
+    PHEC::PlotOpts plot_opts;
+    plot_opts.plot_range = plot_range;
+    plot_opts.norm_range = norm_range;
+    plot_opts.canvas     = canvas;
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::CompareSpectraParams params;
     params.inputs  = inputs;
-    params.options = opts;
+    params.options = plot_opts;
     return params;
 
   }  // end 'CompareSpectra2D(PHEC::Inputs&, std::string&)'
@@ -243,7 +243,7 @@ namespace PlotOptions {
     // turn on log y/x when necessary
     PHEC::PadOpts ratio_opts = PHEC::PadOpts();
     PHEC::PadOpts spect_opts = PHEC::PadOpts();
-    if (opt == Side) {
+    if (range_opt == Side) {
       ratio_opts.logx = 1;
       spect_opts.logx = 1;
       spect_opts.logy = 1;
@@ -281,16 +281,16 @@ namespace PlotOptions {
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
 
     // set auxilliary options
-    PHEC::PlotOpts opts;
-    opts.plot_range = DefinePlotRange(range_opt);
-    opts.norm_range = DefinePlotRange(range_opt);
-    opts.canvas     = canvas;
+    PHEC::PlotOpts plot_opts;
+    plot_opts.plot_range = DefinePlotRange(range_opt);
+    plot_opts.norm_range = DefinePlotRange(range_opt);
+    plot_opts.canvas     = canvas;
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::SpectraVsBaselineParams params;
     params.denominator = in_denom;
     params.numerators  = in_numers;
-    params.options     = opts;
+    params.options     = plot_opts;
     return params;
 
   }  // end 'SpectraVsBaseline(PHEC::PlotInput&, PHEC::Inputs&, std::string&, int)'
@@ -302,7 +302,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   PHEC::PHCorrelatorPlotter::CompareRatiosParams CompareRatios(
     const PHEC::Inputs& in_denoms,
-    const PHEC::Inputs& in_denoms,
+    const PHEC::Inputs& in_numers,
     const std::string& canvas_name = "cRatios",
     const int range_opt = Side
   ) {
@@ -311,7 +311,7 @@ namespace PlotOptions {
     // turn on log y/x when necessary
     PHEC::PadOpts ratio_opts = PHEC::PadOpts();
     PHEC::PadOpts spect_opts = PHEC::PadOpts();
-    if (opt == Side) {
+    if (range_opt == Side) {
       ratio_opts.logx = 1;
       spect_opts.logx = 1;
       spect_opts.logy = 1;
@@ -344,25 +344,27 @@ namespace PlotOptions {
     spect_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(name, "", std::make_pair(950, 1568), PHEC::PadOpts());
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
     canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts) );
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts) );
 
     // set auxilliary options
-    PHEC::PlotOpts opts;
-    opts.plot_range = DefinePlotRange(range_opt);
-    opts.norm_range = DefinePlotRange(range_opt);
-    opts.canvas     = canvas;
+    PHEC::PlotOpts plot_opts;
+    plot_opts.plot_range = DefinePlotRange(range_opt);
+    plot_opts.norm_range = DefinePlotRange(range_opt);
+    plot_opts.canvas     = canvas;
 
     // bundle parameters
     PHEC::PHCorrelatorPlotter::CompareRatiosParams params;
     params.denominators = in_denoms;
     params.numerators   = in_numers;
-    params.options      = opts;
+    params.options      = plot_opts;
     return params;
 
   }  // end 'CompareRatios(PHEC::Inputs&, PHEC::Inputs&, std::string&, int)'
 
 }  // end PlotOptions namespace
+
+#endif
 
 // end ========================================================================

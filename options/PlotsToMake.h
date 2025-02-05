@@ -191,7 +191,7 @@ namespace PlotsToMake {
     input.push_back( tru_opt );
 
     // make plot
-    plotter.PlotSepctra2D(
+    plotter.PlotSpectra2D(
       PO::CompareSpectra2D(input, canvas),
       ofile
     );

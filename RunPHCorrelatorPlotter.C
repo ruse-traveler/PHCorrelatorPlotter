@@ -23,10 +23,12 @@
 // plotting options
 #include "options/BaseOptions.h"
 #include "options/InputOutput.h"
+#include "options/PlotOptions.h"
 #include "options/PlotsToMake.h"
 
 // abbreviate common namespaces
 namespace BO = BaseOptions;
+namespace PO = PlotOptions;
 namespace PM = PlotsToMake;
 
 
@@ -46,21 +48,21 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   switch (plot) {
 
     case PM::SimVsReco:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
       break;
 
     case PM::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
       break;
 
     case PM::PPVsPAu:
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_withFixedAngleCalc.d27m1y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
       break;
 
     default:
@@ -103,12 +105,12 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             if (ico == InFiles::PAu) plotter.SetTextBox( BO::Text(ico) );
 
             // create comparison for each desired 1D histogram
-            PM::SimVsReco1D("EEC", ico, ipt, ich, isp, SB::Side, io, plotter, ofiles[0]);
-            PM::SimVsReco1D("CollinsBlue", ico, ipt, ich, isp, SB::Angle, io, plotter, ofiles[1]);
-            PM::SimVsReco1D("BoerMuldersBlue", ico, ipt, ich, isp, SB::Angle, io, plotter, ofiles[2]);
+            PM::SimVsReco1D("EEC", ico, ipt, ich, isp, PO::Side, io, plotter, ofiles[0]);
+            PM::SimVsReco1D("CollinsBlue", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+            PM::SimVsReco1D("BoerMuldersBlue", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::SimVsReco1D("CollinsYell", ico, ipt, ich, isp, SB::Angle, io, plotter, ofiles[1]);
-              PM::SimVsReco1D("BoerMuldersYell", ico, ipt, ich, isp, SB::Angle, io, plotter, ofiles[2]);
+              PM::SimVsReco1D("CollinsYell", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+              PM::SimVsReco1D("BoerMuldersYell", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
@@ -148,12 +150,12 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             if (ico == InFiles::PAu) plotter.SetTextBox( BO::Text(ico) );
 
             // create comparisons for each desired 1D histogram
-            PM::VsPtJet1D("EEC", ico, ilv, ich, isp, SB::Side, io, plotter, ofiles[0]);
-            PM::VsPtJet1D("CollinsBlue", ico, ilv, ich, isp, SB::Angle, io, plotter, ofiles[1]);
-            PM::VsPtJet1D("BoerMuldersBlue", ico, ilv, ich, isp, SB::Angle, io, plotter, ofiles[2]);
+            PM::VsPtJet1D("EEC", ico, ilv, ich, isp, PO::Side, io, plotter, ofiles[0]);
+            PM::VsPtJet1D("CollinsBlue", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+            PM::VsPtJet1D("BoerMuldersBlue", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::VsPtJet1D("CollinsYell", ico, ilv, ich, isp, SB::Angle, io, plotter, ofiles[1]);
-              PM::VsPtJet1D("BoerMuldersYell", ico, ilv, ich, isp, SB::Angle, io, plotter, ofiles[2]);
+              PM::VsPtJet1D("CollinsYell", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+              PM::VsPtJet1D("BoerMuldersYell", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
@@ -187,9 +189,9 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           if (!isOnlyBlue) continue;
 
           // create comparisons for each desired 1D histogram
-          PM::PPVsPAu1D("EEC", ilv, ich, isp, SB::Side, io, plotter, ofiles[0]);
-          PM::PPVsPAu1D("CollinsBlue", ilv, ich, isp, SB::Angle, io, plotter, ofiles[1]);
-          PM::PPVsPAu1D("BoerMuldersBlue", ilv, ich, isp, SB::Angle, io, plotter, ofiles[2]);
+          PM::PPVsPAu1D("EEC", ilv, ich, isp, PO::Side, io, plotter, ofiles[0]);
+          PM::PPVsPAu1D("CollinsBlue", ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+          PM::PPVsPAu1D("BoerMuldersBlue", ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
 
           /* TODO add 2D comparison */
 

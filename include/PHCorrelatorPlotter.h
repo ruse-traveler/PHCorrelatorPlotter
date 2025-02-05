@@ -43,9 +43,9 @@ namespace PHEnergyCorrelator {
   // --------------------------------------------------------------------------
   // Useful aliases
   // ---------------------------------------------------------------------------
-  typedef std::map<PlotShape>    Shapes;
-  typedef std::vector<PlotInput> Inputs;
-  typedef std::vector<Style>     Styles;
+  typedef std::map<std::string, PlotShape> Shapes;
+  typedef std::vector<PlotInput>           Inputs;
+  typedef std::vector<Style>               Styles;
 
 
 
@@ -123,7 +123,7 @@ namespace PHEnergyCorrelator {
           denominator = PlotInput();
           numerators  = Inputs();
           unity       = PlotShape();
-          shape       = Shapes();
+          shapes      = Shapes();
           options     = PlotOpts();
         }
 
@@ -173,7 +173,7 @@ namespace PHEnergyCorrelator {
           denominators = Inputs();
           numerators   = Inputs();
           unity        = PlotShape();
-          shape        = Shapes();
+          shapes       = Shapes();
           options      = PlotOpts();
         }
 
@@ -282,8 +282,8 @@ namespace PHEnergyCorrelator {
             Tools::NormalizeByIntegral(
               ihists.back(),
               param.options.norm_to,
-              param.options.norm_range.x.first,
-              param.options.norm_range.x.second
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
             );
           }
         }  // end input loop
@@ -320,8 +320,8 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( param.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          param.options.plot_range.Appy(Range::X, ihists[ihst] -> GetXaxis());
-          param.options.plot_range.Appy(Range::Y, ihists[ihst] -> GetYaxis());
+          param.options.plot_range.Apply(Range::X, ihists[ihst] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, ihists[ihst] -> GetYaxis());
         }
 
         // set legend/text styles
@@ -396,8 +396,8 @@ namespace PHEnergyCorrelator {
           Tools::NormalizeByIntegral(
             dhist,
             param.options.norm_to,
-            param.options.norm_range.x.first,
-            param.options.norm_range.x.second
+            param.options.norm_range.GetX().first,
+            param.options.norm_range.GetX().second
           );
         }
 
@@ -422,8 +422,8 @@ namespace PHEnergyCorrelator {
             Tools::NormalizeByIntegral(
               nhists.back(),
               param.options.norm_to,
-              param.options.norm_range.x.first,
-              param.options.norm_range.x.second
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
             );
           }
         }  // end numerator loop
@@ -465,9 +465,9 @@ namespace PHEnergyCorrelator {
         }
 
         // determine relevant range to draw line
-        PlotShape unitydef = param.unity.shape;
+        Shape unitydef = param.unity.shape;
         unitydef.SetXRange(
-          Tools::GetDrawRange( param.options.plot_range.x, rhists.front() -> GetXaxis()
+          Tools::GetDrawRange( param.options.plot_range.GetX(), rhists.front() -> GetXaxis() )
         );
 
         // create root objects
@@ -495,7 +495,7 @@ namespace PHEnergyCorrelator {
         }
 
         // set legend/text styles
-        param.unity.style.Apply( unity );
+        //param.unity.style.Apply( unity );  // TEST
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
@@ -594,8 +594,8 @@ namespace PHEnergyCorrelator {
             Tools::NormalizeByIntegral(
               dhists.back(),
               param.options.norm_to,
-              param.options.norm_range.x.first,
-              param.options.norm_range.x.second
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
             );
           }
         }  // end denominator loop
@@ -621,8 +621,8 @@ namespace PHEnergyCorrelator {
             Tools::NormalizeByIntegral(
               nhists.back(),
               param.options.norm_to,
-              param.options.norm_range.x.first,
-              param.options.norm_range.x.second
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
             );
           }
         }  // end numerator loop
@@ -668,9 +668,9 @@ namespace PHEnergyCorrelator {
         }
 
         // determine relevant range to draw line
-        PlotShape unitydef = param.unity.shape;
+        Shape unitydef = param.unity.shape;
         unitydef.SetXRange(
-          Tools::GetDrawRange( param.options.plot_range.x, rhists.front() -> GetXaxis()
+          Tools::GetDrawRange( param.options.plot_range.GetX(), rhists.front() -> GetXaxis() )
         );
 
         // create root objects
@@ -702,7 +702,7 @@ namespace PHEnergyCorrelator {
         }
 
         // set legend/text styles
-        param.unity.style.Apply( unity );
+        //param.unity.style.Apply( unity );  // TEST
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
@@ -793,10 +793,10 @@ namespace PHEnergyCorrelator {
             Tools::NormalizeByIntegral(
               ihists.back(),
               param.options.norm_to,
-              param.options.norm_range.x.first,
-              param.options.norm_range.x.second,
-              param.options.norm_range.y.first,
-              param.options.norm_range.y.second
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second,
+              param.options.norm_range.GetY().first,
+              param.options.norm_range.GetY().second
             );
           }
         }  // end input loop
