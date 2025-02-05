@@ -23,8 +23,8 @@
 #include <TH2.h>
 #include <TMath.h>
 #include <TObject.h>
+#include <TString.h>
 // plotting utilities
-#include "PHCorrelatorPlotTools.h"
 #include "PHCorrelatorPlotTypes.h"
 
 
@@ -145,6 +145,23 @@ namespace PHEnergyCorrelator {
       return height;
 
     }  // end 'GetHeight(std::size_t, float x 2)'
+
+
+
+    // ------------------------------------------------------------------------
+    //! Helper method to convert an index to a string
+    // ------------------------------------------------------------------------
+    std::string StringifyIndex(const std::size_t index) {
+
+      // create TString, add index
+      TString tstr;
+      tstr += index;
+
+      // create std::string and return
+      const std::string sstr(tstr.Data());
+      return sstr;
+
+    }  // end 'StringifyIndex(std::size_t)'
 
 
 
