@@ -1,5 +1,5 @@
 /// ===========================================================================
-/*! \file    PHCorrelatorPlotManager.h
+/*! \file    PHCorrelatorCanvasManager.h
  *  \authors Derek Anderson
  *  \date    12.26.2024
  *
@@ -34,67 +34,23 @@ namespace PHEnergyCorrelator {
   /*! A small class to hold/organize the pointers
    *  to a TCanvas and all of its associated pads.
    */ 
-  class PlotManager {
+  class CanvasManager {
 
     private:
 
       // canvas definition
-      Canvas m_define;
-
-      // root members
-      TCanvas*           m_canvas;
-      std::vector<TPad*> m_pads;
-
-      // pad-label-to-index map
-      Type::LabelList       m_labels;
+      Canvas                m_define;
+      TCanvas*              m_canvas;
+      std::vector<TPad*>    m_pads;
       Type::LabelToIndexMap m_labtoindex;
 
       // ----------------------------------------------------------------------
-      //! Convert an index to a string
-      // ----------------------------------------------------------------------
-      std::string StringifyIndex(const std::size_t index) const {
-
-        // create TString, add index
-        TString tstr;
-        tstr += index;
-
-        // create std::string and return
-        const std::string sstr(tstr.Data());
-        return sstr;
-
-      }  // end 'StringifyIndex(std::size_t)'
-
-      // ----------------------------------------------------------------------
-      //! Make a pad label
-      // ----------------------------------------------------------------------
-      std::string MakePadLabel(const std::size_t index) const {
-
-        // by default use the index as a label
-        std::string label = StringifyIndex(index);
-
-        // but if corresponding label exists, use that
-        if (index < m_labels.size()) {
-          label = m_labels[index];
-        }
-        return label;
-
-      }  // end 'MakePadLabel(std::size_t)'
-
-      // ----------------------------------------------------------------------
-      //! Make label-to-index map
+      //! Generate label-to-index map for pads
       // ----------------------------------------------------------------------
       void MakeLabelToIndexMap() {
 
-        // emit warning if size of label list and pad vector
-        // are different
-        if (m_labels.size() != m_define.GetPads().size()) {
-          std::cerr << "WARNING: provided label list is NOT the same length as the list of pads to make!" << std::endl;
-        }
-
-        // create label-to-index map
-        for (std::size_t ipad = 0; ipad < m_define.GetPads().size(); ++ipad) {
-          const std::string label = MakePadLabel(ipad);
-          m_labtoindex[label] = ipad;
+        for (std::size_t ipad = 0; ipad < m_pads.size(); ++ipad) {
+          m_labtoindex[ m_define.GetPadLabel(ipad) ] = ipad;
         }
         return;
 
@@ -107,14 +63,12 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       Canvas             GetDefinition() const {return m_define;}
       TCanvas*           GetTCanvas()    const {return m_canvas;}
-      Type::LabelList    GetPadLabels()  const {return m_labels;}
       std::vector<TPad*> GetTPads()      const {return m_pads;}
 
       // ----------------------------------------------------------------------
       //! Setters 
       // ----------------------------------------------------------------------
-      void SetDefinition(const Canvas& define)         {m_define = define;}
-      void SetPadLabels(const Type::LabelList& labels) {m_labels = labels;}
+      void SetDefinition(const Canvas& define) {m_define = define;}
 
       // ----------------------------------------------------------------------
       //! Make canvas and pads 
@@ -165,50 +119,37 @@ namespace PHEnergyCorrelator {
       }  // end 'Close()'
 
       // ----------------------------------------------------------------------
-      //! Get a specific pad via its label
-      // ----------------------------------------------------------------------
-      TPad* GetTPad(const std::string& label) const {
-
-        /* FIXME add size checks here */
-
-        return m_pads[ m_labtoindex.at(label) ];
-
-      }  // end 'GetTPad(std::string&)'
-
-      // ----------------------------------------------------------------------
       //! Get a specific pad via its index
       // ----------------------------------------------------------------------
       TPad* GetTPad(const std::size_t index) const {
 
-        /* FIXME add size checks here */
-
-        return m_pads[ index ];
+        return m_pads.at( index );
 
       }  // end 'GetTPad(std::size_t)'
 
       // ----------------------------------------------------------------------
+      //! Get a specific pad via its label
+      // ----------------------------------------------------------------------
+      TPad* GetTPad(const std::string& label) const {
+
+        return m_pads.at( m_labtoindex.at(label) );
+
+      }  // end 'GetTPad(std::string&)'
+
+      // ----------------------------------------------------------------------
       //! default ctor/dtor 
       // ----------------------------------------------------------------------
-      PlotManager()  {};
-      ~PlotManager() {};
+      CanvasManager()  {};
+      ~CanvasManager() {};
 
       // ----------------------------------------------------------------------
-      //! ctor accepting a canvas definition and possibly a
-      //  list of pad labels
+      //! ctor accepting a canvas definition
       // ----------------------------------------------------------------------
-      PlotManager(
-        const Canvas& define,
-        const Type::LabelList& padlabels = Type::LabelList()
-      ) {
-
+      CanvasManager(const Canvas& define) {
         m_define = define;
-        if (!padlabels.empty()) {
-          m_labels = padlabels;
-        }
-
       }   // end ctor(Canvas&)' 
 
-  };  // end PlotManager
+  };  // end CanvasManager
 
 }    // end PHEnergyCorrelator namespace
 
