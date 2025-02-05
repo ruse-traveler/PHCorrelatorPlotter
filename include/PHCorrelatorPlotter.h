@@ -151,11 +151,6 @@ namespace PHEnergyCorrelator {
 
       };  // end SpectraVsBaselineParams
 
-        const Inputs& in_denoms,
-        const Inputs& in_numers,
-        const PlotOpts& opts,
-        TFile* ofile
-
       // ======================================================================
       //! Parameters for comparing pairs of spectra
       // ======================================================================
