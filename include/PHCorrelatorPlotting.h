@@ -12,11 +12,11 @@
 
 // components
 #include "PHCorrelatorCanvas.h"
+#include "PHCorrelatorCanvasManager.h"
 #include "PHCorrelatorLegend.h"
 #include "PHCorrelatorPad.h"
 #include "PHCorrelatorPadOpts.h"
 #include "PHCorrelatorPlotInput.h"
-#include "PHCorrelatorPlotManager.h"
 #include "PHCorrelatorPlotOpts.h"
 #include "PHCorrelatorPlotter.h"
 #include "PHCorrelatorPlotShape.h"
