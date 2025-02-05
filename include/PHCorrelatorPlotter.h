@@ -255,7 +255,7 @@ namespace PHEnergyCorrelator {
        *  \param[in]  param routine parameters
        *  \param[out] ofile file to write to
        */
-      void CompareSpectra(
+      void PlotSpectra1D(
         const CompareSpectraParams& param,
         TFile* ofile
       ) const {
@@ -365,7 +365,7 @@ namespace PHEnergyCorrelator {
         Tools::CloseFiles(ifiles);
         return;
 
-      }  // end 'CompareSpectra(...)'
+      }  // end 'PlotSpectra1D(CompareSpectraParams&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! Compare various ENC (or othwerise) spectra to a baseline
@@ -377,7 +377,7 @@ namespace PHEnergyCorrelator {
        *  \param[in]  param routine parameters
        *  \param[out] ofile file to write to
        */
-      void CompareSpectraToBaseline(
+      void PlotSpectra1D(
         const SpectraVsBaselineParams& param,
         TFile* ofile
       ) const {
@@ -546,7 +546,7 @@ namespace PHEnergyCorrelator {
         dfile -> Close();
         return;
 
-      }  // end 'CompareSpectraToBaseline(...)'
+      }  // end 'PlotSpectra1D(SpectraVsBaselineParams&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! Compare ratios of various pairs of ENC (or otherwise) spectra
@@ -558,7 +558,7 @@ namespace PHEnergyCorrelator {
        *  \param[in]  param routine parameters
        *  \param[out] ofile file to write to
        */
-      void CompareRatios(
+      void PlotSpectra1D(
         const CompareRatiosParams& param,
         TFile* ofile
       ) const {
@@ -755,7 +755,7 @@ namespace PHEnergyCorrelator {
         Tools::CloseFiles(nfiles);
         return;
 
-      }  // end 'CompareRatios(...)'
+      }  // end 'PlotSpectra1D(CompareRatiosParams&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! Compare various 2D spectra
@@ -765,7 +765,7 @@ namespace PHEnergyCorrelator {
        *  \param[in]  param routine parameters
        *  \param[out] ofile file to write to
        */
-      void CompareSpectra2D(
+      void PlotSpectra2D(
         const CompareSpectraParams& param,
         TFile* ofile
       ) const {
@@ -863,7 +863,7 @@ namespace PHEnergyCorrelator {
         Tools::CloseFiles(ifiles);
         return;
 
-      }  // end 'ComparSpectra2D(...)'
+      }  // end 'PlotSpectra2D(CompareSpectraParams&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! default ctor/dtor
