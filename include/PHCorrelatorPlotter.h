@@ -495,7 +495,7 @@ namespace PHEnergyCorrelator {
         }
 
         // set legend/text styles
-        //param.unity.style.Apply( unity );  // TEST
+        param.unity.style.Apply( unity );
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
@@ -702,7 +702,7 @@ namespace PHEnergyCorrelator {
         }
 
         // set legend/text styles
-        //param.unity.style.Apply( unity );  // TEST
+        param.unity.style.Apply( unity );
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;

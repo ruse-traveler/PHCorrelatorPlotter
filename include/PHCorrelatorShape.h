@@ -121,7 +121,7 @@ namespace PHEnergyCorrelator {
 
         m_xrange   = std::make_pair(0.0, 1.0);
         m_yrange   = std::make_pair(0.0, 1.0);
-        m_phirange = std::make_pair(0.0, 360.);
+        m_phirange = Tools::DefaultPhiRange();
         m_center   = std::make_pair(0.5, 0.5);
         m_radii    = std::make_pair(0.5, 0.5);
         m_theta    = 0.0;
@@ -158,7 +158,7 @@ namespace PHEnergyCorrelator {
       Shape(
         const Type::Point& center,
         const Type::PairF& radii,
-        const Type::Interval& phirange = Tools::DefaultPhiRange(),
+        const Type::Interval& phirange,
         const float theta = 0.0
       ) {
 

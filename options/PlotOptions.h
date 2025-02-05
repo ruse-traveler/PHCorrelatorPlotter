@@ -95,6 +95,20 @@ namespace PlotOptions {
 
 
 
+  // --------------------------------------------------------------------------
+  //! Define line for unit ratio
+  // --------------------------------------------------------------------------
+  PHEC::PlotShape DefineUnity(const int opt = Side) {
+
+    return PHEC::PlotShape(
+      PHEC::Shape(DefinePlotRange(opt).GetX(), std::make_pair(1.0, 1.0)),
+      PHEC::Style::Plot(923, 1, 0, 9, 2)
+    );
+
+  }  // end 'DefineUnity(int)'
+
+
+
   // bundle parameters ========================================================
 
   // --------------------------------------------------------------------------
@@ -283,7 +297,7 @@ namespace PlotOptions {
     // set auxilliary options
     PHEC::PlotOpts plot_opts;
     plot_opts.plot_range = DefinePlotRange(range_opt);
-    plot_opts.norm_range = DefinePlotRange(range_opt);
+    plot_opts.norm_range = DefineNormRange(range_opt);
     plot_opts.canvas     = canvas;
 
     // bundle parameters
@@ -291,6 +305,7 @@ namespace PlotOptions {
     params.denominator = in_denom;
     params.numerators  = in_numers;
     params.options     = plot_opts;
+    params.unity       = DefineUnity(range_opt);
     return params;
 
   }  // end 'SpectraVsBaseline(PHEC::PlotInput&, PHEC::Inputs&, std::string&, int)'
@@ -351,7 +366,7 @@ namespace PlotOptions {
     // set auxilliary options
     PHEC::PlotOpts plot_opts;
     plot_opts.plot_range = DefinePlotRange(range_opt);
-    plot_opts.norm_range = DefinePlotRange(range_opt);
+    plot_opts.norm_range = DefineNormRange(range_opt);
     plot_opts.canvas     = canvas;
 
     // bundle parameters
@@ -359,6 +374,7 @@ namespace PlotOptions {
     params.denominators = in_denoms;
     params.numerators   = in_numers;
     params.options      = plot_opts;
+    params.unity        = DefineUnity(range_opt);
     return params;
 
   }  // end 'CompareRatios(PHEC::Inputs&, PHEC::Inputs&, std::string&, int)'

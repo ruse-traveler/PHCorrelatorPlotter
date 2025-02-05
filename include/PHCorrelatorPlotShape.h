@@ -31,9 +31,9 @@ namespace PHEnergyCorrelator {
   struct PlotShape {
 
     Shape       shape;   ///!< shape definition
-    Style::Plot style;   ///!< marker, line, and fill style
-    std::string legend;  ///!< legend entry
+    Style       style;   ///!< style attributes
     std::string pad;     ///!< which pad to draw shape on
+    std::string legend;  ///!< legend entry
 
     // ------------------------------------------------------------------------
     //! default ctor
@@ -41,8 +41,8 @@ namespace PHEnergyCorrelator {
     PlotShape() {
       shape  = Shape();
       style  = Style::Plot();
-      legend = "";
       pad    = "";
+      legend = "";
     };
 
     // ------------------------------------------------------------------------
@@ -55,14 +55,14 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     PlotShape(
       const Shape sharg,
-      const std::string& larg,
+      const Style::Plot& sarg,
       const std::string& parg = "",
-      const Style::Plot& sarg = Style::Plot()
+      const std::string& larg = ""
     ) {
       shape  = sharg;
-      legend = larg;
+      style  = Style(sarg);
       pad    = parg;
-      style  = sarg;
+      legend = larg;
     };
 
   };  // end PlotShape(Shape, std::string&, std::string&, Style::Plot&)'
