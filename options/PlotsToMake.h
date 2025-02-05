@@ -17,17 +17,11 @@
 // plotting utilities
 #include "../include/PHCorrelatorPlotting.h"
 // plotting options
-#include "CompareRatios.h"
-#include "CompareSpectra.h"
-#include "CompareSpectra2D.h"
 #include "InputOutput.h"
-#include "SpectraVsBaseline.h"
+#include "PlotOptions.h"
 
 // abbreviate common namespaces
-namespace CR = CompareRatios;
-namespace CS = CompareSpectra;
-namespace C2 = CompareSpectra2D;
-namespace SB = SpectraVsBaseline;
+namespace PO = PlotOptions;
 
 // useful types
 typedef std::pair<std::size_t, std::size_t> StylePair;
@@ -127,10 +121,8 @@ namespace PlotsToMake {
     num_input.push_back( rec_opt );
 
     // make plot
-    plotter.CompareSpectraToBaseline(
-      tru_opt,
-      num_input,
-      SB::Options(canvas, opt),
+    plotter.PlotSpectra1D(
+      PO::SpectraVsBaseline(tru_opt, num_input, canvas, opt),
       ofile
     );
     return;
@@ -199,9 +191,8 @@ namespace PlotsToMake {
     input.push_back( tru_opt );
 
     // make plot
-    plotter.CompareSpectra2D(
-      input,
-      C2::Options(canvas, input),
+    plotter.PlotSepctra2D(
+      PO::CompareSpectra2D(input, canvas),
       ofile
     );
     return;
@@ -293,9 +284,8 @@ namespace PlotsToMake {
     input.push_back( pt15_opt );
 
     // make plot
-    plotter.CompareSpectra(
-      input,
-      CS::Options(canvas, opt),
+    plotter.PlotSpectra1D(
+      PO::CompareSpectra1D(input, canvas, opt),
       ofile
     );
     return;
@@ -364,9 +354,8 @@ namespace PlotsToMake {
     input.push_back( pt15_opt );
 
     // make plot
-    plotter.CompareSpectra2D(
-      input,
-      C2::Options(canvas, input),
+    plotter.PlotSpectra2D(
+      PO::CompareSpectra2D(input, canvas),
       ofile
     );
     return;
@@ -517,10 +506,8 @@ namespace PlotsToMake {
     numerator.push_back( pt15_opt.second );
 
     // make plot
-    plotter.CompareRatios(
-      denominator,
-      numerator,
-      CR::Options(canvas, opt),
+    plotter.PlotSpectra1D(
+      PO::CompareRatios(denominator, numerator, canvas, opt),
       ofile
     );
     return;
