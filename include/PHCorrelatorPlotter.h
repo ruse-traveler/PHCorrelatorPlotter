@@ -209,10 +209,9 @@ namespace PHEnergyCorrelator {
     private:
 
       // members
-      Style         m_basePlotStyle;
-      Style         m_baseTextStyle;
-      TextBox       m_textBox;
-      Type::FileMap m_fileMap;
+      Style   m_basePlotStyle;
+      Style   m_baseTextStyle;
+      TextBox m_textBox;
 
       // ----------------------------------------------------------------------
       //! Generate list of styles to be applied
@@ -246,25 +245,6 @@ namespace PHEnergyCorrelator {
       void SetBasePlotStyle(const Style& style) {m_basePlotStyle = style;}
       void SetBaseTextStyle(const Style& style) {m_baseTextStyle = style;}
       void SetTextBox(const TextBox& text)      {m_textBox       = text;}
-
-      // ----------------------------------------------------------------------
-      //! Add filename in map of files
-      // ----------------------------------------------------------------------
-      void AddFileToMap(const std::string& label, const std::string& file) {
-
-        m_fileMap[label] = file;
-        return;
-
-      }  // end 'AddFileToMap(std::string&, std:string&)'
-
-      // ----------------------------------------------------------------------
-      //! Get filename from map of files
-      // ----------------------------------------------------------------------
-      std::string GetFileFromMap(const std::string& label) {
-
-        return m_fileMap[label];
-
-      }  // end 'GetFileFromMap(std::string&)'
 
       // ----------------------------------------------------------------------
       //! Compare various ENC (or othwerise) spectra
@@ -836,9 +816,9 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( param.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( param.options.plot_range.x.first, param.options.plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( param.options.plot_range.y.first, param.options.plot_range.y.second );
-          ihists[ihst] -> GetZaxis() -> SetRangeUser( param.options.plot_range.z.first, param.options.plot_range.z.second );
+          param.options.plot_range.Apply(Range::X, ihists[ihst] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, ihists[ihst] -> GetYaxis());
+          param.options.plot_range.Apply(Range::Z, ihists[ihst] -> GetZaxis());
         }
         std::cout << "    Set styles." << std::endl;
 
