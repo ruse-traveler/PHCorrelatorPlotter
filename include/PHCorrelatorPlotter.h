@@ -56,6 +56,51 @@ namespace PHEnergyCorrelator {
    */
   class PHCorrelatorPlotter {
 
+    public:
+
+      // ======================================================================
+      //! Parameters for compare spectra
+      // ======================================================================
+      /*! Struct to consolidate arameters for "Compare Spectra"
+       *  plotting routines.
+       */
+      struct CompareSpectraParams {
+
+        // members
+        Inputs   inputs;   //!< list objects to plots and their details
+        Shapes   shapes;   //!< shapes (e.g. lines) to draw
+        PlotOpts options;  //!< auxilliary plot options
+
+        // --------------------------------------------------------------------
+        //! default ctor
+        // --------------------------------------------------------------------
+        CompareSpectraParams() {
+          inputs  = Inputs();
+          shapes  = Shapes();
+          options = PlotOpts();
+        }
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
+        ~CompareSpectraParams() {};
+
+        // --------------------------------------------------------------------
+        //! ctor accepting arguments
+        // --------------------------------------------------------------------
+        CompareSpectraParams(
+          const Inputs& input_args,
+          const Shapes& shape_args,
+          const PlotOpts& opt_args
+        ) {
+          inputs  = input_args;
+          shapes  = shape_args;
+          options = opt_args;
+        }  // end ctor(Inputs&, Shapes&, PlotOpts&)'
+
+      };  // end CompareSpectraParams
+
+
     private:
 
       // members
@@ -122,13 +167,11 @@ namespace PHEnergyCorrelator {
       /*! Compares a variety of ENC (or otherwise) spectra from different
        *  sources.
        *
-       *  \param[in]  inputs list of objects to plot and their details
-       *  \param[in]  opts   auxilliary plot options
-       *  \param[out] ofile  file to write to
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
        */
       void CompareSpectra(
-        const Inputs& inputs,
-        const PlotOpts& opts,
+        const CompareSpectraParams& param,
         TFile* ofile
       ) const {
 
@@ -141,32 +184,32 @@ namespace PHEnergyCorrelator {
         // open inputs
         std::vector<TFile*> ifiles;
         std::vector<TH1*>   ihists;
-        for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
+        for (std::size_t iin = 0; iin < param.inputs.size(); ++iin) {
 
           ifiles.push_back(
-            Tools::OpenFile(inputs[iin].file, "read")
+            Tools::OpenFile(param.inputs[iin].file, "read")
           );
           ihists.push_back(
-            (TH1*) Tools::GrabObject( inputs[iin].object, ifiles.back() )
+            (TH1*) Tools::GrabObject( param.inputs[iin].object, ifiles.back() )
           );
-          ihists.back() -> SetName( inputs[iin].rename.data() );
-          std::cout << "      File = " << inputs[iin].file << "\n"
-                    << "      Hist = " << inputs[iin].object
+          ihists.back() -> SetName( param.inputs[iin].rename.data() );
+          std::cout << "      File = " << param.inputs[iin].file << "\n"
+                    << "      Hist = " << param.inputs[iin].object
                     << std::endl;
 
           // normalize input if need be
-          if (opts.do_norm) {
+          if (param.options.do_norm) {
             Tools::NormalizeByIntegral(
               ihists.back(),
-              opts.norm_to,
-              opts.norm_range.x.first,
-              opts.norm_range.x.second
+              param.options.norm_to,
+              param.options.norm_range.x.first,
+              param.options.norm_range.x.second
             );
           }
         }  // end input loop
 
         // define legend dimensions
-        const std::size_t nlines    = !opts.header.empty() ? ihists.size() + 1 : ihists.size();
+        const std::size_t nlines    = !param.options.header.empty() ? ihists.size() + 1 : ihists.size();
         const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
         const float       legheight = Tools::GetHeight(nlines, spacing);
 
@@ -180,11 +223,11 @@ namespace PHEnergyCorrelator {
         // define legend
         Legend legdef;
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
-          legdef.AddEntry( Legend::Entry(ihists[ihst], inputs[ihst].legend, "PF") );
+          legdef.AddEntry( Legend::Entry(ihists[ihst], param.inputs[ihst].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!opts.header.empty()) {
-          legdef.SetHeader( opts.header );
+        if (!param.options.header.empty()) {
+          legdef.SetHeader( param.options.header );
         }
 
         // create root objects
@@ -193,12 +236,12 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created legend and text box." << std::endl;
 
         // set hist styles
-        Styles styles = GenerateStyles( inputs );
+        Styles styles = GenerateStyles( param.inputs );
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
-          styles[ihst].SetPlotStyle( inputs[ihst].style );
+          styles[ihst].SetPlotStyle( param.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( param.options.plot_range.x.first, param.options.plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( param.options.plot_range.y.first, param.options.plot_range.y.second );
         }
 
         // set legend/text styles
@@ -207,7 +250,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( opts.canvas );
+        PlotManager manager = PlotManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTCanvas() -> cd();
@@ -646,13 +689,11 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       /*! Compares a variety of 2D spectra from different sources.
        *
-       *  \param[in]  inputs list of objects to plot and their details
-       *  \param[in]  opts   auxilliary plot options
-       *  \param[out] ofile  file to write to
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
        */
       void CompareSpectra2D(
-        const Inputs& inputs,
-        const PlotOpts& opts,
+        const CompareSpectraParams& param,
         TFile* ofile
       ) const {
 
@@ -665,29 +706,29 @@ namespace PHEnergyCorrelator {
         // open inputs
         std::vector<TFile*> ifiles;
         std::vector<TH2*>   ihists;
-        for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
+        for (std::size_t iin = 0; iin < param.inputs.size(); ++iin) {
 
           ifiles.push_back(
-            Tools::OpenFile(inputs[iin].file, "read")
+            Tools::OpenFile(param.inputs[iin].file, "read")
           );
           ihists.push_back(
-            (TH2*) Tools::GrabObject( inputs[iin].object, ifiles.back() )
+            (TH2*) Tools::GrabObject( param.inputs[iin].object, ifiles.back() )
           );
-          ihists.back() -> SetName( inputs[iin].rename.data() );
-          ihists.back() -> SetTitle( inputs[iin].legend.data() );
-          std::cout << "      File = " << inputs[iin].file << "\n"
-                    << "      Hist = " << inputs[iin].object
+          ihists.back() -> SetName( param.inputs[iin].rename.data() );
+          ihists.back() -> SetTitle( param.inputs[iin].legend.data() );
+          std::cout << "      File = " << param.inputs[iin].file << "\n"
+                    << "      Hist = " << param.inputs[iin].object
                     << std::endl;
 
           // normalize input if need be
-          if (opts.do_norm) {
+          if (param.options.do_norm) {
             Tools::NormalizeByIntegral(
               ihists.back(),
-              opts.norm_to,
-              opts.norm_range.x.first,
-              opts.norm_range.x.second,
-              opts.norm_range.y.first,
-              opts.norm_range.y.second
+              param.options.norm_to,
+              param.options.norm_range.x.first,
+              param.options.norm_range.x.second,
+              param.options.norm_range.y.first,
+              param.options.norm_range.y.second
             );
           }
         }  // end input loop
@@ -698,18 +739,18 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created text box." << std::endl;
 
         // set hist styles
-        Styles styles = GenerateStyles( inputs );
+        Styles styles = GenerateStyles( param.inputs );
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
-          styles[ihst].SetPlotStyle( inputs[ihst].style );
+          styles[ihst].SetPlotStyle( param.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
-          ihists[ihst] -> GetZaxis() -> SetRangeUser( opts.plot_range.z.first, opts.plot_range.z.second );
+          ihists[ihst] -> GetXaxis() -> SetRangeUser( param.options.plot_range.x.first, param.options.plot_range.x.second );
+          ihists[ihst] -> GetYaxis() -> SetRangeUser( param.options.plot_range.y.first, param.options.plot_range.y.second );
+          ihists[ihst] -> GetZaxis() -> SetRangeUser( param.options.plot_range.z.first, param.options.plot_range.z.second );
         }
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
-        PlotManager manager = PlotManager( opts.canvas );
+        PlotManager manager = PlotManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
 
