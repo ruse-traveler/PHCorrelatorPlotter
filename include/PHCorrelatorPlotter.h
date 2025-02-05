@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -42,8 +43,8 @@ namespace PHEnergyCorrelator {
   // --------------------------------------------------------------------------
   // Useful aliases
   // ---------------------------------------------------------------------------
+  typedef std::map<PlotShape>    Shapes;
   typedef std::vector<PlotInput> Inputs;
-  typedef std::vector<PlotShape> Shapes;
   typedef std::vector<Style>     Styles;
 
 
@@ -59,17 +60,17 @@ namespace PHEnergyCorrelator {
     public:
 
       // ======================================================================
-      //! Parameters for compare spectra
+      //! Parameters for comparing spectra
       // ======================================================================
-      /*! Struct to consolidate arameters for "Compare Spectra"
+      /*! Struct to consolidate parameters for the "Compare Spectra"
        *  plotting routines.
        */
       struct CompareSpectraParams {
 
         // members
-        Inputs   inputs;   //!< list objects to plots and their details
-        Shapes   shapes;   //!< shapes (e.g. lines) to draw
-        PlotOpts options;  //!< auxilliary plot options
+        Inputs   inputs;   ///!< list objects to plots and their details
+        Shapes   shapes;   ///!< shapes (e.g. lines) to draw
+        PlotOpts options;  ///!< auxilliary plot options
 
         // --------------------------------------------------------------------
         //! default ctor
@@ -100,6 +101,110 @@ namespace PHEnergyCorrelator {
 
       };  // end CompareSpectraParams
 
+      // ======================================================================
+      //! Parameters for comparing spectra to a baseline
+      // ======================================================================
+      /*! Struct to consolidate arameters for the "Compare Spectra to Baseline"
+       *  plotting routines.
+       */
+      struct SpectraVsBaselineParams {
+
+        // members
+        PlotInput denominator;  ///!< baseline to compare against and its details
+        Inputs    numerators;   ///!< list of spectra to compare and their details
+        PlotShape unity;        ///!< definition of unit ratio line to draw
+        Shapes    shapes;       ///!< additional shapes (e.g. lines) to draw
+        PlotOpts  options;      ///!< auxilliary plot options
+
+        // --------------------------------------------------------------------
+        //! default ctor
+        // --------------------------------------------------------------------
+        SpectraVsBaselineParams() {
+          denominator = PlotInput();
+          numerators  = Inputs();
+          unity       = PlotShape();
+          shape       = Shapes();
+          options     = PlotOpts();
+        }
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
+        ~SpectraVsBaselineParams() {};
+
+        // --------------------------------------------------------------------
+        //! ctor accepting arguments
+        // --------------------------------------------------------------------
+        SpectraVsBaselineParams(
+          const PlotInput& denom_arg,
+          const Inputs& numer_args,
+          const PlotShape& unity_arg,
+          const Shapes& shape_args,
+          const PlotOpts& opt_args
+        ) {
+          denominator = denom_arg;
+          numerators  = numer_args;
+          unity       = unity_arg;
+          shapes      = shape_args;
+          options     = opt_args;
+        }  // end ctor(PlotInput&, Inputs&, PlotShape&, Shapes&, PlotOpts&)'
+
+      };  // end SpectraVsBaselineParams
+
+        const Inputs& in_denoms,
+        const Inputs& in_numers,
+        const PlotOpts& opts,
+        TFile* ofile
+
+      // ======================================================================
+      //! Parameters for comparing pairs of spectra
+      // ======================================================================
+      /*! Struct to consolidate arameters for the "Compare Ratios"
+       *  plotting routines.
+       */
+      struct CompareRatiosParams {
+
+        // members
+        Inputs    denominators;  ///!< baselines to compare against and their details
+        Inputs    numerators;    ///!< list of spectra to compare and their details
+        PlotShape unity;         ///!< definition of unit ratio line to draw
+        Shapes    shapes;        ///!< additional shapes (e.g. lines) to draw
+        PlotOpts  options;       ///!< auxilliary plot options
+
+        // --------------------------------------------------------------------
+        //! default ctor
+        // --------------------------------------------------------------------
+        CompareRatiosParams() {
+          denominators = Inputs();
+          numerators   = Inputs();
+          unity        = PlotShape();
+          shape        = Shapes();
+          options      = PlotOpts();
+        }
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
+        ~CompareRatiosParams() {};
+
+        // --------------------------------------------------------------------
+        //! ctor accepting arguments
+        // --------------------------------------------------------------------
+        CompareRatiosParams(
+          const Inputs& denom_args,
+          const Inputs& numer_args,
+          const PlotShape& unity_arg,
+          const Shapes& shape_args,
+          const PlotOpts& opt_args
+        ) {
+          denominators = denom_args;
+          numerators   = numer_args;
+          unity        = unity_arg;
+          shapes       = shape_args;
+          options      = opt_args;
+        }  // end ctor(Inputs&, Inputs&, PlotShape&, Shapes&, PlotOpts&)'
+
+      };  // end CompareRatiosParams
 
     private:
 
@@ -240,8 +345,8 @@ namespace PHEnergyCorrelator {
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( param.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );
-          ihists[ihst] -> GetXaxis() -> SetRangeUser( param.options.plot_range.x.first, param.options.plot_range.x.second );
-          ihists[ihst] -> GetYaxis() -> SetRangeUser( param.options.plot_range.y.first, param.options.plot_range.y.second );
+          param.options.plot_range.Appy(Range::X, ihists[ihst] -> GetXaxis());
+          param.options.plot_range.Appy(Range::Y, ihists[ihst] -> GetYaxis());
         }
 
         // set legend/text styles
@@ -289,15 +394,11 @@ namespace PHEnergyCorrelator {
        *  sources to a baseline. Uppder panel shows spectra, lower panel
        *  shows ratio of spectra to baseline.
        *
-       *  \param[in]  in_denom  baseline to compare against and its info
-       *  \param[in]  in_numers spectra to compare against baseline and their info
-       *  \param[in]  opts      auxilliary plot options
-       *  \param[out] ofile     file to write to
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
        */
       void CompareSpectraToBaseline(
-        const PlotInput& in_denom,
-        const Inputs& in_numers,
-        const PlotOpts& opts,
+        const SpectraVsBaselineParams& param,
         TFile* ofile
       ) const {
 
@@ -308,46 +409,46 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // open denominator input
-        TFile* dfile = Tools::OpenFile( in_denom.file, "read" );
-        TH1*   dhist = (TH1*) Tools::GrabObject( in_denom.object, dfile );
-        dhist -> SetName( in_denom.rename.data() );
-        std::cout << "      File (denom) = " << in_denom.file << "\n"
-                  << "      Hist (denom) = " << in_denom.object
+        TFile* dfile = Tools::OpenFile( param.denominator.file, "read" );
+        TH1*   dhist = (TH1*) Tools::GrabObject( param.denominator.object, dfile );
+        dhist -> SetName( param.denominator.rename.data() );
+        std::cout << "      File (denom) = " << param.denominator.file << "\n"
+                  << "      Hist (denom) = " << param.denominator.object
                   << std::endl;
 
         // normalize denominator if need be
-        if (opts.do_norm) {
+        if (param.options.do_norm) {
           Tools::NormalizeByIntegral(
             dhist,
-            opts.norm_to,
-            opts.norm_range.x.first,
-            opts.norm_range.x.second
+            param.options.norm_to,
+            param.options.norm_range.x.first,
+            param.options.norm_range.x.second
           );
         }
 
         // open numerator inputs
         std::vector<TFile*> nfiles;
         std::vector<TH1*>   nhists;
-        for (std::size_t inum = 0; inum < in_numers.size(); ++inum) {
+        for (std::size_t inum = 0; inum < param.numerators.size(); ++inum) {
 
           nfiles.push_back(
-            Tools::OpenFile(in_numers[inum].file, "read")
+            Tools::OpenFile(param.numerators[inum].file, "read")
           );
           nhists.push_back(
-            (TH1*) Tools::GrabObject( in_numers[inum].object, nfiles.back() )
+            (TH1*) Tools::GrabObject( param.numerators[inum].object, nfiles.back() )
           );
-          nhists.back() -> SetName( in_numers[inum].rename.data() );
-          std::cout << "      File (numer) = " << in_numers[inum].file << "\n"
-                    << "      Hist (numer) = " << in_numers[inum].object
+          nhists.back() -> SetName( param.numerators[inum].rename.data() );
+          std::cout << "      File (numer) = " << param.numerators[inum].file << "\n"
+                    << "      Hist (numer) = " << param.numerators[inum].object
                     << std::endl;
 
           // normalize numerator if need be
-          if (opts.do_norm) {
+          if (param.options.do_norm) {
             Tools::NormalizeByIntegral(
               nhists.back(),
-              opts.norm_to,
-              opts.norm_range.x.first,
-              opts.norm_range.x.second
+              param.options.norm_to,
+              param.options.norm_range.x.first,
+              param.options.norm_range.x.second
             );
           }
         }  // end numerator loop
@@ -366,7 +467,7 @@ namespace PHEnergyCorrelator {
         }
 
         // define legend dimensions
-        const std::size_t nlines    = !opts.header.empty() ? nhists.size() + 2 : nhists.size() + 1;
+        const std::size_t nlines    = !param.options.header.empty() ? nhists.size() + 2 : nhists.size() + 1;
         const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
         const float       legheight = Tools::GetHeight(nlines, spacing);
 
@@ -379,56 +480,54 @@ namespace PHEnergyCorrelator {
 
         // define legend
         Legend legdef;
-        legdef.AddEntry( Legend::Entry(dhist, in_denom.legend, "PF") ); 
+        legdef.AddEntry( Legend::Entry(dhist, param.denominator.legend, "PF") ); 
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
-          legdef.AddEntry( Legend::Entry(nhists[inum], in_numers[inum].legend, "PF") );
+          legdef.AddEntry( Legend::Entry(nhists[inum], param.numerators[inum].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!opts.header.empty()) {
-          legdef.SetHeader( opts.header );
+        if (!param.options.header.empty()) {
+          legdef.SetHeader( param.options.header );
         }
 
         // determine relevant range to draw line
-        Type::Interval xline = Tools::GetDrawRange( opts.plot_range.x, rhists.front() -> GetXaxis() );
+        PlotShape unitydef = param.unity.shape;
+        unitydef.SetXRange(
+          Tools::GetDrawRange( param.options.plot_range.x, rhists.front() -> GetXaxis()
+        );
 
         // create root objects
-        //   - FIXME line should be configurable
-        TLine*     line   = new TLine( xline.first, 1.0, xline.second, 1.0 );
+        TLine*     unity  = unitydef.MakeTLine();
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
 
         // set denominator style
         Style den_style = m_basePlotStyle;
-        den_style.SetPlotStyle( in_denom.style );
+        den_style.SetPlotStyle( param.denominator.style );
         den_style.Apply( dhist );
-        dhist -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-        dhist -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+        param.options.plot_range.Apply(Range::X, dhist -> GetXaxis());
+        param.options.plot_range.Apply(Range::Y, dhist -> GetYaxis());
 
         // set numerator and ratio styles
-        Styles num_styles = GenerateStyles( in_numers );
+        Styles num_styles = GenerateStyles( param.numerators );
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
-          num_styles[inum].SetPlotStyle( in_numers[inum].style );
+          num_styles[inum].SetPlotStyle( param.numerators[inum].style );
           num_styles[inum].Apply( nhists[inum] );
           num_styles[inum].Apply( rhists[inum] );
-          nhists[inum] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-          nhists[inum] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
-          rhists[inum] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          param.options.plot_range.Apply(Range::X, nhists[inum] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, nhists[inum] -> GetYaxis());
+          param.options.plot_range.Apply(Range::X, rhists[inum] -> GetXaxis());
         }
 
-        // set line styles
-        //   - FIXME line should be configurable
-        line -> SetLineStyle(9);
-        line -> SetLineColor(923);
-
         // set legend/text styles
+        param.unity.style.Apply( unity );
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
         //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( opts.canvas );
+        PlotManager manager = PlotManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTPad(0) -> cd();
@@ -436,7 +535,7 @@ namespace PHEnergyCorrelator {
         for (std::size_t irat = 1; irat < rhists.size(); ++irat) {
           rhists[irat] -> Draw("same");
         }
-        line -> Draw();
+        unity -> Draw();
         manager.GetTPad(1) -> cd();
         dhist -> Draw();
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
@@ -476,15 +575,11 @@ namespace PHEnergyCorrelator {
        *  different sources and their ratios. Uppder panel shows spectra,
        *  lower panel shows ratios.
        *
-       *  \param[in]  in_denoms denominator spectra and their info
-       *  \param[in]  in_numers numerator spectra and their info
-       *  \param[in]  opts      auxilliary plot options
-       *  \param[out] ofile     file to write to
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
        */
       void CompareRatios(
-        const Inputs& in_denoms,
-        const Inputs& in_numers,
-        const PlotOpts& opts,
+        const CompareRatiosParams& param,
         TFile* ofile
       ) const {
 
@@ -495,37 +590,37 @@ namespace PHEnergyCorrelator {
                   << std::endl;
 
         // throw error if no. of denominators and numerators don't match
-        if (in_denoms.size() != in_numers.size()) {
+        if (param.denominators.size() != param.numerators.size()) {
           std::cerr << "PANIC: number of denominators and numerators should be the same!\n"
-                    << "       denominators = " << in_denoms.size() << "\n"
-                    << "       numerators   = " << in_numers.size()
+                    << "       denominators = " << param.denominators.size() << "\n"
+                    << "       numerators   = " << param.numerators.size()
                     << std::endl;
-          assert(in_denoms.size() == in_numers.size());
+          assert(param.denominators.size() == param.numerators.size());
         }
 
         // open denominator inputs
         std::vector<TFile*> dfiles;
         std::vector<TH1*>   dhists;
-        for (std::size_t iden = 0; iden < in_denoms.size(); ++iden) {
+        for (std::size_t iden = 0; iden < param.denominators.size(); ++iden) {
 
           dfiles.push_back(
-            Tools::OpenFile(in_denoms[iden].file, "read")
+            Tools::OpenFile(param.denominators[iden].file, "read")
           );
           dhists.push_back(
-            (TH1*) Tools::GrabObject( in_denoms[iden].object, dfiles.back() )
+            (TH1*) Tools::GrabObject( param.denominators[iden].object, dfiles.back() )
           );
-          dhists.back() -> SetName( in_denoms[iden].rename.data() );
-          std::cout << "      File (denom) = " << in_denoms[iden].file << "\n"
-                    << "      Hist (denom) = " << in_denoms[iden].object
+          dhists.back() -> SetName( param.denominators[iden].rename.data() );
+          std::cout << "      File (denom) = " << param.denominators[iden].file << "\n"
+                    << "      Hist (denom) = " << param.denominators[iden].object
                     << std::endl;
 
           // normalize denominaotr if need be
-          if (opts.do_norm) {
+          if (param.options.do_norm) {
             Tools::NormalizeByIntegral(
               dhists.back(),
-              opts.norm_to,
-              opts.norm_range.x.first,
-              opts.norm_range.x.second
+              param.options.norm_to,
+              param.options.norm_range.x.first,
+              param.options.norm_range.x.second
             );
           }
         }  // end denominator loop
@@ -533,26 +628,26 @@ namespace PHEnergyCorrelator {
         // open numerator inputs
         std::vector<TFile*> nfiles;
         std::vector<TH1*>   nhists;
-        for (std::size_t inum = 0; inum < in_numers.size(); ++inum) {
+        for (std::size_t inum = 0; inum < param.numerators.size(); ++inum) {
 
           nfiles.push_back(
-            Tools::OpenFile(in_numers[inum].file, "read")
+            Tools::OpenFile(param.numerators[inum].file, "read")
           );
           nhists.push_back(
-            (TH1*) Tools::GrabObject( in_numers[inum].object, nfiles.back() )
+            (TH1*) Tools::GrabObject( param.numerators[inum].object, nfiles.back() )
           );
-          nhists.back() -> SetName( in_numers[inum].rename.data() );
-          std::cout << "      File (numer) = " << in_numers[inum].file << "\n"
-                    << "      Hist (numer) = " << in_numers[inum].object
+          nhists.back() -> SetName( param.numerators[inum].rename.data() );
+          std::cout << "      File (numer) = " << param.numerators[inum].file << "\n"
+                    << "      Hist (numer) = " << param.numerators[inum].object
                     << std::endl;
 
           // normalize numerator if need be
-          if (opts.do_norm) {
+          if (param.options.do_norm) {
             Tools::NormalizeByIntegral(
               nhists.back(),
-              opts.norm_to,
-              opts.norm_range.x.first,
-              opts.norm_range.x.second
+              param.options.norm_to,
+              param.options.norm_range.x.first,
+              param.options.norm_range.x.second
             );
           }
         }  // end numerator loop
@@ -571,7 +666,7 @@ namespace PHEnergyCorrelator {
         }
 
         // determine no. of legend lines
-        const std::size_t nlines = !opts.header.empty()
+        const std::size_t nlines = !param.options.header.empty()
                                  ? nhists.size() + dhists.size() + 1
                                  : nhists.size() + dhists.size();
 
@@ -589,59 +684,57 @@ namespace PHEnergyCorrelator {
         // define legend
         Legend legdef;
         for (std::size_t iden = 0; iden < dhists.size(); ++iden) {
-          legdef.AddEntry( Legend::Entry(dhists[iden], in_denoms[iden].legend, "PF") );
-          legdef.AddEntry( Legend::Entry(nhists[iden], in_numers[iden].legend, "PF") );
+          legdef.AddEntry( Legend::Entry(dhists[iden], param.denominators[iden].legend, "PF") );
+          legdef.AddEntry( Legend::Entry(nhists[iden], param.numerators[iden].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
-        if (!opts.header.empty()) {
-          legdef.SetHeader( opts.header );
+        if (!param.options.header.empty()) {
+          legdef.SetHeader( param.options.header );
         }
 
         // determine relevant range to draw line
-        Type::Interval xline = Tools::GetDrawRange( opts.plot_range.x, rhists.front() -> GetXaxis() );
+        PlotShape unitydef = param.unity.shape;
+        unitydef.SetXRange(
+          Tools::GetDrawRange( param.options.plot_range.x, rhists.front() -> GetXaxis()
+        );
 
         // create root objects
-        //   - FIXME line should be configurable
-        TLine*     line   = new TLine( xline.first, 1.0, xline.second, 1.0 );
+        TLine*     unity   = unitydef.MakeTLine();
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
 
         // set styles
-        Styles den_styles = GenerateStyles( in_denoms );
-        Styles num_styles = GenerateStyles( in_numers );
+        Styles den_styles = GenerateStyles( param.denominators );
+        Styles num_styles = GenerateStyles( param.numerators );
         for (std::size_t iden = 0; iden < nhists.size(); ++iden) {
 
           // set denominator style
-          den_styles[iden].SetPlotStyle( in_denoms[iden].style );
+          den_styles[iden].SetPlotStyle( param.denominators[iden].style );
           den_styles[iden].Apply( dhists[iden] );
-          dhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-          dhists[iden] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+          param.options.plot_range.Apply(Range::X, dhists[iden] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, dhists[iden] -> GetXaxis());
 
           // set numerator style
-          num_styles[iden].SetPlotStyle( in_numers[iden].style );
+          num_styles[iden].SetPlotStyle( param.numerators[iden].style );
           num_styles[iden].Apply( nhists[iden] );
-          nhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
-          nhists[iden] -> GetYaxis() -> SetRangeUser( opts.plot_range.y.first, opts.plot_range.y.second );
+          param.options.plot_range.Apply(Range::X, nhists[iden] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, nhists[iden] -> GetXaxis());
 
           // set ratio style
           den_styles[iden].Apply( rhists[iden] );
-          rhists[iden] -> GetXaxis() -> SetRangeUser( opts.plot_range.x.first, opts.plot_range.x.second );
+          param.options.plot_range.Apply(Range::X, rhists[iden] -> GetXaxis());
         }
 
-        // set line styles
-        //   - FIXME line should be configurable
-        line -> SetLineStyle(9);
-        line -> SetLineColor(923);
-
         // set legend/text styles
+        param.unity.style.Apply( unity );
         m_baseTextStyle.Apply( legend );
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
 
         // draw plot
         //   - FIXME need to be able to specify labels from macro
-        PlotManager manager = PlotManager( opts.canvas );
+        PlotManager manager = PlotManager( param.options.canvas );
         manager.MakePlot();
         manager.Draw();
         manager.GetTPad(0) -> cd();
@@ -649,7 +742,7 @@ namespace PHEnergyCorrelator {
         for (std::size_t irat = 1; irat < rhists.size(); ++irat) {
           rhists[irat] -> Draw("same");
         }
-        line -> Draw();
+        unity -> Draw();
         manager.GetTPad(1) -> cd();
         dhists[0] -> Draw();
         nhists[1] -> Draw();
