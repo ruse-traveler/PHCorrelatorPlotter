@@ -1042,7 +1042,7 @@ namespace PHEnergyCorrelator {
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // divide by (reco / true)
-          dhists[idat] -> Divide( chists[idat] );
+          dhists[idat] = Tools::DivideHist1D( dhists[idat], chists[idat] );
 
           // normalize corrected spectrum if need be
           if (param.options.do_norm) {
@@ -1103,7 +1103,7 @@ namespace PHEnergyCorrelator {
           dat_styles[idat].SetPlotStyle( param.data[idat].style );
           dat_styles[idat].Apply( dhists[idat] );
           param.options.plot_range.Apply(Range::X, dhists[idat] -> GetXaxis());
-          param.options.plot_range.Apply(Range::Y, dhists[idat] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, dhists[idat] -> GetYaxis());
 
           // set correction factor style
           dat_styles[idat].Apply( chists[idat] );
