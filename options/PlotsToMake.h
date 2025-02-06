@@ -533,7 +533,7 @@ namespace PlotsToMake {
   ) {
 
     // colors for diferent jet pt
-    const std::size_t pt5_col[3]  = {809, 799, 797};
+    const std::size_t pt5_col[3]  = {799, 797, 809};
     const std::size_t pt10_col[3] = {899, 909, 907};
     const std::size_t pt15_col[3] = {889, 879, 877};
 

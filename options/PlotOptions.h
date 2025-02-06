@@ -62,7 +62,7 @@ namespace PlotOptions {
       case Angle:
         range = PHEC::Range(
           std::make_pair(0.0, 6.30),
-          std::make_pair(-0.007, 0.017),
+          std::make_pair(-0.007, 0.07),
           std::make_pair(0.00003, 33.)
         );
         break;
