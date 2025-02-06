@@ -232,7 +232,7 @@ namespace PHEnergyCorrelator {
         // --------------------------------------------------------------------
         //! default dtor
         // --------------------------------------------------------------------
-        ~CorrectSpectraParams {};
+        ~CorrectSpectraParams() {};
 
         // --------------------------------------------------------------------
         //! ctor accepting arguments
@@ -945,7 +945,7 @@ namespace PHEnergyCorrelator {
         }
 
         // throw error if no. of data vs. reco inputs don't match
-        if (param.raw.size() != param.recon.size()) {
+        if (param.data.size() != param.recon.size()) {
           std::cerr << "PANIC: number of raw and reconstructed inputs should be the same!\n"
                     << "       data inputs = " << param.data.size() << "\n"
                     << "       reco inputs = " << param.recon.size()
@@ -979,7 +979,7 @@ namespace PHEnergyCorrelator {
             Tools::OpenFile(param.recon[irec].file, "read")
           );
           rhists.push_back(
-            (TH1*) Tools::GrabObject( param.recon[irec].object, nfiles.back() )
+            (TH1*) Tools::GrabObject( param.recon[irec].object, rfiles.back() )
           );
           rhists.back() -> SetName( param.recon[irec].rename.data() );
           std::cout << "      File (recon) = " << param.recon[irec].file << "\n"
@@ -1002,13 +1002,13 @@ namespace PHEnergyCorrelator {
         std::vector<TH1*>   thists;
         for (std::size_t itru = 0; itru < param.truth.size(); ++itru) {
 
-          rfiles.push_back(
+          tfiles.push_back(
             Tools::OpenFile(param.truth[itru].file, "read")
           );
-          rhists.push_back(
-            (TH1*) Tools::GrabObject( param.truth[itru].object, nfiles.back() )
+          thists.push_back(
+            (TH1*) Tools::GrabObject( param.truth[itru].object, tfiles.back() )
           );
-          rhists.back() -> SetName( param.truth[itru].rename.data() );
+          thists.back() -> SetName( param.truth[itru].rename.data() );
           std::cout << "      File (truth) = " << param.truth[itru].file << "\n"
                     << "      Hist (truth) = " << param.truth[itru].object
                     << std::endl;
@@ -1060,7 +1060,7 @@ namespace PHEnergyCorrelator {
         // determine no. of legend lines
         const std::size_t nlines = !param.options.header.empty()
                                  ? dhists.size() + 1
-                                 : nhists.size();
+                                 : dhists.size();
 
         // define legend dimensions
         const float spacing   = m_baseTextStyle.GetTextStyle().spacing;
@@ -1097,7 +1097,7 @@ namespace PHEnergyCorrelator {
 
         // set styles
         Styles dat_styles = GenerateStyles( param.data );
-        for (std::size_t idat = 0; idat < nhists.size(); ++idat) {
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // set data style
           dat_styles[idat].SetPlotStyle( param.data[idat].style );
@@ -1156,7 +1156,6 @@ namespace PHEnergyCorrelator {
         Tools::CloseFiles(dfiles);
         Tools::CloseFiles(rfiles);
         Tools::CloseFiles(tfiles);
-        Tools::CloseFiles(cfiles);
         return;
 
       }  // end 'PlotSpectra1D(CorrectSpectraParams&, TFile*)'
