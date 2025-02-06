@@ -116,7 +116,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   PHEC::PHCorrelatorPlotter::CompareSpectraParams CompareSpectra1D(
     const PHEC::Inputs& inputs,
-    const std::string& canvas_name = "cSpectra",
+    const std::string& canvas_name = "cSpectra1D",
     const int range_opt = Side
   ) {
 
@@ -382,6 +382,79 @@ namespace PlotOptions {
     return params;
 
   }  // end 'CompareRatios(PHEC::Inputs&, PHEC::Inputs&, std::string&, int)'
+
+
+
+  // --------------------------------------------------------------------------
+  //! Bundle 1D `CorrectSpectra` parameters
+  // --------------------------------------------------------------------------
+  PHEC::PHCorrelatorPlotter::CorrectSpectraParams CorrectSpectra1D(
+    const PHEC::Inputs& in_data,
+    const PHEC::Inputs& in_reco,
+    const PHEC::Inputs& in_true,
+    const std::string& canvas_name = "cCorrectSpectra1D",
+    const int range_opt = Side
+  ) {
+
+    // grab default pad options, and
+    // turn on log y/x when necessary
+    PHEC::PadOpts corr_opts = PHEC::PadOpts();
+    PHEC::PadOpts spec_opts = PHEC::PadOpts();
+    if (range_opt == Side) {
+      corr_opts.logx = 1;
+      spec_opts.logx = 1;
+      spec_opts.logy = 1;
+    }
+
+    // set pad vertices
+    PHEC::Type::Vertices corr_vtxs;
+    corr_vtxs.push_back(0.00);
+    corr_vtxs.push_back(0.00);
+    corr_vtxs.push_back(1.00);
+    corr_vtxs.push_back(0.35);
+
+    PHEC::Type::Vertices spec_vtxs;
+    spec_vtxs.push_back(0.00);
+    spec_vtxs.push_back(0.35);
+    spec_vtxs.push_back(1.00);
+    spec_vtxs.push_back(1.00);
+
+    // set spectra margins
+    PHEC::Type::Margins corr_margins;
+    corr_margins.push_back(0.005);
+    corr_margins.push_back(0.02);
+    corr_margins.push_back(0.25);
+    corr_margins.push_back(0.15);
+
+    PHEC::Type::Margins spec_margins;
+    spec_margins.push_back(0.02);
+    spec_margins.push_back(0.02);
+    spec_margins.push_back(0.005);
+    spec_margins.push_back(0.15);
+
+    // define canvas (use default pad options)
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
+    canvas.AddPad( PHEC::Pad("pCorrect", "", corr_vtxs, corr_margins, corr_opts), "correct" );
+    canvas.AddPad( PHEC::Pad("pSpectra", "", spec_vtxs, spec_margins, spec_opts), "spectra" );
+
+    // set auxilliary options
+    PHEC::PlotOpts plot_opts;
+    plot_opts.plot_range  = DefinePlotRange(range_opt);
+    plot_opts.norm_range  = DefineNormRange(range_opt);
+    plot_opts.canvas      = canvas;
+    plot_opts.ratio_pad   = "correct";
+    plot_opts.spectra_pad = "spectra";
+
+    // bundle parameters
+    PHEC::PHCorrelatorPlotter::CorrectSpectraParams params;
+    params.data    = in_data;
+    params.recon   = in_reco;
+    params.truth   = in_true;
+    params.options = plot_opts;
+    params.unity   = DefineUnity(range_opt);
+    return params;
+
+  }  // end 'CorrectSpectra1D(PHEC::Inputs& x 3, std::string&, int)'
 
 }  // end PlotOptions namespace
 

@@ -8,8 +8,9 @@
 # RunPHCorrelatorPlotter.sh
 # =============================================================================
 
-root -b -q "RunPHCorrelatorPlotter.C++(0)"
-root -b -q "RunPHCorrelatorPlotter.C++(1)"
-root -b -q "RunPHCorrelatorPlotter.C++(2)"
+#root -b -q "RunPHCorrelatorPlotter.C++(0)"
+#root -b -q "RunPHCorrelatorPlotter.C++(1)"
+#root -b -q "RunPHCorrelatorPlotter.C++(2)"
+root -b -q "RunPHCorrelatorPlotter.C++(3)"
 
 # end =========================================================================

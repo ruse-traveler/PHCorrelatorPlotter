@@ -23,7 +23,9 @@
 // abbreviate common namespaces
 namespace PO = PlotOptions;
 
+// ----------------------------------------------------------------------------
 // useful types
+// ----------------------------------------------------------------------------
 typedef std::pair<std::size_t, std::size_t> StylePair;
 typedef std::pair<std::string, std::string> StringPair;
 typedef std::pair<PHEC::PlotInput, PHEC::PlotInput> InputPair;
@@ -35,7 +37,7 @@ namespace PlotsToMake {
   // --------------------------------------------------------------------------
   //! Enumerate plots to make
   // --------------------------------------------------------------------------
-  enum Plots {SimVsReco, VsPtJet, PPVsPAu, QuickRatios};
+  enum Plots {SimVsReco, VsPtJet, PPVsPAu, CorrectSpectra, QuickRatios};
 
 
 
@@ -513,6 +515,211 @@ namespace PlotsToMake {
     return;
 
   }  // end 'PPVsPAu1D(...)'
+
+
+
+  // --------------------------------------------------------------------------
+  //! Make 1D corrected spectrum plot
+  // --------------------------------------------------------------------------
+  void CorrectSpectra1D(
+    const std::string& variable,
+    const int species,
+    const int ch,
+    const int spin,
+    const int opt,
+    const InputOutput& io,
+    const PHEC::PHCorrelatorPlotter& plotter,
+    TFile* ofile
+  ) {
+
+    // colors for diferent jet pt
+    const std::size_t pt5_col[3]  = {809, 799, 797};
+    const std::size_t pt10_col[3] = {899, 909, 907};
+    const std::size_t pt15_col[3] = {889, 879, 877};
+
+    // markers for different jet pt
+    const std::size_t pt5_mar[3]  = {22, 22, 26};
+    const std::size_t pt10_mar[3] = {20, 24, 24};
+    const std::size_t pt15_mar[3] = {23, 23, 32};
+
+    // make canvas name and tag
+    const std::string tag    = io.MakeSpeciesTag("Correct", species) + "_";
+    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, -1, ch, spin, -1);
+
+    // build data hist names
+    const std::string pt5_dhist  = io.MakeHistName(variable, InFiles::Data, InHists::Pt5,  ch, spin);
+    const std::string pt10_dhist = io.MakeHistName(variable, InFiles::Data, InHists::Pt10, ch, spin);
+    const std::string pt15_dhist = io.MakeHistName(variable, InFiles::Data, InHists::Pt15, ch, spin);
+
+    // build reco hist names
+    const std::string pt5_rhist  = io.MakeHistName(variable, InFiles::Reco, InHists::Pt5,  ch, spin);
+    const std::string pt10_rhist = io.MakeHistName(variable, InFiles::Reco, InHists::Pt10, ch, spin);
+    const std::string pt15_rhist = io.MakeHistName(variable, InFiles::Reco, InHists::Pt15, ch, spin);
+
+    // build true hist names
+    const std::string pt5_thist  = io.MakeHistName(variable, InFiles::True, InHists::Pt5,  ch, spin);
+    const std::string pt10_thist = io.MakeHistName(variable, InFiles::True, InHists::Pt10, ch, spin);
+    const std::string pt15_thist = io.MakeHistName(variable, InFiles::True, InHists::Pt15, ch, spin);
+
+    // build hist renames
+    const std::string pt5_name[3] = {
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt5, ch, spin, tag + "Data_"),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt5, ch, spin, tag + "Reco_"),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt5, ch, spin, tag + "True_")
+    };
+    const std::string pt10_name[3] = {
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt10, ch, spin, tag + "Data_"),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt10, ch, spin, tag + "Reco_"),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt10, ch, spin, tag + "True_")
+    };
+    const std::string pt15_name[3] = {
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt15, ch, spin, tag + "Data_"),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt15, ch, spin, tag + "Reco_"),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt15, ch, spin, tag + "True_")
+    };
+
+    // build hist legends
+    const std::string pt5_leg[3] = {
+      io.MakeLegend(InHists::Pt5, ch, spin, InFiles::Data, species),
+      io.MakeLegend(InHists::Pt5, ch, spin, InFiles::Reco, species),
+      io.MakeLegend(InHists::Pt5, ch, spin, InFiles::True, species)
+    };
+    const std::string pt10_leg[3] = {
+      io.MakeLegend(InHists::Pt10, ch, spin, InFiles::Data, species),
+      io.MakeLegend(InHists::Pt10, ch, spin, InFiles::Reco, species),
+      io.MakeLegend(InHists::Pt10, ch, spin, InFiles::True, species)
+    };
+    const std::string pt15_leg[3] = {
+      io.MakeLegend(InHists::Pt15, ch, spin, InFiles::Data, species),
+      io.MakeLegend(InHists::Pt15, ch, spin, InFiles::Reco, species),
+      io.MakeLegend(InHists::Pt15, ch, spin, InFiles::True, species)
+    };
+
+    // bundle input data options
+    PHEC::Inputs data_opt;
+    data_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Data),
+        pt5_dhist,
+        pt5_name[0],
+        pt5_leg[0],
+        PHEC::Style::Plot(
+          pt5_col[0],
+          pt5_mar[0]
+        )
+      )
+    );
+    data_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Data),
+        pt10_dhist,
+        pt10_name[0],
+        pt10_leg[0],
+        PHEC::Style::Plot(
+          pt10_col[0],
+          pt10_mar[0]
+        )
+      )
+    );
+    data_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Data),
+        pt15_dhist,
+        pt15_name[0],
+        pt15_leg[0],
+        PHEC::Style::Plot(
+          pt15_col[0],
+          pt15_mar[0]
+        )
+      )
+    );
+
+    // bundle input reco options
+    PHEC::Inputs reco_opt;
+    reco_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Reco),
+        pt5_rhist,
+        pt5_name[1],
+        pt5_leg[1],
+        PHEC::Style::Plot(
+          pt5_col[1],
+          pt5_mar[1]
+        )
+      )
+    );
+    reco_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Reco),
+        pt10_rhist,
+        pt10_name[1],
+        pt10_leg[1],
+        PHEC::Style::Plot(
+          pt10_col[1],
+          pt10_mar[1]
+        )
+      )
+    );
+    reco_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::Reco),
+        pt15_rhist,
+        pt15_name[1],
+        pt15_leg[1],
+        PHEC::Style::Plot(
+          pt15_col[1],
+          pt15_mar[1]
+        )
+      )
+    );
+
+    // bundle input true options
+    PHEC::Inputs true_opt;
+    true_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::True),
+        pt5_thist,
+        pt5_name[2],
+        pt5_leg[2],
+        PHEC::Style::Plot(
+          pt5_col[2],
+          pt5_mar[2]
+        )
+      )
+    );
+    true_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::True),
+        pt10_thist,
+        pt10_name[2],
+        pt10_leg[2],
+        PHEC::Style::Plot(
+          pt10_col[2],
+          pt10_mar[2]
+        )
+      )
+    );
+    true_opt.push_back(
+      PHEC::PlotInput(
+        io.Files().GetFile(species, InFiles::True),
+        pt15_thist,
+        pt15_name[2],
+        pt15_leg[2],
+        PHEC::Style::Plot(
+          pt15_col[2],
+          pt15_mar[2]
+        )
+      )
+    );
+
+    // make plot
+    plotter.PlotSpectra1D(
+      PO::CorrectSpectra1D(data_opt, reco_opt, true_opt, canvas, opt),
+      ofile
+    );
+    return;
+
+  }  // end 'CorrectSpectra1D(...)'
 
 }  // end PlotsToMake namespace
 

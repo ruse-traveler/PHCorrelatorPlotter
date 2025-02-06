@@ -48,21 +48,27 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   switch (plot) {
 
     case PM::SimVsReco:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
       break;
 
     case PM::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
       break;
 
     case PM::PPVsPAu:
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_withCorrectedSpectra.d5m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      break;
+
+    case PM::CorrectSpectra:
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_forCorrections.d6m2y2025.root", "recreate") );
       break;
 
     default:
@@ -89,7 +95,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   if (plot == PM::SimVsReco) {
 
-    // loop through all combinations of species, jet pt, and spin
+    // loop through all combinations of species, jet pt,charge, and spin
     for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
       for (std::size_t ipt = 0; ipt < io.Hists().GetPtTags().size(); ++ipt) {
         for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
@@ -134,7 +140,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   if (plot == PM::VsPtJet) {
 
-    // loop through all combinations of species, level, and spin
+    // loop through all combinations of species, level, charge, and spin
     for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
       for (std::size_t ilv = 0; ilv < io.Files().GetLevelTags().size(); ++ilv) {
         for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
@@ -179,7 +185,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   if (plot == PM::PPVsPAu) {
 
-    // loop through all combinations of level and spin
+    // loop through all combinations of level, charge, and spin
     for (std::size_t ilv = 0; ilv < io.Files().GetLevelTags().size(); ++ilv) {
       for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
         for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
@@ -201,6 +207,38 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
     std::cout << "    Completed pp vs. pAu plots." << std::endl;
 
   }  // end PPVsPAu plot
+
+  // --------------------------------------------------------------------------
+  // apply correction factors
+  // --------------------------------------------------------------------------
+  if (plot == PM::CorrectSpectra) {
+
+    // loop through all combinations of species, charge, and spin
+    for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
+      for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
+        for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
+
+          // only consider blue polarizations for pAu
+          const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
+          if (!isOnlyBlue) continue;
+
+          // calculate/apply corrections for each desired 1D histogram
+          PM::CorrectSpectra1D("EEC", ico, ich, isp, PO::Side, io, plotter, ofiles[0]);
+          PM::CorrectSpectra1D("CollinsBlue", ico, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+          PM::CorrectSpectra1D("BoerMuldersBlue", ico, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+          if (ico != InFiles::PAu) {
+            PM::CorrectSpectra1D("CollinsYell", ico, ich, isp, PO::Angle, io, plotter, ofiles[1]);
+            PM::CorrectSpectra1D("BoerMuldersYell", ico, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+          }
+
+          /* TODO add 2D correction */
+
+        }  // end spin loop
+      }  // end charge loop
+    }   // end species loop
+    std::cout << "    Completed correction plots." << std::endl;
+
+  }  // end CorrectSpectra plot
 
   // --------------------------------------------------------------------------
   // close files & exit
