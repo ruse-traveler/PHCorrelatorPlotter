@@ -104,7 +104,7 @@ namespace PHEnergyCorrelator {
       // ======================================================================
       //! Parameters for comparing spectra to a baseline
       // ======================================================================
-      /*! Struct to consolidate arameters for the "Compare Spectra to Baseline"
+      /*! Struct to consolidate parameters for the "Compare Spectra to Baseline"
        *  plotting routines.
        */
       struct SpectraVsBaselineParams {
@@ -154,7 +154,7 @@ namespace PHEnergyCorrelator {
       // ======================================================================
       //! Parameters for comparing pairs of spectra
       // ======================================================================
-      /*! Struct to consolidate arameters for the "Compare Ratios"
+      /*! Struct to consolidate parameters for the "Compare Ratios"
        *  plotting routines.
        */
       struct CompareRatiosParams {
@@ -200,6 +200,60 @@ namespace PHEnergyCorrelator {
         }  // end ctor(Inputs&, Inputs&, PlotShape&, Shapes&, PlotOpts&)'
 
       };  // end CompareRatiosParams
+
+      // ======================================================================
+      //! Parameters for correcting a spectrum (or spectra)
+      // ======================================================================
+      /*! Struct to consolidate parameters for the "Correct Spectra"
+       *  plotting routines.
+       */ 
+      struct CorrectSpectraParams {
+
+        // members
+        Inputs    data;     ///!< spectra to be corrected (e.g. data)
+        Inputs    recon;    ///!< numerators for correction factors (e.g. reco-level sim)
+        Inputs    truth;    ///!< denominators for correct factors (e.g. truth-level sim)
+        PlotShape unity;    ///!< definition of unit ratio line to draw
+        Shapes    shapes;   ///!< additional shapes (e.g. lines) to draw
+        PlotOpts  options;  ///!< auxilliary plot options
+
+        // --------------------------------------------------------------------
+        //! default ctor
+        // --------------------------------------------------------------------
+        CorrectSpectraParams() {
+          data    = Inputs();
+          recon   = Inputs();
+          truth   = Inputs();
+          unity   = PlotShape();
+          shapes  = Shapes();
+          options = PlotOpts();
+        }
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
+        ~CorrectSpectraParams {};
+
+        // --------------------------------------------------------------------
+        //! ctor accepting arguments
+        // --------------------------------------------------------------------
+        CorrectSpectraParams(
+          const Inputs& data_args,
+          const Inputs& reco_args,
+          const Inputs& true_args,
+          const PlotShape& unity_arg,
+          const Shapes& shape_args,
+          const PlotOpts&  opt_args
+        ) {
+          data    = data_args;
+          recon   = reco_args;
+          truth   = true_args;
+          unity   = unity_arg;
+          shapes  = shape_args;
+          options = opt_args;
+        }  // end ctor(Inputs& x 3, PlotShape&, Shapes&, PlotOpts&)
+
+      };  // end CorrectSpectraParams
 
     private:
 
@@ -366,7 +420,7 @@ namespace PHEnergyCorrelator {
       //! Compare various ENC (or othwerise) spectra to a baseline
       // ----------------------------------------------------------------------
       /*! Compares a variety of ENC (or otherwise) spectra from different
-       *  sources to a baseline. Uppder panel shows spectra, lower panel
+       *  sources to a baseline. Upper panel shows spectra, lower panel
        *  shows ratio of spectra to baseline.
        *
        *  \param[in]  param routine parameters
@@ -436,10 +490,11 @@ namespace PHEnergyCorrelator {
           std::string name( nhists[inum] -> GetName() );
           name += "_Ratio";
 
-          // do division and apply style
+          // do division
           rhists.push_back( Tools::DivideHist1D( nhists[inum], dhist) );
           rhists.back() -> SetName( name.data() );
         }
+        std::cout << "    Calculated ratios." << std::endl;
 
         // define legend dimensions
         const std::size_t nlines    = !param.options.header.empty() ? nhists.size() + 2 : nhists.size() + 1;
@@ -546,7 +601,7 @@ namespace PHEnergyCorrelator {
       //! Compare ratios of various pairs of ENC (or otherwise) spectra
       // ----------------------------------------------------------------------
       /*! Compares a variety of pairs of ENC (or otherwise) spectra from
-       *  different sources and their ratios. Uppder panel shows spectra,
+       *  different sources and their ratios. Upper panel shows spectra,
        *  lower panel shows ratios.
        *
        *  \param[in]  param routine parameters
@@ -634,10 +689,11 @@ namespace PHEnergyCorrelator {
           std::string name( dhists[iden] -> GetName() );
           name += "_Ratio";
 
-          // do division and apply style
+          // do division
           rhists.push_back( Tools::DivideHist1D( nhists[iden], dhists[iden]) );
           rhists.back() -> SetName( name.data() );
         }
+        std::cout << "    Calculated ratios." << std::endl;
 
         // determine no. of legend lines
         const std::size_t nlines = !param.options.header.empty()
@@ -856,6 +912,254 @@ namespace PHEnergyCorrelator {
         return;
 
       }  // end 'PlotSpectra2D(CompareSpectraParams&, TFile*)'
+
+      // ----------------------------------------------------------------------
+      //! Correct various 1D spectra 
+      // ----------------------------------------------------------------------
+      /*! Calculates and applies a bin-by-bin correction to a variety of ENC
+       *  (or otherwise) spectra from different sources and their ratios. Upper
+       *  panel shows corrected spectra vs truth, and lwer panel shows
+       *  correction factors.
+       *
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
+       */
+      void PlotSpectra1D(
+        const CorrectSpectraParams& param,
+        TFile* ofile
+      ) const {
+
+        // announce start
+        std::cout << "\n -------------------------------- \n"
+                  << "  Beginning 1D spectra correction!\n"
+                  << "    Opening inputs:"
+                  << std::endl;
+
+        // throw error if no. of reco vs. truth inputs don't match
+        if (param.recon.size() != param.truth.size()) {
+          std::cerr << "PANIC: number of reconstructed and truth inputs should be the same!\n"
+                    << "       reco inputs = " << param.recon.size() << "\n"
+                    << "       true inputs = " << param.truth.size()
+                    << std::endl;
+          assert(param.recon.size() == param.truth.size());
+        }
+
+        // throw error if no. of data vs. reco inputs don't match
+        if (param.raw.size() != param.recon.size()) {
+          std::cerr << "PANIC: number of raw and reconstructed inputs should be the same!\n"
+                    << "       data inputs = " << param.data.size() << "\n"
+                    << "       reco inputs = " << param.recon.size()
+                    << std::endl;
+          assert(param.data.size() == param.recon.size());
+        }
+
+        // open data inputs
+        std::vector<TFile*> dfiles;
+        std::vector<TH1*>   dhists;
+        for (std::size_t idat = 0; idat < param.data.size(); ++idat) {
+
+          dfiles.push_back(
+            Tools::OpenFile(param.data[idat].file, "read")
+          );
+          dhists.push_back(
+            (TH1*) Tools::GrabObject( param.data[idat].object, dfiles.back() )
+          );
+          dhists.back() -> SetName( param.data[idat].rename.data() );
+          std::cout << "      File (data) = " << param.data[idat].file << "\n"
+                    << "      Hist (data) = " << param.data[idat].object
+                    << std::endl;
+        }  // end data loop
+
+        // open reco inputs
+        std::vector<TFile*> rfiles;
+        std::vector<TH1*>   rhists;
+        for (std::size_t irec = 0; irec < param.recon.size(); ++irec) {
+
+          rfiles.push_back(
+            Tools::OpenFile(param.recon[irec].file, "read")
+          );
+          rhists.push_back(
+            (TH1*) Tools::GrabObject( param.recon[irec].object, nfiles.back() )
+          );
+          rhists.back() -> SetName( param.recon[irec].rename.data() );
+          std::cout << "      File (recon) = " << param.recon[irec].file << "\n"
+                    << "      Hist (recon) = " << param.recon[irec].object
+                    << std::endl;
+
+          // normalize reco if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              rhists.back(),
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }  // end reco loop
+
+        // open true inputs
+        std::vector<TFile*> tfiles;
+        std::vector<TH1*>   thists;
+        for (std::size_t itru = 0; itru < param.truth.size(); ++itru) {
+
+          rfiles.push_back(
+            Tools::OpenFile(param.truth[itru].file, "read")
+          );
+          rhists.push_back(
+            (TH1*) Tools::GrabObject( param.truth[itru].object, nfiles.back() )
+          );
+          rhists.back() -> SetName( param.truth[itru].rename.data() );
+          std::cout << "      File (truth) = " << param.truth[itru].file << "\n"
+                    << "      Hist (truth) = " << param.truth[itru].object
+                    << std::endl;
+
+          // normalize true if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              thists.back(),
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }  // end true loop
+
+        // calculate correction factors
+        std::vector<TH1*> chists;
+        for (std::size_t itru = 0; itru < thists.size(); ++itru) {
+
+          // create name
+          std::string name( thists[itru] -> GetName() );
+          name += "_Correction";
+
+          // do division
+          chists.push_back( Tools::DivideHist1D( rhists[itru], thists[itru]) );
+          chists.back() -> SetName( name.data() );
+        }
+        std::cout << "    Calculated correction factors." << std::endl;
+
+        // apply correct factors
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+
+          // divide by (reco / true)
+          dhists[idat] -> Divide( chists[idat] );
+
+          // normalize corrected spectrum if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              dhists[idat],
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }
+        std::cout << "    Applied correction factors." << std::endl;
+
+
+        // determine no. of legend lines
+        const std::size_t nlines = !param.options.header.empty()
+                                 ? dhists.size() + 1
+                                 : nhists.size();
+
+        // define legend dimensions
+        const float spacing   = m_baseTextStyle.GetTextStyle().spacing;
+        const float legheight = Tools::GetHeight(nlines, spacing);
+
+        // generate legend vertices
+        Type::Vertices vtxleg;
+        vtxleg.push_back(0.3);
+        vtxleg.push_back(0.1);
+        vtxleg.push_back(0.5);
+        vtxleg.push_back((float) 0.1 + legheight);
+
+        // define legend
+        Legend legdef;
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+          legdef.AddEntry( Legend::Entry(dhists[idat], param.data[idat].legend, "PF") );
+        }
+        legdef.SetVertices( vtxleg );
+        if (!param.options.header.empty()) {
+          legdef.SetHeader( param.options.header );
+        }
+
+        // determine relevant range to draw line
+        Shape unitydef = param.unity.shape;
+        unitydef.SetXRange(
+          Tools::GetDrawRange( param.options.plot_range.GetX(), chists.front() -> GetXaxis() )
+        );
+
+        // create root objects
+        TLine*     unity   = unitydef.MakeTLine();
+        TLegend*   legend = legdef.MakeLegend();
+        TPaveText* text   = m_textBox.MakeTPaveText();
+        std::cout << "    Created legend and text box." << std::endl;
+
+        // set styles
+        Styles dat_styles = GenerateStyles( param.data );
+        for (std::size_t idat = 0; idat < nhists.size(); ++idat) {
+
+          // set data style
+          dat_styles[idat].SetPlotStyle( param.data[idat].style );
+          dat_styles[idat].Apply( dhists[idat] );
+          param.options.plot_range.Apply(Range::X, dhists[idat] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, dhists[idat] -> GetXaxis());
+
+          // set correction factor style
+          dat_styles[idat].Apply( chists[idat] );
+          param.options.plot_range.Apply(Range::X, chists[idat] -> GetXaxis());
+        }
+
+        // set legend/text styles
+        param.unity.style.Apply( unity );
+        m_baseTextStyle.Apply( legend );
+        m_baseTextStyle.Apply( text );
+        std::cout << "    Set styles." << std::endl;
+
+        // draw plot
+        CanvasManager manager = CanvasManager( param.options.canvas );
+        manager.MakePlot();
+        manager.Draw();
+        manager.GetTPad( param.options.ratio_pad ) -> cd();
+        chists[0] -> Draw();
+        for (std::size_t icor = 1; icor < chists.size(); ++icor) {
+          chists[icor] -> Draw("same");
+        }
+        unity -> Draw();
+        manager.GetTPad( param.options.spectra_pad ) -> cd();
+        dhists[0] -> Draw();
+        for (std::size_t iden = 1; iden < dhists.size(); ++iden) {
+          dhists[iden] -> Draw("same");
+        }
+        legend -> Draw();
+        text   -> Draw();
+        std:: cout << "    Made plot." << std::endl;
+
+        // save output
+        ofile -> cd();
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+          dhists[idat] -> Write();
+          rhists[idat] -> Write();
+          thists[idat] -> Write();
+          chists[idat] -> Write();
+        }
+        manager.Write();
+        manager.Close();
+        std::cout << "    Saved output." << std::endl;
+
+        // announce end
+        std::cout << "  Finished 1D spectra correction!\n"
+                  << " -------------------------------- \n"
+                  << std::endl;
+
+        // exit routine
+        Tools::CloseFiles(dfiles);
+        Tools::CloseFiles(rfiles);
+        Tools::CloseFiles(tfiles);
+        Tools::CloseFiles(cfiles);
+        return;
+
+      }  // end 'PlotSpectra1D(CorrectSpectraParams&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! default ctor/dtor
