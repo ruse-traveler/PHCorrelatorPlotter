@@ -342,10 +342,14 @@ namespace PHEnergyCorrelator {
           }
         }  // end input loop
 
+        // determine no. of legend lines
+        const std::size_t nlines = !param.options.header.empty()
+                                 ? ihists.size() + 1
+                                 : ihists.size();
+
         // define legend dimensions
-        const std::size_t nlines    = !param.options.header.empty() ? ihists.size() + 1 : ihists.size();
-        const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
-        const float       legheight = Tools::GetHeight(nlines, spacing);
+        const float spacing   = m_baseTextStyle.GetTextStyle().spacing;
+        const float legheight = Tools::GetHeight(nlines, spacing);
 
         // generate legend vertices
         Type::Vertices vtxleg;
@@ -496,10 +500,14 @@ namespace PHEnergyCorrelator {
         }
         std::cout << "    Calculated ratios." << std::endl;
 
+        // determine no. of legend lines
+        const std::size_t nlines = !param.options.header.empty()
+                                 ? nhists.size() + 2
+                                 : nhists.size() + 1;
+
         // define legend dimensions
-        const std::size_t nlines    = !param.options.header.empty() ? nhists.size() + 2 : nhists.size() + 1;
-        const float       spacing   = m_baseTextStyle.GetTextStyle().spacing;
-        const float       legheight = Tools::GetHeight(nlines, spacing);
+        const float spacing   = m_baseTextStyle.GetTextStyle().spacing;
+        const float legheight = Tools::GetHeight(nlines, spacing);
 
         // generate legend vertices
         Type::Vertices vtxleg;
@@ -555,9 +563,27 @@ namespace PHEnergyCorrelator {
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
 
-        // draw plot
+        // initialize canvas manager
         CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
+
+        // scale text of objects in smaller panels
+        for (std::size_t irat = 0; irat < rhists.size(); ++irat) {
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::X,
+            rhists[irat] -> GetXaxis()
+          );
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::Y,
+            rhists[irat] -> GetYaxis()
+          );
+        }
+
+        // draw objects
         manager.Draw();
         manager.GetTPad( param.options.ratio_pad ) -> cd();
         rhists[0] -> Draw();
@@ -762,9 +788,27 @@ namespace PHEnergyCorrelator {
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
 
-        // draw plot
+        // initialize canvas manager
         CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
+
+        // scale text of objects in smaller panels
+        for (std::size_t irat = 0; irat < rhists.size(); ++irat) {
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::X,
+            rhists[irat] -> GetXaxis()
+          );
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::Y,
+            rhists[irat] -> GetYaxis()
+          );
+        }
+
+        // draw objects
         manager.Draw();
         manager.GetTPad( param.options.ratio_pad ) -> cd();
         rhists[0] -> Draw();
@@ -1116,9 +1160,27 @@ namespace PHEnergyCorrelator {
         m_baseTextStyle.Apply( text );
         std::cout << "    Set styles." << std::endl;
 
-        // draw plot
+        // initialize canvas manager
         CanvasManager manager = CanvasManager( param.options.canvas );
         manager.MakePlot();
+
+        // scale text of objects in smaller panels
+        for (std::size_t icor = 0; icor < chists.size(); ++icor) {
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::X,
+            chists[icor] -> GetXaxis()
+          );
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::Y,
+            chists[icor] -> GetYaxis()
+          );
+        }
+
+        // draw objects
         manager.Draw();
         manager.GetTPad( param.options.ratio_pad ) -> cd();
         chists[0] -> Draw();

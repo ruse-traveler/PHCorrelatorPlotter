@@ -11,10 +11,12 @@
 #define PHCORRELATORCANVAS_H
 
 // c++ utilities
+#include <cmath>
 #include <string>
 #include <utility>
 #include <vector>
 // root libraries
+#include <TAxis.h>
 #include <TCanvas.h>
 #include <TPad.h>
 // plotting utilities
@@ -22,6 +24,7 @@
 #include "PHCorrelatorPadOpts.h"
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorPlotTools.h"
+#include "PHCorrelatorRange.h"  // FIXME remove once enum is in Const::
 
 
 
@@ -69,6 +72,48 @@ namespace PHEnergyCorrelator {
       void SetMargins(const Type::Margins& mgns)       {m_mgns  = mgns;}
       void SetDimensions(const Type::Dimensions& dims) {m_dims  = dims;}
       void SetPadLabels(const Type::LabelList& labels) {m_labels = labels;}
+
+      // ----------------------------------------------------------------------
+      //! Helper method to scale text of a TAxis
+      // ----------------------------------------------------------------------
+      void DoAxisTextScaling(
+        const std::size_t ibig,
+        const std::size_t ismall,
+        const int axis,
+        TAxis* to_scale
+      ) {
+
+        // get x,y sizes of pads
+        const std::pair<float, float> xsize = std::make_pair(
+          m_pads.at(ibig).GetVertices()[2] - m_pads.at(ibig).GetVertices()[0],
+          m_pads.at(ismall).GetVertices()[2] - m_pads.at(ismall).GetVertices()[0]
+        );
+        const std::pair<float, float> ysize = std::make_pair(
+          m_pads.at(ibig).GetVertices()[3] - m_pads.at(ibig).GetVertices()[1],
+          m_pads.at(ismall).GetVertices()[3] - m_pads.at(ismall).GetVertices()[1]
+        );
+
+        // calculate scale
+        const float xscale = abs(xsize.first) / abs(xsize.second);
+        const float yscale = abs(ysize.first) / abs(ysize.second);
+        const float scale  = xscale * yscale;
+
+        // grab old title/label text
+        const float size_ttl = to_scale -> GetTitleSize();
+        const float off_ttl  = to_scale -> GetTitleOffset();
+        const float size_lbl = to_scale -> GetLabelSize();
+        const float off_lbl  = to_scale -> GetLabelOffset();
+
+        // update title/label text
+        to_scale -> SetTitleSize( size_ttl * scale );
+        to_scale -> SetLabelSize( size_lbl * scale );
+        if (axis == Range::Y) {
+          to_scale -> SetTitleOffset( off_ttl / scale );
+          to_scale -> SetLabelOffset( off_lbl / scale );
+        }
+        return;
+
+      }  // end 'DoAxisTextScaling(std::size_t x 2, int, TAxis*)'
 
       // ----------------------------------------------------------------------
       //! Add an associated pad

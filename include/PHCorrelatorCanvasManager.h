@@ -16,6 +16,7 @@
 #include <utility>
 #include <vector>
 // root libraries
+#include <TAxis.h>
 #include <TCanvas.h>
 #include <TPad.h>
 #include <TString.h>
@@ -23,6 +24,7 @@
 #include "PHCorrelatorCanvas.h"
 #include "PHCorrelatorPad.h"
 #include "PHCorrelatorPlotTypes.h"
+#include "PHCorrelatorRange.h"  // FIXME remove once enum is in Const::
 
 
 
@@ -84,6 +86,40 @@ namespace PHEnergyCorrelator {
         return;
 
       }  // end 'MakePlot()' '
+
+      // ----------------------------------------------------------------------
+      //! Scale axis text by ratio of two pads (selected via indices)
+      // ----------------------------------------------------------------------
+      void ScaleAxisText(
+        const std::size_t ibig,
+        const std::size_t ismall,
+        const int axis,
+        TAxis* to_scale
+      ) {
+
+        m_define.DoAxisTextScaling(ibig, ismall, axis, to_scale);
+        return;
+
+      }  // end 'ScaleAxisText(std::size_t x 2, int, TAxis*)'
+
+      // ----------------------------------------------------------------------
+      //! Scale axis text by ratio of two pads (selected via labels)
+      // ----------------------------------------------------------------------
+      void ScaleAxisText(
+        const std::string sbig,
+        const std::string ssmall,
+        const int axis,
+        TAxis* to_scale
+      ) {
+
+        // grab indices
+        const std::size_t ibig   = m_labtoindex.at(sbig);
+        const std::size_t ismall = m_labtoindex.at(ssmall);
+
+        m_define.DoAxisTextScaling(ibig, ismall, axis, to_scale);
+        return;
+
+      }  // end 'ScaleAxisText(std::string x 2, int, TAxis*)'
 
       // ----------------------------------------------------------------------
       //! Draw canvas and pads
