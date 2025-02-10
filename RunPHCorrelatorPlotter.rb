@@ -1,16 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 # =============================================================================
-# @file   RunPHCorrelatorPlotter.sh
+# @file   RunPHCorrelatorPlotter.rb
 # @author Derek Anderson
-# @date   01.02.2025
+# @data   02.10.2025
 #
 # Short script to run the driver macro for plotting,
-# RunPHCorrelatorPlotter.sh
+# RunPHCorrelatorPlotter.C
 # =============================================================================
 
-#root -b -q "RunPHCorrelatorPlotter.C++(0)"
-#root -b -q "RunPHCorrelatorPlotter.C++(1)"
-#root -b -q "RunPHCorrelatorPlotter.C++(2)"
-root -b -q "RunPHCorrelatorPlotter.C++(3)"
+# set which plots to generate
+plots = [0, 3]
+
+# run macro for each option
+plots.each { |plot|
+  system("root -b -q \"RunPHCorrelatorPlotter.C++(#{plot})\"")
+}
 
 # end =========================================================================
