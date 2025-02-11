@@ -58,15 +58,15 @@ class InFiles {
 
       // define input files for pp
       std::vector<std::string> pp_files;
-      pp_files.push_back("./input/ppRun15_dataWithFixedAngleCalc_r0_30.d19m1y2025.root");
-      pp_files.push_back("./input/ppRun15_simWithFixedAngleCalc_r0_30.d19m1y2025.root");
-      pp_files.push_back("./input/ppRun15_simWithFixedAngleCalc_r0_30.d19m1y2025.root");
+      pp_files.push_back("./input/ppRun15_dataWithBetterWraps_r03all.d6m2y2025.root");
+      pp_files.push_back("./input/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
+      pp_files.push_back("./input/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
 
       // define input files for pAu
       std::vector<std::string> pa_files;
-      pa_files.push_back("./input/paRun15_dataWithSpin_r0_30_0_84.d26m12y2024.root");
-      pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
-      pa_files.push_back("./input/paRun15_simWithSpin_r0_30_0_84.d26m12y2024.root");
+      pa_files.push_back("./input/paRun15_dataWithJetCharge_r03all_084.d27m1y2025.root");
+      pa_files.push_back("./input/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
+      pa_files.push_back("./input/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
 
       // load vector of inputs
       m_files.clear();
