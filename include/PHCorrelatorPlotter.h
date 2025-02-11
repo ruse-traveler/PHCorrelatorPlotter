@@ -1082,7 +1082,7 @@ namespace PHEnergyCorrelator {
         }
         std::cout << "    Calculated correction factors." << std::endl;
 
-        // apply correct factors
+        // apply correction factors
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // divide by (reco / true)
@@ -1100,6 +1100,18 @@ namespace PHEnergyCorrelator {
         }
         std::cout << "    Applied correction factors." << std::endl;
 
+        // calculate corrected / truth ratios ('f' for "fraction")
+        std::vector<TH1*> fhists;
+        for (std::size_t icor = 0; icor < chists.size(); ++icor) {
+
+          // create name
+          std::string name( dhists[icor] -> GetName() );
+          name += "_CorrectOverTruth";
+
+          // do division
+          fhists.push_back( Tools::DivideHist1D(chists[icor], thists[icor]) );
+          fhists.back() -> SetName( name.data() );
+        }
 
         // determine no. of legend lines
         const std::size_t nlines = !param.options.header.empty()
@@ -1141,6 +1153,7 @@ namespace PHEnergyCorrelator {
 
         // set styles
         Styles dat_styles = GenerateStyles( param.data );
+        Styles tru_styles = GenerateStyles( param.truth );
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // set data style
@@ -1152,6 +1165,11 @@ namespace PHEnergyCorrelator {
           // set correction factor style
           dat_styles[idat].Apply( chists[idat] );
           param.options.plot_range.Apply(Range::X, chists[idat] -> GetXaxis());
+
+          // set ratio style
+          tru_styles[idat].SetPlotStyle( param.truth[idat].style );
+          tru_styles[idat].Apply( fhists[idat] );
+          param.options.plot_range.Apply(Range::X, fhists[idat] -> GetXaxis()); 
         }
 
         // set legend/text styles
@@ -1166,32 +1184,57 @@ namespace PHEnergyCorrelator {
 
         // scale text of objects in smaller panels
         for (std::size_t icor = 0; icor < chists.size(); ++icor) {
+
+          // scale correction factors
           manager.ScaleAxisText(
             param.options.spectra_pad,
-            param.options.ratio_pad,
+            param.options.correct_pad,
             Range::X,
             chists[icor] -> GetXaxis()
           );
           manager.ScaleAxisText(
             param.options.spectra_pad,
-            param.options.ratio_pad,
+            param.options.correct_pad,
             Range::Y,
             chists[icor] -> GetYaxis()
+          );
+
+          // scale ratios
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::X,
+            fhists[icor] -> GetXaxis()
+          );
+          manager.ScaleAxisText(
+            param.options.spectra_pad,
+            param.options.ratio_pad,
+            Range::Y,
+            fhists[icor] -> GetYaxis()
           );
         }
 
         // draw objects
         manager.Draw();
-        manager.GetTPad( param.options.ratio_pad ) -> cd();
+        manager.GetTPad( param.options.correct_pad ) -> cd();
         chists[0] -> Draw();
         for (std::size_t icor = 1; icor < chists.size(); ++icor) {
           chists[icor] -> Draw("same");
         }
         unity -> Draw();
+        manager.GetTPad( param.options.ratio_pad ) -> cd();
+        fhists[0] -> Draw();
+        for (std::size_t irat = 1; irat < fhists.size(); ++irat) {
+          fhists[irat] -> Draw("same");
+        }
+        unity -> Draw();
         manager.GetTPad( param.options.spectra_pad ) -> cd();
         dhists[0] -> Draw();
-        for (std::size_t iden = 1; iden < dhists.size(); ++iden) {
-          dhists[iden] -> Draw("same");
+        thists[0] -> Draw("same");
+        for (std::size_t idat = 1; idat < dhists.size(); ++idat) {
+          dhists[idat] -> Draw("same");
+          thists[idat] -> Draw("same");
+
         }
         legend -> Draw();
         text   -> Draw();
@@ -1204,6 +1247,7 @@ namespace PHEnergyCorrelator {
           rhists[idat] -> Write();
           thists[idat] -> Write();
           chists[idat] -> Write();
+          fhists[idat] -> Write();
         }
         manager.Write();
         manager.Close();

@@ -136,7 +136,7 @@ namespace PlotOptions {
     margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 950), pad_opts);
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(750, 750), pad_opts);
     canvas.SetMargins( margins );
 
     // set auxilliary options
@@ -172,8 +172,8 @@ namespace PlotOptions {
     // determine canvas dimensions
     //   - FIXME layout of canvas should be configurable
     const PHEC::Type::Dimensions dimensions = std::make_pair(
-      950 * inputs.size(),
-      950
+      750 * inputs.size(),
+      750
     );
 
     // determine vertices of pads
@@ -290,7 +290,7 @@ namespace PlotOptions {
     spect_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(750, 1125), PHEC::PadOpts());
     canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts), "ratio" );
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts), "spectra" );
 
@@ -361,7 +361,7 @@ namespace PlotOptions {
     spect_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(750, 1125), PHEC::PadOpts());
     canvas.AddPad( PHEC::Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts), "ratio" );
     canvas.AddPad( PHEC::Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts), "spectra" );
 
@@ -398,9 +398,11 @@ namespace PlotOptions {
 
     // grab default pad options, and
     // turn on log y/x when necessary
+    PHEC::PadOpts rat_opts  = PHEC::PadOpts();
     PHEC::PadOpts corr_opts = PHEC::PadOpts();
     PHEC::PadOpts spec_opts = PHEC::PadOpts();
     if (range_opt == Side) {
+      rat_opts.logx  = 1;
       corr_opts.logx = 1;
       spec_opts.logx = 1;
       spec_opts.logy = 1;
@@ -411,11 +413,17 @@ namespace PlotOptions {
     corr_vtxs.push_back(0.00);
     corr_vtxs.push_back(0.00);
     corr_vtxs.push_back(1.00);
-    corr_vtxs.push_back(0.35);
+    corr_vtxs.push_back(0.25);
+
+    PHEC::Type::Vertices rat_vtxs;
+    rat_vtxs.push_back(0.00);
+    rat_vtxs.push_back(0.25);
+    rat_vtxs.push_back(1.00);
+    rat_vtxs.push_back(0.50);
 
     PHEC::Type::Vertices spec_vtxs;
     spec_vtxs.push_back(0.00);
-    spec_vtxs.push_back(0.35);
+    spec_vtxs.push_back(0.50);
     spec_vtxs.push_back(1.00);
     spec_vtxs.push_back(1.00);
 
@@ -426,6 +434,12 @@ namespace PlotOptions {
     corr_margins.push_back(0.25);
     corr_margins.push_back(0.15);
 
+    PHEC::Type::Margins rat_margins;
+    rat_margins.push_back(0.005);
+    rat_margins.push_back(0.02);
+    rat_margins.push_back(0.005);
+    rat_margins.push_back(0.15);
+
     PHEC::Type::Margins spec_margins;
     spec_margins.push_back(0.02);
     spec_margins.push_back(0.02);
@@ -433,8 +447,9 @@ namespace PlotOptions {
     spec_margins.push_back(0.15);
 
     // define canvas (use default pad options)
-    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(950, 1568), PHEC::PadOpts());
+    PHEC::Canvas canvas = PHEC::Canvas(canvas_name, "", std::make_pair(750, 1125), PHEC::PadOpts());
     canvas.AddPad( PHEC::Pad("pCorrect", "", corr_vtxs, corr_margins, corr_opts), "correct" );
+    canvas.AddPad( PHEC::Pad("pRatio",   "", rat_vtxs,  rat_margins,  rat_opts),  "ratio");
     canvas.AddPad( PHEC::Pad("pSpectra", "", spec_vtxs, spec_margins, spec_opts), "spectra" );
 
     // set auxilliary options
@@ -442,7 +457,8 @@ namespace PlotOptions {
     plot_opts.plot_range  = DefinePlotRange(range_opt);
     plot_opts.norm_range  = DefineNormRange(range_opt);
     plot_opts.canvas      = canvas;
-    plot_opts.ratio_pad   = "correct";
+    plot_opts.correct_pad = "correct";
+    plot_opts.ratio_pad   = "ratio";
     plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
