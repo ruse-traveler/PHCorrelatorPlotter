@@ -769,13 +769,13 @@ namespace PHEnergyCorrelator {
           den_styles[iden].SetPlotStyle( param.denominators[iden].style );
           den_styles[iden].Apply( dhists[iden] );
           param.options.plot_range.Apply(Range::X, dhists[iden] -> GetXaxis());
-          param.options.plot_range.Apply(Range::Y, dhists[iden] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, dhists[iden] -> GetYaxis());
 
           // set numerator style
           num_styles[iden].SetPlotStyle( param.numerators[iden].style );
           num_styles[iden].Apply( nhists[iden] );
           param.options.plot_range.Apply(Range::X, nhists[iden] -> GetXaxis());
-          param.options.plot_range.Apply(Range::Y, nhists[iden] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, nhists[iden] -> GetYaxis());
 
           // set ratio style
           den_styles[iden].Apply( rhists[iden] );
