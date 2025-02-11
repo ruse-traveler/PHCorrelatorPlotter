@@ -1077,7 +1077,7 @@ namespace PHEnergyCorrelator {
           name += "_Correction";
 
           // do division
-          chists.push_back( Tools::DivideHist1D( rhists[itru], thists[itru]) );
+          chists.push_back( Tools::DivideHist1D(rhists[itru], thists[itru]) );
           chists.back() -> SetName( name.data() );
         }
         std::cout << "    Calculated correction factors." << std::endl;
@@ -1102,14 +1102,14 @@ namespace PHEnergyCorrelator {
 
         // calculate corrected / truth ratios ('f' for "fraction")
         std::vector<TH1*> fhists;
-        for (std::size_t icor = 0; icor < chists.size(); ++icor) {
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // create name
-          std::string name( dhists[icor] -> GetName() );
+          std::string name( dhists[idat] -> GetName() );
           name += "_CorrectOverTruth";
 
           // do division
-          fhists.push_back( Tools::DivideHist1D(chists[icor], thists[icor]) );
+          fhists.push_back( Tools::DivideHist1D(dhists[idat], thists[idat]) );
           fhists.back() -> SetName( name.data() );
         }
 

@@ -219,8 +219,10 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
         for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
 
           // only consider blue polarizations for pAu
-          const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
-          if (!isOnlyBlue) continue;
+          if (ico == InFiles::PAu) {
+            const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
+            if (!isOnlyBlue) continue;
+          }
 
           // calculate/apply corrections for each desired 1D histogram
           PM::CorrectSpectra1D("EEC", ico, ich, isp, PO::Side, io, plotter, ofiles[0]);

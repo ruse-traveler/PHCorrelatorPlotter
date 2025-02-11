@@ -543,8 +543,8 @@ namespace PlotsToMake {
     const std::size_t pt15_mar[3] = {23, 23, 32};
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("Correct", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, -1, ch, spin, -1);
+    const std::string tag    = io.MakeSpeciesTag("Correct1D", species) + "_";
+    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, -1, ch, spin, species);
 
     // build data hist names
     const std::string pt5_dhist  = io.MakeHistName(variable, InFiles::Data, InHists::Pt5,  ch, spin);
