@@ -544,7 +544,7 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = io.MakeSpeciesTag("Correct1D", species) + "_";
-    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, -1, ch, spin, species);
+    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, -1, ch, spin, -1, species);
 
     // build data hist names
     const std::string pt5_dhist  = io.MakeHistName(variable, InFiles::Data, InHists::Pt5,  ch, spin);
@@ -563,19 +563,19 @@ namespace PlotsToMake {
 
     // build hist renames
     const std::string pt5_name[3] = {
-      io.MakeHistName(variable, InFiles::Data, InHists::Pt5, ch, spin, tag + "Data_"),
-      io.MakeHistName(variable, InFiles::Reco, InHists::Pt5, ch, spin, tag + "Reco_"),
-      io.MakeHistName(variable, InFiles::True, InHists::Pt5, ch, spin, tag + "True_")
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt5, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt5, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt5, ch, spin, tag)
     };
     const std::string pt10_name[3] = {
-      io.MakeHistName(variable, InFiles::Data, InHists::Pt10, ch, spin, tag + "Data_"),
-      io.MakeHistName(variable, InFiles::Reco, InHists::Pt10, ch, spin, tag + "Reco_"),
-      io.MakeHistName(variable, InFiles::True, InHists::Pt10, ch, spin, tag + "True_")
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt10, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt10, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt10, ch, spin, tag)
     };
     const std::string pt15_name[3] = {
-      io.MakeHistName(variable, InFiles::Data, InHists::Pt15, ch, spin, tag + "Data_"),
-      io.MakeHistName(variable, InFiles::Reco, InHists::Pt15, ch, spin, tag + "Reco_"),
-      io.MakeHistName(variable, InFiles::True, InHists::Pt15, ch, spin, tag + "True_")
+      io.MakeHistName(variable, InFiles::Data, InHists::Pt15, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::Reco, InHists::Pt15, ch, spin, tag),
+      io.MakeHistName(variable, InFiles::True, InHists::Pt15, ch, spin, tag)
     };
 
     // build hist legends
