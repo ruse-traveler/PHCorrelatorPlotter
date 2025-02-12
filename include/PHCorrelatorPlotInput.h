@@ -31,6 +31,7 @@ namespace PHEnergyCorrelator {
     std::string object;  ///!< object to be plotted
     std::string rename;  ///!< rename object to this
     std::string legend;  ///!< legend entry
+    std::string draw;    ///!< draw option
     Style::Plot style;   ///!< marker, line, and fill style
 
     // ------------------------------------------------------------------------
@@ -41,6 +42,7 @@ namespace PHEnergyCorrelator {
       object = "";
       rename = "";
       legend = "";
+      draw   = "";
       style  = Style::Plot();
     };
 
@@ -57,16 +59,18 @@ namespace PHEnergyCorrelator {
       const std::string& oarg,
       const std::string& rarg,
       const std::string& larg,
+      const std::String& darg,
       const Style::Plot& sarg = Style::Plot()
     ) {
       file   = farg;
       object = oarg;
       rename = rarg;
       legend = larg;
+      draw   = darg;
       style  = sarg;
-    };
+    };  // end PlotInput(std::string x 5, Style::Plot)
 
-  };  // end PlotInput(std::string x 4, Style::Plot)
+  };  // end PlotInput
 
 }    // end PHEnergyCorrelator namespace
 
