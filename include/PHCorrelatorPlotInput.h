@@ -59,7 +59,7 @@ namespace PHEnergyCorrelator {
       const std::string& oarg,
       const std::string& rarg,
       const std::string& larg,
-      const std::String& darg,
+      const std::string& darg,
       const Style::Plot& sarg = Style::Plot()
     ) {
       file   = farg;
