@@ -12,6 +12,7 @@
 #define PLOTOPTIONS_H
 
 // c++ utilities
+#include <cmath>
 #include <string>
 #include <vector>
 #include <utility>
@@ -37,6 +38,16 @@ namespace PlotOptions {
 
 
   // helper methods ===========================================================
+
+  std::size_t GetRowNumber(const std::size_t nhist, const std::size_t ncol) {
+
+    const std::size_t div_one = (nhist / ncol) + 1;
+    const std::size_t div_mod = (nhist / ncol) + (nhist % ncol);
+    return min(div_one, div_mod);
+
+  }  // end 'GetRowNumber(std::size_t, std::size_t)'
+
+
 
   // --------------------------------------------------------------------------
   //! Define plot range
@@ -160,7 +171,8 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   PHEC::PHCorrelatorPlotter::CompareSpectraParams CompareSpectra2D(
     const PHEC::Inputs& inputs,
-    const std::string& canvas_name = "cSpectra2D"
+    const std::string& canvas_name = "cSpectra2D",
+    const std::size_t ncolumn = 2
   ) {
 
     // grab default pad options, and
@@ -169,27 +181,38 @@ namespace PlotOptions {
     pad_opts.logx = 1;
     pad_opts.logz = 1;
 
+    // basic dimension of each pad
+    std::size_t pad_dim = 375;
+    std::size_t nrow    = GetRowNumber(inputs.size(), ncolumn);
+
     // determine canvas dimensions
-    //   - FIXME layout of canvas should be configurable
     const PHEC::Type::Dimensions dimensions = std::make_pair(
-      750 * inputs.size(),
-      750
+      pad_dim * ncolumn,
+      pad_dim * nrow
     );
 
     // determine vertices of pads
     std::vector<PHEC::Type::Vertices> pad_vtxs;    
     for (std::size_t iin = 0; iin < inputs.size(); ++iin) {
 
+      // get column/row indices
+      const std::size_t icol = iin % ncolumn;
+      const std::size_t irow = GetRowNumber(iin, ncolumn);
+
       // set x vertices
-      const double startx = iin * (1.0 / inputs.size());
-      const double stopx  = (iin + 1) * (1.0 / inputs.size());
+      const double startx = icol * (1.0 / (double) ncolumn);
+      const double stopx  = (icol % ncolumn) * (1.0 / (double) ncolumn);
+
+      // set y vertices
+      const double starty = irow * (1.0 / (double) nrow);
+      const double stopy  = (irow % nrow) * (1.0 / (double) nrow);
 
       // add to vector
       pad_vtxs.push_back( PHEC::Type::Vertices() );
       pad_vtxs.back().push_back( startx );
-      pad_vtxs.back().push_back( 0.00 );
+      pad_vtxs.back().push_back( starty );
       pad_vtxs.back().push_back( stopx );
-      pad_vtxs.back().push_back( 1.00 );
+      pad_vtxs.back().push_back( stopy );
     }
 
     // set pad margins
