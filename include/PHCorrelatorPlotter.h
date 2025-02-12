@@ -255,6 +255,38 @@ namespace PHEnergyCorrelator {
 
       };  // end CorrectSpectraParams
 
+      // ======================================================================
+      //! Parameters for EEC vs. angle projection plot
+      // ======================================================================
+      /*! Struct to consolidate parameters for the "Project EEC vs. Angle"
+       *  plotting routine.
+       */
+      struct ProjectEECVsAngleParams {
+
+        // --------------------------------------------------------------------
+        //! default ctor
+        // --------------------------------------------------------------------
+        ProjectEECVsAngleParams() {
+        }  // end ctor
+
+        // --------------------------------------------------------------------
+        //! default dtor
+        // --------------------------------------------------------------------
+        ~ProjectEECVsAngleParams() {};
+
+        // --------------------------------------------------------------------
+        //! ctor accepting arguments
+        // --------------------------------------------------------------------
+/* TODO
+        ProjectEECVsAngleParams(
+          const PlotInput& input,
+          const S
+        ) {
+        }  // end ctor(...)
+*/
+
+      };  // end ProjectEECVsAngleParams
+
     private:
 
       // members
@@ -755,7 +787,7 @@ namespace PHEnergyCorrelator {
         );
 
         // create root objects
-        TLine*     unity   = unitydef.MakeTLine();
+        TLine*     unity  = unitydef.MakeTLine();
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -1074,7 +1106,7 @@ namespace PHEnergyCorrelator {
 
           // create name
           std::string name( thists[itru] -> GetName() );
-          name += "_Correction";
+          name += "_CorrectionFactor";
 
           // do division
           chists.push_back( Tools::DivideHist1D(rhists[itru], thists[itru]) );
@@ -1085,8 +1117,13 @@ namespace PHEnergyCorrelator {
         // apply correction factors
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
+          // create name
+          std::string name( dhists[idat] -> GetName() );
+          name += "_Corrected";
+
           // divide by (reco / true)
           dhists[idat] = Tools::DivideHist1D( dhists[idat], chists[idat] );
+          dhists[idat] -> SetName( name.data() );
 
           // normalize corrected spectrum if need be
           if (param.options.do_norm) {
@@ -1105,18 +1142,19 @@ namespace PHEnergyCorrelator {
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // create name
-          std::string name( dhists[idat] -> GetName() );
+          std::string name( param.data[idat].rename );
           name += "_CorrectOverTruth";
 
           // do division
           fhists.push_back( Tools::DivideHist1D(dhists[idat], thists[idat]) );
           fhists.back() -> SetName( name.data() );
         }
+        std::cout << "    Calculated corrected / truth ratios." << std::endl;
 
         // determine no. of legend lines
         const std::size_t nlines = !param.options.header.empty()
-                                 ? dhists.size() + 1
-                                 : dhists.size();
+                                 ? dhists.size() + thists.size() + 1
+                                 : dhists.size() + thists.size();
 
         // define legend dimensions
         const float spacing   = m_baseTextStyle.GetTextStyle().spacing;
@@ -1130,9 +1168,11 @@ namespace PHEnergyCorrelator {
         vtxleg.push_back((float) 0.1 + legheight);
 
         // define legend
+        //   - FIXME option should be configurable
         Legend legdef;
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
-          legdef.AddEntry( Legend::Entry(dhists[idat], param.data[idat].legend, "PF") );
+          legdef.AddEntry( Legend::Entry(dhists[idat], param.data[idat].legend,  "PF") );
+          legdef.AddEntry( Legend::Entry(thists[idat], param.truth[idat].legend, "PF") );
         }
         legdef.SetVertices( vtxleg );
         if (!param.options.header.empty()) {
@@ -1146,7 +1186,7 @@ namespace PHEnergyCorrelator {
         );
 
         // create root objects
-        TLine*     unity   = unitydef.MakeTLine();
+        TLine*     unity  = unitydef.MakeTLine();
         TLegend*   legend = legdef.MakeLegend();
         TPaveText* text   = m_textBox.MakeTPaveText();
         std::cout << "    Created legend and text box." << std::endl;
@@ -1156,18 +1196,23 @@ namespace PHEnergyCorrelator {
         Styles tru_styles = GenerateStyles( param.truth );
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
-          // set data style
+          // set data styles
           dat_styles[idat].SetPlotStyle( param.data[idat].style );
           dat_styles[idat].Apply( dhists[idat] );
           param.options.plot_range.Apply(Range::X, dhists[idat] -> GetXaxis());
           param.options.plot_range.Apply(Range::Y, dhists[idat] -> GetYaxis());
 
-          // set correction factor style
+          // set truth styles
+          tru_styles[idat].SetPlotStyle( param.truth[idat].style );
+          tru_styles[idat].Apply( thists[idat] );
+          param.options.plot_range.Apply(Range::X, thists[idat] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, thists[idat] -> GetYaxis());
+
+          // set correction factor styles
           dat_styles[idat].Apply( chists[idat] );
           param.options.plot_range.Apply(Range::X, chists[idat] -> GetXaxis());
 
-          // set ratio style
-          tru_styles[idat].SetPlotStyle( param.truth[idat].style );
+          // set ratio styles
           tru_styles[idat].Apply( fhists[idat] );
           param.options.plot_range.Apply(Range::X, fhists[idat] -> GetXaxis()); 
         }
@@ -1215,11 +1260,12 @@ namespace PHEnergyCorrelator {
         }
 
         // draw objects
+        //   - FIXME option should be configurable
         manager.Draw();
         manager.GetTPad( param.options.correct_pad ) -> cd();
-        chists[0] -> Draw();
+        chists[0] -> Draw("hist");
         for (std::size_t icor = 1; icor < chists.size(); ++icor) {
-          chists[icor] -> Draw("same");
+          chists[icor] -> Draw("hist same");
         }
         unity -> Draw();
         manager.GetTPad( param.options.ratio_pad ) -> cd();
@@ -1230,10 +1276,10 @@ namespace PHEnergyCorrelator {
         unity -> Draw();
         manager.GetTPad( param.options.spectra_pad ) -> cd();
         dhists[0] -> Draw();
-        thists[0] -> Draw("same");
+        thists[0] -> Draw("hist same");
         for (std::size_t idat = 1; idat < dhists.size(); ++idat) {
           dhists[idat] -> Draw("same");
-          thists[idat] -> Draw("same");
+          thists[idat] -> Draw("hist same");
 
         }
         legend -> Draw();
