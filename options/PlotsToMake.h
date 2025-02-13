@@ -91,6 +91,7 @@ namespace PlotsToMake {
       dat_hist,
       dat_name,
       dat_leg,
+      "",
       PHEC::Style::Plot(
         dat_col,
         dat_mar
@@ -101,6 +102,7 @@ namespace PlotsToMake {
       rec_hist,
       rec_name,
       rec_leg,
+      "",
       PHEC::Style::Plot(
         rec_col,
         rec_mar
@@ -111,6 +113,7 @@ namespace PlotsToMake {
       tru_hist,
       tru_name,
       tru_leg,
+      "",
       PHEC::Style::Plot(
         tru_col,
         tru_mar
@@ -171,19 +174,22 @@ namespace PlotsToMake {
       io.Files().GetFile(species, InFiles::Data),
       dat_hist,
       dat_name,
-      dat_leg
+      dat_leg,
+      "colz"
     );
     PHEC::PlotInput rec_opt = PHEC::PlotInput(
       io.Files().GetFile(species, InFiles::Reco),
       rec_hist,
       rec_name,
-      rec_leg
+      rec_leg,
+      "colz"
     );
     PHEC::PlotInput tru_opt = PHEC::PlotInput(
       io.Files().GetFile(species, InFiles::True),
       tru_hist,
       tru_name,
-      tru_leg
+      tru_leg,
+      "colz"
     );
 
     // load into vector
@@ -253,6 +259,7 @@ namespace PlotsToMake {
       pt5_hist,
       pt5_name,
       pt5_leg,
+      "",
       PHEC::Style::Plot(
         pt5_col,
         pt5_mar
@@ -263,6 +270,7 @@ namespace PlotsToMake {
       pt10_hist,
       pt10_name,
       pt10_leg,
+      "",
       PHEC::Style::Plot(
         pt10_col,
         pt10_mar
@@ -273,6 +281,7 @@ namespace PlotsToMake {
       pt15_hist,
       pt15_name,
       pt15_leg,
+      "",
       PHEC::Style::Plot(
         pt15_col,
         pt15_mar
@@ -334,19 +343,22 @@ namespace PlotsToMake {
       io.Files().GetFile(species, level),
       pt5_hist,
       pt5_name,
-      pt5_leg
+      pt5_leg,
+      "colz"
     );
     PHEC::PlotInput pt10_opt = PHEC::PlotInput(
       io.Files().GetFile(species, level),
       pt10_hist,
       pt10_name,
-      pt10_leg
+      pt10_leg,
+      "colz"
     );
     PHEC::PlotInput pt15_opt = PHEC::PlotInput(
       io.Files().GetFile(species, level),
       pt15_hist,
       pt15_name,
-      pt15_leg
+      pt15_leg,
+      "colz"
     );
 
     // load into vector
@@ -434,6 +446,7 @@ namespace PlotsToMake {
         pt5_hist,
         pt5_name.first,
         pt5_leg.first,
+        "",
         PHEC::Style::Plot(
           pt5_col.first,
           pt5_mar.first
@@ -444,6 +457,7 @@ namespace PlotsToMake {
         pt5_hist,
         pt5_name.second,
         pt5_leg.second,
+        "",
         PHEC::Style::Plot(
           pt5_col.second,
           pt5_mar.second
@@ -456,6 +470,7 @@ namespace PlotsToMake {
         pt10_hist,
         pt10_name.first,
         pt10_leg.first,
+        "",
         PHEC::Style::Plot(
           pt10_col.first,
           pt10_mar.first
@@ -466,6 +481,7 @@ namespace PlotsToMake {
         pt10_hist,
         pt10_name.second,
         pt10_leg.second,
+        "",
         PHEC::Style::Plot(
           pt10_col.second,
           pt10_mar.second
@@ -478,6 +494,7 @@ namespace PlotsToMake {
         pt15_hist,
         pt15_name.first,
         pt15_leg.first,
+        "",
         PHEC::Style::Plot(
           pt15_col.first,
           pt15_mar.first
@@ -488,6 +505,7 @@ namespace PlotsToMake {
         pt15_hist,
         pt15_name.second,
         pt15_leg.second,
+        "",
         PHEC::Style::Plot(
           pt15_col.second,
           pt15_mar.second
@@ -603,6 +621,7 @@ namespace PlotsToMake {
         pt5_dhist,
         pt5_name[0],
         pt5_leg[0],
+        "",
         PHEC::Style::Plot(
           pt5_col[0],
           pt5_mar[0]
@@ -615,6 +634,7 @@ namespace PlotsToMake {
         pt10_dhist,
         pt10_name[0],
         pt10_leg[0],
+        "",
         PHEC::Style::Plot(
           pt10_col[0],
           pt10_mar[0]
@@ -627,6 +647,7 @@ namespace PlotsToMake {
         pt15_dhist,
         pt15_name[0],
         pt15_leg[0],
+        "",
         PHEC::Style::Plot(
           pt15_col[0],
           pt15_mar[0]
@@ -642,6 +663,7 @@ namespace PlotsToMake {
         pt5_rhist,
         pt5_name[1],
         pt5_leg[1],
+        "",
         PHEC::Style::Plot(
           pt5_col[1],
           pt5_mar[1]
@@ -654,6 +676,7 @@ namespace PlotsToMake {
         pt10_rhist,
         pt10_name[1],
         pt10_leg[1],
+        "",
         PHEC::Style::Plot(
           pt10_col[1],
           pt10_mar[1]
@@ -666,6 +689,7 @@ namespace PlotsToMake {
         pt15_rhist,
         pt15_name[1],
         pt15_leg[1],
+        "",
         PHEC::Style::Plot(
           pt15_col[1],
           pt15_mar[1]
@@ -681,6 +705,7 @@ namespace PlotsToMake {
         pt5_thist,
         pt5_name[2],
         pt5_leg[2],
+        "",
         PHEC::Style::Plot(
           pt5_col[2],
           pt5_mar[2]
@@ -693,6 +718,7 @@ namespace PlotsToMake {
         pt10_thist,
         pt10_name[2],
         pt10_leg[2],
+        "",
         PHEC::Style::Plot(
           pt10_col[2],
           pt10_mar[2]
@@ -705,6 +731,7 @@ namespace PlotsToMake {
         pt15_thist,
         pt15_name[2],
         pt15_leg[2],
+        "",
         PHEC::Style::Plot(
           pt15_col[2],
           pt15_mar[2]
