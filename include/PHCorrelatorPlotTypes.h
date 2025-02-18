@@ -23,6 +23,8 @@
 namespace PHEnergyCorrelator {
   namespace Type {
 
+    // typedefs ===============================================================
+
     // ------------------------------------------------------------------------
     //! Convenient types
     // ------------------------------------------------------------------------
@@ -45,6 +47,8 @@ namespace PHEnergyCorrelator {
 
 
 
+    // enums ==================================================================
+
     // ------------------------------------------------------------------------
     //! Different axes of histograms & graphs
     // ------------------------------------------------------------------------
@@ -54,6 +58,62 @@ namespace PHEnergyCorrelator {
     //! Different margins of a pad or canvas
     // ------------------------------------------------------------------------
     enum Margin {Top, Right, Bottom, Left};
+
+
+
+    // structs ================================================================
+
+    // ------------------------------------------------------------------------
+    //! Plot index
+    // ------------------------------------------------------------------------
+    /*! FIXME after merging, should split off file indices into
+     *  a separate FileIndex type, and then make PlotIndex
+     *  composed of HistIndex + FileIndex.
+     *
+     *  FIXME the default arguments should be a constant.
+     */
+    struct PlotIndex {
+
+      // data members
+      std::size_t level;
+      std::size_t species;
+      std::size_t pt;
+      std::size_t cf;
+      std::size_t chrg;
+      std::size_t spin;
+
+      //! default ctor/dtor
+      PlotIndex()  {};
+      ~PlotIndex() {};
+
+      //! ctor accepting a single argument
+      PlotIndex(const std::size_t iarg) {
+        level   = iarg;
+        species = iarg;
+        pt      = iarg;
+        cf      = iarg;
+        chrg    = iarg;
+        spin    = iarg;
+      }  // end ctor(std::size_t)
+
+      //! ctor accepting all arguments
+      PlotIndex(
+        const std::size_t ilvl,
+        const std::size_t icol,
+        const std::size_t ipt,
+        const std::size_t icf = -1,
+        const std::size_t ich = -1,
+        const std::size_t isp = -1
+      ) {
+        level   = ilvl;
+        species = icol;
+        pt      = ipt;
+        cf      = icf;
+        chrg    = ich;
+        spin    = isp;
+      }  // end ctor(std::size_t x 6)
+
+    };  // end PlotIndex
 
   }  // end Types namespace
 }  // end PHEnergyCorrelator namespace
