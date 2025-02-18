@@ -48,27 +48,27 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   switch (plot) {
 
     case PM::SimVsReco:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
       break;
 
     case PM::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
       break;
 
     case PM::PPVsPAu:
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
       break;
 
     case PM::CorrectSpectra:
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_checkingBetterWraps.d11m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_checkingBetterWraps.d13m2y2025.root", "recreate") );
       break;
 
     default:
@@ -96,35 +96,35 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   if (plot == PM::SimVsReco) {
 
     // loop through all combinations of species, jet pt,charge, and spin
-    for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
-      for (std::size_t ipt = 0; ipt < io.Hists().GetPtTags().size(); ++ipt) {
-        for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
-          for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
+    PHEC::Type::PlotIndex idx(-1);
+    for (idx.species = 0; idx.species < io.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.pt = 0; idx.pt < io.Hists().GetPtTags().size(); ++idx.pt) {
+        for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
+          for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
-            if (ico == InFiles::PAu) {
-              const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
-              if (!isOnlyBlue) continue;
+            if (io.IsPAu(idx) && !io.IsBluePolarization(idx)) {
+              continue;
             }
 
             // make sure collision system is correct
-            if (ico == InFiles::PAu) plotter.SetTextBox( BO::Text(ico) );
+            if (io.IsPAu(idx)) plotter.SetTextBox( BO::Text(ico) );
 
             // create comparison for each desired 1D histogram
-            PM::SimVsReco1D("EEC", ico, ipt, ich, isp, PO::Side, io, plotter, ofiles[0]);
-            PM::SimVsReco1D("CollinsBlue", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-            PM::SimVsReco1D("BoerMuldersBlue", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+            PM::SimVsReco1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
+            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
+            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::SimVsReco1D("CollinsYell", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-              PM::SimVsReco1D("BoerMuldersYell", ico, ipt, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
+              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
-            PM::SimVsReco2D("CollinsBlueVsR", ico, ipt, ich, isp, io, plotter, ofiles[1]);
-            PM::SimVsReco2D("BoerMuldersBlueVsR", ico, ipt, ich, isp, io, plotter, ofiles[2]);
+            PM::SimVsReco2D("CollinsBlueVsR", idx, io, plotter, ofiles[1]);
+            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::SimVsReco2D("CollinsYellVsR", ico, ipt, ich, isp, io, plotter, ofiles[1]);
-              PM::SimVsReco2D("BoerMuldersYellVsR", ico, ipt, ich, isp, io, plotter, ofiles[2]);
+              PM::SimVsReco2D("CollinsYellVsR", idx, io, plotter, ofiles[1]);
+              PM::SimVsReco2D("BoerMuldersYellVsR", idx, io, plotter, ofiles[2]);
             }
 
           }  // end spin loop
@@ -141,35 +141,35 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   if (plot == PM::VsPtJet) {
 
     // loop through all combinations of species, level, charge, and spin
-    for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
-      for (std::size_t ilv = 0; ilv < io.Files().GetLevelTags().size(); ++ilv) {
-        for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
-          for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
+    PHEC::Type::PlotIndex idx(-1);
+    for (idx.species = 0; idx.spcies < io.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.level = 0; idx.level < io.Files().GetLevelTags().size(); ++idx.level) {
+        for (idx.chrg = 0; ich < io.Hists().GetChargeTags().size(); ++ichrg) {
+          for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
-            if (ico == InFiles::PAu) {
-              const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
-              if (!isOnlyBlue) continue;
+            if (io.IsPAu(idx) && !io.IsBluePolarization(idx)) {
+              continue;
             }
 
             // make sure collision system is correct
-            if (ico == InFiles::PAu) plotter.SetTextBox( BO::Text(ico) );
+            if (io.IsPAu(idx)) plotter.SetTextBox( BO::Text(ico) );
 
             // create comparisons for each desired 1D histogram
-            PM::VsPtJet1D("EEC", ico, ilv, ich, isp, PO::Side, io, plotter, ofiles[0]);
-            PM::VsPtJet1D("CollinsBlue", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-            PM::VsPtJet1D("BoerMuldersBlue", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+            PM::VsPtJet1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
+            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
+            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::VsPtJet1D("CollinsYell", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-              PM::VsPtJet1D("BoerMuldersYell", ico, ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
+              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
-            PM::VsPtJet2D("CollinsBlueVsR", ico, ilv, ich, isp, io, plotter, ofiles[1]);
-            PM::VsPtJet2D("BoerMuldersBlueVsR", ico, ilv, ich, isp, io, plotter, ofiles[2]);
+            PM::VsPtJet2D("CollinsBlueVsR", idx, io, plotter, ofiles[1]);
+            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, io, plotter, ofiles[2]);
             if (ico != InFiles::PAu) {
-              PM::VsPtJet2D("CollinsYellVsR", ico, ilv, ich, isp, io, plotter, ofiles[1]);
-              PM::VsPtJet2D("BoerMuldersYellVsR", ico, ilv, ich, isp, io, plotter, ofiles[2]);
+              PM::VsPtJet2D("CollinsYellVsR", idx, io, plotter, ofiles[1]);
+              PM::VsPtJet2D("BoerMuldersYellVsR", idx, io, plotter, ofiles[2]);
             }
 
           }  // end spin loop
@@ -186,18 +186,18 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   if (plot == PM::PPVsPAu) {
 
     // loop through all combinations of level, charge, and spin
-    for (std::size_t ilv = 0; ilv < io.Files().GetLevelTags().size(); ++ilv) {
-      for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
-        for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
+    PHEC::Type::PlotIndex idx(-1);
+    for (idx.level = 0; idx.level < io.Files().GetLevelTags().size(); ++idx.level) {
+      for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
+        for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
-          const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
-          if (!isOnlyBlue) continue;
+          if (!io.IsBlue(polarization)) continue;
 
           // create comparisons for each desired 1D histogram
-          PM::PPVsPAu1D("EEC", ilv, ich, isp, PO::Side, io, plotter, ofiles[0]);
-          PM::PPVsPAu1D("CollinsBlue", ilv, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-          PM::PPVsPAu1D("BoerMuldersBlue", ilv, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+          PM::PPVsPAu1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
+          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
+          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
 
           /* TODO add 2D comparison */
 
@@ -214,23 +214,26 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   if (plot == PM::CorrectSpectra) {
 
     // loop through all combinations of species, charge, and spin
-    for (std::size_t ico = 0; ico < io.Files().GetSpeciesTags().size(); ++ico) {
-      for (std::size_t ich = 0; ich < io.Hists().GetChargeTags().size(); ++ich) {
-        for (std::size_t isp = 0; isp < io.Hists().GetSpinTags().size(); ++isp) {
+    PHEC::Type::PlotIndex idx(-1);
+    for (idx.species; idx.species < io.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
+        for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
-          if (ico == InFiles::PAu) {
-            const bool isOnlyBlue = ((isp == InHists::BU) || (isp == InHists::BD) || (isp == InHists::Int));
-            if (!isOnlyBlue) continue;
+          if (io.IsPau(idx) && !io.IsBluePolarization(idx)) {
+            continue;
           }
 
+          // make sure collision system is correct
+          if (io.IsPAu(idx)) plotter.SetTextBox( BO::Text(ico) );
+
           // calculate/apply corrections for each desired 1D histogram
-          PM::CorrectSpectra1D("EEC", ico, ich, isp, PO::Side, io, plotter, ofiles[0]);
-          PM::CorrectSpectra1D("CollinsBlue", ico, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-          PM::CorrectSpectra1D("BoerMuldersBlue", ico, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+          PM::CorrectSpectra1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
+          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
+          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
           if (ico != InFiles::PAu) {
-            PM::CorrectSpectra1D("CollinsYell", ico, ich, isp, PO::Angle, io, plotter, ofiles[1]);
-            PM::CorrectSpectra1D("BoerMuldersYell", ico, ich, isp, PO::Angle, io, plotter, ofiles[2]);
+            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
+            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
           }
 
           /* TODO add 2D correction */
