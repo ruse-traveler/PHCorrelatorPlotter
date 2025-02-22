@@ -154,20 +154,20 @@ class InFiles {
     // ------------------------------------------------------------------------
     //! Get files for a specific species
     // ------------------------------------------------------------------------
-    Strings GetFiles(const int species) const {
+    Strings GetFiles(const PHEC::Type::PlotIndex& idx) const {
 
-      return m_files.at(species);
+      return m_files.at(idx.species);
 
-    }  // end 'GetFiles(int)'
+    }  // end 'GetFiles(PHEC::Type::PlotIndex&)'
 
     // ------------------------------------------------------------------------
     //! Get a particular file
     // ------------------------------------------------------------------------
-    String GetFile(const int species, const int level) const {
+    String GetFile(const PHEC::Type::PlotIndex& idx) const {
 
-      return m_files.at(species).at(level);
+      return m_files.at(idx.species).at(idx.level);
 
-    }  // end 'GetFile(int, int)'
+    }  // end 'GetFile(PHEC::Type::PlotIndex&)'
 
     // ------------------------------------------------------------------------
     //! default ctor
@@ -375,88 +375,98 @@ class InputOutput {
     InHists Hists() const {return m_hists;}
 
     // ------------------------------------------------------------------------
+    //! Check if is p+Au
+    // ------------------------------------------------------------------------
+    bool IsPAu(const PHEC::Type::PlotIndex& idx) {
+
+      return (idx.species == PAu);
+
+    }  // end 'IsPAu(PHEC::Type::PlotIndex&);
+
+    // ------------------------------------------------------------------------
+    //! Check if only blue polarizations should be considered
+    // ------------------------------------------------------------------------
+    bool IsBluePolarization(const PHEC::Type::PlotIndex& idx) {
+
+      const bool isBlue = (
+        (idx.spin == InHists::BU) ||
+        (idx.spin == InHists::BD) ||
+        (idx.spin == InHists::Int)
+      );
+      return isBlue;
+
+    }  // end 'IsBluePolarization(PHEC::Type::PlotIndex&)'
+
+    // ------------------------------------------------------------------------
     //! Make a variable + species tag
     // ------------------------------------------------------------------------
     String MakeSpeciesTag(const String& base, const int spe) const {
 
       return base + m_files.GetSpeciesTag(spe);
 
-    }  // 'MakeSpeciesTag(String&, int)'
+    }  // end 'MakeSpeciesTag(String&, int)'
 
     // ------------------------------------------------------------------------
     //! Make a histogram name
     // ------------------------------------------------------------------------
     String MakeHistName(
       const String& var,
-      const int lvl,
-      const int pt,
-      const int ch,
-      const int sp,
+      const PHEC::Type::PlotIndex& idx,
       const String& tag = ""
     ) const {
 
-      const String base  = "h" + tag + m_files.GetLevelTag(lvl) + var + "Stat_";
-      const String index = m_hists.GetPtTag(pt) + "cf0" + m_hists.GetChargeTag(ch) + m_hists.GetSpinTag(sp);
+      const String base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
+      const String index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(dx.chrg) + m_hists.GetSpinTag(idx.spin);
       return base + index;
 
-    }  // end 'MakeHistName(String&, int x 4, String&)'
+    }  // end 'MakeHistName(String&, PHEC::Type::PlotIndex&, String&)'
 
     // ------------------------------------------------------------------------
     //! Make a histogram legend
     // ------------------------------------------------------------------------
-    String MakeLegend(
-      const int pt,
-      const int ch,
-      const int sp,
-      const int lvl = -1,
-      const int spe = -1
-    ) const {
+    String MakeLegend(const PHEC::Type::PlotIndex& idx) const {
 
       String legend;
-      if (spe > -1) {
-        legend += m_files.GetSpeciesLegend(spe) + " ";
+      if (idx.species > -1) {
+        legend += m_files.GetSpeciesLegend(idx.species) + " ";
       }
-      if (lvl > -1) {
-        legend += m_files.GetLevelLegend(lvl) + " ";
+      if (idx.level > -1) {
+        legend += m_files.GetLevelLegend(idx.level) + " ";
       }
-      legend += m_hists.GetSpinLegend(sp) + ", " + m_hists.GetPtLegend(pt) + ", " + m_hists.GetChargeLegend(ch);
+      legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt) + ", " + m_hists.GetChargeLegend(idx.chrg);
       return legend;
 
-    }  // end 'MakeLegend(int x 6)'
+    }  // end 'MakeLegend(PHEC::Type::PlotIndex&)'
 
     // ------------------------------------------------------------------------
     //! Make canvas name
     // ------------------------------------------------------------------------
     String MakeCanvasName(
       const String& base,
-      const int pt  = -1,
-      const int ch  = -1,
-      const int sp  = -1,
-      const int lvl = -1,
-      const int spe = -1
+      const PHEC::Type::PlotIndex& idx
     ) const {
 
       String name = base;
-      if (spe > -1) {
-        name += "_" + m_files.GetSpeciesTag(spe);
+      if (idx.species > -1) {
+        name += "_" + m_files.GetSpeciesTag(idx.species);
       }
-      if (lvl > -1) {
-        name += m_files.GetLevelTag(lvl);
+      if (idx.level > -1) {
+        name += m_files.GetLevelTag(idx.level);
       }
       name += "_";
 
-      if (pt > -1) {
-        name += m_hists.GetPtTag(pt);
+      if (idx.pt > -1) {
+        name += m_hists.GetPtTag(idx.pt);
       }
-      if (ch > -1) {
-        name += m_hists.GetChargeTag(ch);
+      if (idx.chrg > -1) {
+        name += m_hists.GetChargeTag(idx.chrg);
       }
-      if (sp > -1) {
-        name += m_hists.GetSpinTag(sp);
+      if (idx.spin > -1) {
+        name += m_hists.GetSpinTag(idx.spin);
       }
       return name;
 
-    }  // end 'MakeCanvasName(int x 6)'
+    }  // end 'MakeCanvasName(String&, PHEC::Type::PlotIndex&)'
 
     // ------------------------------------------------------------------------
     // default ctor/dtor
