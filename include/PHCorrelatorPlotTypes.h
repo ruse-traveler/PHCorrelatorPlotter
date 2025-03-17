@@ -75,35 +75,35 @@ namespace PHEnergyCorrelator {
     struct PlotIndex {
 
       // data members
-      std::size_t level;
-      std::size_t species;
-      std::size_t pt;
-      std::size_t cf;
-      std::size_t chrg;
-      std::size_t spin;
+      int level;
+      int species;
+      int pt;
+      int cf;
+      int chrg;
+      int spin;
 
       //! default ctor/dtor
       PlotIndex()  {};
       ~PlotIndex() {};
 
       //! ctor accepting a single argument
-      PlotIndex(const std::size_t iarg) {
+      PlotIndex(const int iarg) {
         level   = iarg;
         species = iarg;
         pt      = iarg;
         cf      = iarg;
         chrg    = iarg;
         spin    = iarg;
-      }  // end ctor(std::size_t)
+      }  // end ctor(int)
 
       //! ctor accepting all arguments
       PlotIndex(
-        const std::size_t ilvl,
-        const std::size_t icol,
-        const std::size_t ipt,
-        const std::size_t icf = -1,
-        const std::size_t ich = -1,
-        const std::size_t isp = -1
+        const int ilvl,
+        const int icol,
+        const int ipt,
+        const int icf = -1,
+        const int ich = -1,
+        const int isp = -1
       ) {
         level   = ilvl;
         species = icol;
@@ -111,7 +111,7 @@ namespace PHEnergyCorrelator {
         cf      = icf;
         chrg    = ich;
         spin    = isp;
-      }  // end ctor(std::size_t x 6)
+      }  // end ctor(int x 6)
 
     };  // end PlotIndex
 

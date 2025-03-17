@@ -58,15 +58,15 @@ class InFiles {
 
       // define input files for pp
       std::vector<std::string> pp_files;
-      pp_files.push_back("./input/ppRun15_dataWithBetterWraps_r03all.d6m2y2025.root");
-      pp_files.push_back("./input/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
-      pp_files.push_back("./input/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
+      pp_files.push_back("./input/ppRun15_withCorrectWrapsAndHistManageOptimizing_r03all.d7m3y2025.root");
+      pp_files.push_back("./input/Feb2025/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
+      pp_files.push_back("./input/Feb2025/ppRun15_simWithBetterWraps_r03all.d6m2y2025.root");
 
       // define input files for pAu
       std::vector<std::string> pa_files;
-      pa_files.push_back("./input/paRun15_dataWithJetCharge_r03all_084.d27m1y2025.root");
-      pa_files.push_back("./input/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
-      pa_files.push_back("./input/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
+      pa_files.push_back("./input/Jan2025/paRun15_dataWithJetCharge_r03all_084.d27m1y2025.root");
+      pa_files.push_back("./input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
+      pa_files.push_back("./input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
 
       // load vector of inputs
       m_files.clear();
@@ -379,7 +379,7 @@ class InputOutput {
     // ------------------------------------------------------------------------
     bool IsPAu(const PHEC::Type::PlotIndex& idx) {
 
-      return (idx.species == PAu);
+      return (idx.species == InFiles::PAu);
 
     }  // end 'IsPAu(PHEC::Type::PlotIndex&);
 
@@ -416,7 +416,7 @@ class InputOutput {
     ) const {
 
       const String base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
-      const String index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(dx.chrg) + m_hists.GetSpinTag(idx.spin);
+      const String index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
       return base + index;
 
     }  // end 'MakeHistName(String&, PHEC::Type::PlotIndex&, String&)'
