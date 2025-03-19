@@ -990,7 +990,7 @@ namespace PHEnergyCorrelator {
       }  // end 'PlotSpectra2D(CompareSpectraParams&, TFile*)'
 
       // ----------------------------------------------------------------------
-      //! Correct various 1D spectra 
+      //! Correct various 1D spectra
       // ----------------------------------------------------------------------
       /*! Calculates and applies a bin-by-bin correction to a variety of ENC
        *  (or otherwise) spectra from different sources and their ratios. Upper
@@ -1301,6 +1301,270 @@ namespace PHEnergyCorrelator {
 
         // announce end
         std::cout << "  Finished 1D spectra correction!\n"
+                  << " -------------------------------- \n"
+                  << std::endl;
+
+        // exit routine
+        Tools::CloseFiles(dfiles);
+        Tools::CloseFiles(rfiles);
+        Tools::CloseFiles(tfiles);
+        return;
+
+      }  // end 'PlotSpectra1D(CorrectSpectraParams&, TFile*)'
+
+      // ----------------------------------------------------------------------
+      //! Correct various 2D spectra
+      // ----------------------------------------------------------------------
+      /*! Calculates and applies a bin-by-bin correction to a variety of ENC
+       *  (or otherwise) spectra from different sources and their ratios. Upper
+       *  panel shows corrected spectra vs truth, and lwer panel shows
+       *  correction factors.
+       *
+       *  \param[in]  param routine parameters
+       *  \param[out] ofile file to write to
+       */
+      void PlotSpectra2D(
+        const CorrectSpectraParams& param,
+        TFile* ofile
+      ) const {
+
+        // announce start
+        std::cout << "\n -------------------------------- \n"
+                  << "  Beginning 2D spectra correction!\n"
+                  << "    Opening inputs:"
+                  << std::endl;
+
+        // throw error if no. of reco vs. truth inputs don't match
+        if (param.recon.size() != param.truth.size()) {
+          std::cerr << "PANIC: number of reconstructed and truth inputs should be the same!\n"
+                    << "       reco inputs = " << param.recon.size() << "\n"
+                    << "       true inputs = " << param.truth.size()
+                    << std::endl;
+          assert(param.recon.size() == param.truth.size());
+        }
+
+        // throw error if no. of data vs. reco inputs don't match
+        if (param.data.size() != param.recon.size()) {
+          std::cerr << "PANIC: number of raw and reconstructed inputs should be the same!\n"
+                    << "       data inputs = " << param.data.size() << "\n"
+                    << "       reco inputs = " << param.recon.size()
+                    << std::endl;
+          assert(param.data.size() == param.recon.size());
+        }
+
+        // open data inputs
+        std::vector<TFile*> dfiles;
+        std::vector<TH2*>   dhists;
+        for (std::size_t idat = 0; idat < param.data.size(); ++idat) {
+
+          dfiles.push_back(
+            Tools::OpenFile(param.data[idat].file, "read")
+          );
+          dhists.push_back(
+            (TH2*) Tools::GrabObject( param.data[idat].object, dfiles.back() )
+          );
+          dhists.back() -> SetName( param.data[idat].rename.data() );
+          dhists.back() -> SetTitle( param.data[idat].legend.data() );
+          std::cout << "      File (data) = " << param.data[idat].file << "\n"
+                    << "      Hist (data) = " << param.data[idat].object
+                    << std::endl;
+        }  // end data loop
+
+        // open reco inputs
+        std::vector<TFile*> rfiles;
+        std::vector<TH2*>   rhists;
+        for (std::size_t irec = 0; irec < param.recon.size(); ++irec) {
+
+          rfiles.push_back(
+            Tools::OpenFile(param.recon[irec].file, "read")
+          );
+          rhists.push_back(
+            (TH2*) Tools::GrabObject( param.recon[irec].object, rfiles.back() )
+          );
+          rhists.back() -> SetName( param.recon[irec].rename.data() );
+          rhists.back() -> SetTitle( param.recon[irec].legend.data() );
+          std::cout << "      File (recon) = " << param.recon[irec].file << "\n"
+                    << "      Hist (recon) = " << param.recon[irec].object
+                    << std::endl;
+
+          // normalize reco if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              rhists.back(),
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }  // end reco loop
+
+        // open true inputs
+        std::vector<TFile*> tfiles;
+        std::vector<TH2*>   thists;
+        for (std::size_t itru = 0; itru < param.truth.size(); ++itru) {
+
+          tfiles.push_back(
+            Tools::OpenFile(param.truth[itru].file, "read")
+          );
+          thists.push_back(
+            (TH2*) Tools::GrabObject( param.truth[itru].object, tfiles.back() )
+          );
+          thists.back() -> SetName( param.truth[itru].rename.data() );
+          thists.back() -> SetTitle( param.truth[itru].legend.data() );
+          std::cout << "      File (truth) = " << param.truth[itru].file << "\n"
+                    << "      Hist (truth) = " << param.truth[itru].object
+                    << std::endl;
+
+          // normalize true if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              thists.back(),
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }  // end true loop
+
+        // calculate correction factors
+        std::vector<TH2*> chists;
+        for (std::size_t itru = 0; itru < thists.size(); ++itru) {
+
+          // create name
+          std::string name( thists[itru] -> GetName() );
+          name += "_CorrectionFactor";
+
+          // do division
+          chists.push_back( Tools::DivideHist2D(rhists[itru], thists[itru]) );
+          chists.back() -> SetName( name.data() );
+          chists.back() -> SetTitle( "Correction Factors" );
+        }
+        std::cout << "    Calculated correction factors." << std::endl;
+
+        // apply correction factors
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+
+          // create name
+          std::string name( dhists[idat] -> GetName() );
+          name += "_Corrected";
+
+          // divide by (reco / true)
+          dhists[idat] = Tools::DivideHist2D( dhists[idat], chists[idat] );
+          dhists[idat] -> SetName( name.data() );
+          dhists[idat] -> SetTitle( param.data[idat].legend.data() );
+
+          // normalize corrected spectrum if need be
+          if (param.options.do_norm) {
+            Tools::NormalizeByIntegral(
+              dhists[idat],
+              param.options.norm_to,
+              param.options.norm_range.GetX().first,
+              param.options.norm_range.GetX().second
+            );
+          }
+        }
+        std::cout << "    Applied correction factors." << std::endl;
+
+        // calculate corrected / truth ratios ('f' for "fraction")
+        std::vector<TH2*> fhists;
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+
+          // create name
+          std::string name( param.data[idat].rename );
+          name += "_CorrectOverTruth";
+
+          // do division
+          fhists.push_back( Tools::DivideHist2D(dhists[idat], thists[idat]) );
+          fhists.back() -> SetName( name.data() );
+          fhists.back() -> SetTitle( "Corrected / Truth" );
+        }
+        std::cout << "    Calculated corrected / truth ratios." << std::endl;
+
+        // determine no. of legend lines
+        const std::size_t nlines = !param.options.header.empty()
+                                 ? dhists.size() + thists.size() + 1
+                                 : dhists.size() + thists.size();
+
+        // create root objects
+        TPaveText* text = m_textBox.MakeTPaveText();
+        std::cout << "    Created legend and text box." << std::endl;
+
+        // set styles
+        Styles dat_styles = GenerateStyles( param.data );
+        Styles tru_styles = GenerateStyles( param.truth );
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+
+          // set data styles
+          dat_styles[idat].SetPlotStyle( param.data[idat].style );
+          dat_styles[idat].Apply( dhists[idat] );
+          param.options.plot_range.Apply(Range::X, dhists[idat] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, dhists[idat] -> GetYaxis());
+
+          // set truth styles
+          tru_styles[idat].SetPlotStyle( param.truth[idat].style );
+          tru_styles[idat].Apply( thists[idat] );
+          param.options.plot_range.Apply(Range::X, thists[idat] -> GetXaxis());
+          param.options.plot_range.Apply(Range::Y, thists[idat] -> GetYaxis());
+
+          // set correction factor styles
+          dat_styles[idat].Apply( chists[idat] );
+          param.options.plot_range.Apply(Range::X, chists[idat] -> GetXaxis());
+
+          // set ratio styles
+          tru_styles[idat].Apply( fhists[idat] );
+          param.options.plot_range.Apply(Range::X, fhists[idat] -> GetXaxis()); 
+        }
+
+        // set text styles
+        m_baseTextStyle.Apply( text );
+        std::cout << "    Set styles." << std::endl;
+
+        // initialize canvas manager
+        CanvasManager manager = CanvasManager( param.options.canvas );
+        manager.MakePlot();
+
+        // throw error if not enough pads are present for histograms
+        if (manager.GetTPads().size() < (3 * dhists.size())) {
+          std::cerr << "PANIC: more histograms to draw than pads in " << manager.GetTCanvas() -> GetName() << "!" << std::endl;
+          assert(manager.GetTPads().size() >= (3 * dhists.size()));
+        }
+
+        // draw objects
+        //   - FIXME option should be configurable
+        manager.Draw();
+        for (std::size_t ihst = 0; ihst < dhists.size(); ++ihst) {
+
+          // draw corrected
+          manager.GetTPad( ihst ) -> cd();
+          dhists[ihst] -> Draw("colz");
+
+          // draw correction factor
+          manager.GetTPad( ihst + chists.size() ) -> cd();
+          chists[ihst] -> Draw("colz");
+
+          // draw ratio
+          manager.GetTPad( ihst + (2 * chists.size()) ) -> cd();
+          fhists[ihst] -> Draw("colz");
+        }
+        manager.GetTPads().back() -> cd();
+        text -> Draw();
+        std:: cout << "    Made plot." << std::endl;
+
+        // save output
+        ofile -> cd();
+        for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
+          dhists[idat] -> Write();
+          rhists[idat] -> Write();
+          thists[idat] -> Write();
+          chists[idat] -> Write();
+          fhists[idat] -> Write();
+        }
+        manager.Write();
+        manager.Close();
+        std::cout << "    Saved output." << std::endl;
+
+        // announce end
+        std::cout << "  Finished 2D spectra correction!\n"
                   << " -------------------------------- \n"
                   << std::endl;
 
