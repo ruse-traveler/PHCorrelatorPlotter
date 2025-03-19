@@ -219,7 +219,7 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! Divide two TH2s
     // ------------------------------------------------------------------------
-    TH1* DivideHist2D(TH2* in_numer, TH2* in_denom, const double wnum = 1.0, const double wden = 1.0) {
+    TH2* DivideHist2D(TH2* in_numer, TH2* in_denom, const double wnum = 1.0, const double wden = 1.0) {
 
       // grab inputs, create histogram to
       // hold result
