@@ -27,6 +27,10 @@
 #include "components/PHCorrelatorShape.h"
 #include "components/PHCorrelatorStyle.h"
 #include "components/PHCorrelatorTextBox.h"
+#include "io/PHCorrelatorFileInput.h"
+#include "io/PHCorrelatorHistInput.h"
+#include "io/PHCorrelatorInput.h"
+#include "io/PHCorrelatorIOTypes.h"
 #include "maker/PHCorrelatorPlotMaker.h"
 
 // alias for convenience
