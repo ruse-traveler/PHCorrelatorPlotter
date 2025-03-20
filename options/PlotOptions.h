@@ -17,7 +17,7 @@
 #include <vector>
 #include <utility>
 // plotting utilities
-#include "../include/PHCorrelatorPlotting.h"
+#include "../include/PHCorrelatorPlotter.h"
 
 
 
@@ -25,7 +25,7 @@
 //! Plot Options
 // ============================================================================
 /*! This namespace collects all the parameters associated with
- *  the various `PHCorrelatorPlotter` routines.
+ *  the various `PHCorrelatorPlotMaker` routines.
  */
 namespace PlotOptions {
 
@@ -125,7 +125,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   //! Bundle 1D `CompareSpectra` parameters
   // --------------------------------------------------------------------------
-  PHEC::PHCorrelatorPlotter::CompareSpectraParams CompareSpectra1D(
+  PHEC::PHCorrelatorPlotMaker::CompareSpectraParams CompareSpectra1D(
     const PHEC::Inputs& inputs,
     const std::string& canvas_name = "cSpectra1D",
     const int range_opt = Side
@@ -157,7 +157,7 @@ namespace PlotOptions {
     plot_opts.canvas     = canvas;
 
     // bundle parameters
-    PHEC::PHCorrelatorPlotter::CompareSpectraParams params;
+    PHEC::PHCorrelatorPlotMaker::CompareSpectraParams params;
     params.inputs  = inputs;
     params.options = plot_opts;
     return params;
@@ -169,7 +169,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   //! Bundle 2D `CompareSpectra` parameters
   // --------------------------------------------------------------------------
-  PHEC::PHCorrelatorPlotter::CompareSpectraParams CompareSpectra2D(
+  PHEC::PHCorrelatorPlotMaker::CompareSpectraParams CompareSpectra2D(
     const PHEC::Inputs& inputs,
     const std::string& canvas_name = "cSpectra2D",
     const std::size_t ncolumn = 2
@@ -257,7 +257,7 @@ namespace PlotOptions {
     plot_opts.canvas     = canvas;
 
     // bundle parameters
-    PHEC::PHCorrelatorPlotter::CompareSpectraParams params;
+    PHEC::PHCorrelatorPlotMaker::CompareSpectraParams params;
     params.inputs  = inputs;
     params.options = plot_opts;
     return params;
@@ -269,7 +269,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   //! Bundle `SpectraVsBaseline` parameters
   // --------------------------------------------------------------------------
-  PHEC::PHCorrelatorPlotter::SpectraVsBaselineParams SpectraVsBaseline(
+  PHEC::PHCorrelatorPlotMaker::SpectraVsBaselineParams SpectraVsBaseline(
     const PHEC::PlotInput& in_denom,
     const PHEC::Inputs& in_numers,
     const std::string& canvas_name = "cSpectraVsBaseline",
@@ -326,7 +326,7 @@ namespace PlotOptions {
     plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
-    PHEC::PHCorrelatorPlotter::SpectraVsBaselineParams params;
+    PHEC::PHCorrelatorPlotMaker::SpectraVsBaselineParams params;
     params.denominator = in_denom;
     params.numerators  = in_numers;
     params.options     = plot_opts;
@@ -340,7 +340,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   //! Bundle `CompareRatios` parameters
   // --------------------------------------------------------------------------
-  PHEC::PHCorrelatorPlotter::CompareRatiosParams CompareRatios(
+  PHEC::PHCorrelatorPlotMaker::CompareRatiosParams CompareRatios(
     const PHEC::Inputs& in_denoms,
     const PHEC::Inputs& in_numers,
     const std::string& canvas_name = "cRatios",
@@ -397,7 +397,7 @@ namespace PlotOptions {
     plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
-    PHEC::PHCorrelatorPlotter::CompareRatiosParams params;
+    PHEC::PHCorrelatorPlotMaker::CompareRatiosParams params;
     params.denominators = in_denoms;
     params.numerators   = in_numers;
     params.options      = plot_opts;
@@ -411,7 +411,7 @@ namespace PlotOptions {
   // --------------------------------------------------------------------------
   //! Bundle 1D `CorrectSpectra` parameters
   // --------------------------------------------------------------------------
-  PHEC::PHCorrelatorPlotter::CorrectSpectraParams CorrectSpectra1D(
+  PHEC::PHCorrelatorPlotMaker::CorrectSpectraParams CorrectSpectra1D(
     const PHEC::Inputs& in_data,
     const PHEC::Inputs& in_reco,
     const PHEC::Inputs& in_true,
@@ -485,7 +485,7 @@ namespace PlotOptions {
     plot_opts.spectra_pad = "spectra";
 
     // bundle parameters
-    PHEC::PHCorrelatorPlotter::CorrectSpectraParams params;
+    PHEC::PHCorrelatorPlotMaker::CorrectSpectraParams params;
     params.data    = in_data;
     params.recon   = in_reco;
     params.truth   = in_true;

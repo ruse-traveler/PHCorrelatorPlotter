@@ -15,7 +15,7 @@
 #include <string>
 #include <utility>
 // plotting utilities
-#include "../include/PHCorrelatorPlotting.h"
+#include "../include/PHCorrelatorPlotter.h"
 // plotting options
 #include "InputOutput.h"
 #include "PlotOptions.h"
@@ -49,7 +49,7 @@ namespace PlotsToMake {
     const int opt,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -131,7 +131,7 @@ namespace PlotsToMake {
     num_input.push_back( rec_opt );
 
     // make plot
-    plotter.PlotSpectra1D(
+    maker.PlotSpectra1D(
       PO::SpectraVsBaseline(tru_opt, num_input, canvas, opt),
       ofile
     );
@@ -148,7 +148,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -209,7 +209,7 @@ namespace PlotsToMake {
     input.push_back( tru_opt );
 
     // make plot
-    plotter.PlotSpectra2D(
+    maker.PlotSpectra2D(
       PO::CompareSpectra2D(input, canvas),
       ofile
     );
@@ -227,7 +227,7 @@ namespace PlotsToMake {
     const int opt,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -310,7 +310,7 @@ namespace PlotsToMake {
     input.push_back( pt15_opt );
 
     // make plot
-    plotter.PlotSpectra1D(
+    maker.PlotSpectra1D(
       PO::CompareSpectra1D(input, canvas, opt),
       ofile
     );
@@ -327,7 +327,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -388,7 +388,7 @@ namespace PlotsToMake {
     input.push_back( pt15_opt );
 
     // make plot
-    plotter.PlotSpectra2D(
+    maker.PlotSpectra2D(
       PO::CompareSpectra2D(input, canvas),
       ofile
     );
@@ -406,7 +406,7 @@ namespace PlotsToMake {
     const int opt,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -566,7 +566,7 @@ namespace PlotsToMake {
     numerator.push_back( pt15_opt.second );
 
     // make plot
-    plotter.PlotSpectra1D(
+    maker.PlotSpectra1D(
       PO::CompareRatios(denominator, numerator, canvas, opt),
       ofile
     );
@@ -584,7 +584,7 @@ namespace PlotsToMake {
     const int opt,
     const PHEC::Type::PlotIndex& index,
     const InputOutput& io,
-    const PHEC::PHCorrelatorPlotter& plotter,
+    const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -809,7 +809,7 @@ namespace PlotsToMake {
     );
 
     // make plot
-    plotter.PlotSpectra1D(
+    maker.PlotSpectra1D(
       PO::CorrectSpectra1D(data_opt, reco_opt, true_opt, canvas, opt),
       ofile
     );

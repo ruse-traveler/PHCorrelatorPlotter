@@ -4,7 +4,7 @@
  *  \date   12.27.2024
  *
  *  A small namespace to collect all of the general options for
- *  the `PHCorrelatorPlotter` class (i.e. plotting options
+ *  the `PHCorrelatorPlotMaker` class (i.e. plotting options
  *  constant across multiple plotting routines).
  */
 /// ===========================================================================
@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 // plotting utilities
-#include "../include/PHCorrelatorPlotting.h"
+#include "../include/PHCorrelatorPlotter.h"
 // plotting options
 #include "InputOutput.h"
 
@@ -27,7 +27,7 @@
 //! Base/General Plotting Options
 // ============================================================================
 /*! This namespace collects all the generic parameters associated with
- *  the `PHCorrelatorPlotter` routines, i.e. anything common across
+ *  the `PHCorrelatorPlotMaker` routines, i.e. anything common across
  *  multiple routines.
  */
 namespace BaseOptions {

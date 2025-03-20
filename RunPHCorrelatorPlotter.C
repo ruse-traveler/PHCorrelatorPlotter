@@ -19,7 +19,7 @@
 #include <TFile.h>
 #include <TSystem.h>
 // plotting utilities
-#include "include/PHCorrelatorPlotting.h"
+#include "include/PHCorrelatorPlotter.h"
 // plotting options
 #include "options/BaseOptions.h"
 #include "options/InputOutput.h"
@@ -82,13 +82,13 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   InputOutput io = InputOutput();
   std::cout << "    Loaded input options." << std::endl;
 
-  // create plotter
-  PHEC::PHCorrelatorPlotter plotter = PHEC::PHCorrelatorPlotter(
+  // create maker
+  PHEC::PHCorrelatorPlotMaker maker = PHEC::PHCorrelatorPlotMaker(
     BO::BasePlotStyle(),
     BO::BaseTextStyle(),
     BO::Text()
   );
-  std::cout << "    Made plotter." << std::endl;
+  std::cout << "    Made maker." << std::endl;
 
   // --------------------------------------------------------------------------
   // compare sim vs. data distributions
@@ -109,23 +109,23 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             }
 
             // make sure collision system is correct
-            if (isPAu) plotter.SetTextBox( BO::Text(idx.species) );
+            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
             // create comparison for each desired 1D histogram
-            PM::SimVsReco1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
-            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
-            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
+            PM::SimVsReco1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
+            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
+            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
             if (isPAu) {
-              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
-              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
+              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
+              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
-            PM::SimVsReco2D("CollinsBlueVsR", idx, io, plotter, ofiles[1]);
-            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, io, plotter, ofiles[2]);
+            PM::SimVsReco2D("CollinsBlueVsR", idx, io, maker, ofiles[1]);
+            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, io, maker, ofiles[2]);
             if (!isPAu) {
-              PM::SimVsReco2D("CollinsYellVsR", idx, io, plotter, ofiles[1]);
-              PM::SimVsReco2D("BoerMuldersYellVsR", idx, io, plotter, ofiles[2]);
+              PM::SimVsReco2D("CollinsYellVsR", idx, io, maker, ofiles[1]);
+              PM::SimVsReco2D("BoerMuldersYellVsR", idx, io, maker, ofiles[2]);
             }
 
           }  // end spin loop
@@ -155,23 +155,23 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             }
 
             // make sure collision system is correct
-            if (isPAu) plotter.SetTextBox( BO::Text(idx.species) );
+            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
             // create comparisons for each desired 1D histogram
-            PM::VsPtJet1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
-            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
-            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
+            PM::VsPtJet1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
+            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
+            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
-              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
+              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
+              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
-            PM::VsPtJet2D("CollinsBlueVsR", idx, io, plotter, ofiles[1]);
-            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, io, plotter, ofiles[2]);
+            PM::VsPtJet2D("CollinsBlueVsR", idx, io, maker, ofiles[1]);
+            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, io, maker, ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet2D("CollinsYellVsR", idx, io, plotter, ofiles[1]);
-              PM::VsPtJet2D("BoerMuldersYellVsR", idx, io, plotter, ofiles[2]);
+              PM::VsPtJet2D("CollinsYellVsR", idx, io, maker, ofiles[1]);
+              PM::VsPtJet2D("BoerMuldersYellVsR", idx, io, maker, ofiles[2]);
             }
 
           }  // end spin loop
@@ -197,9 +197,9 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           if (!io.IsBluePolarization(idx)) continue;
 
           // create comparisons for each desired 1D histogram
-          PM::PPVsPAu1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
-          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
-          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
+          PM::PPVsPAu1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
+          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
+          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
 
           /* TODO add 2D comparison */
 
@@ -228,15 +228,15 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           }
 
           // make sure collision system is correct
-          if (isPAu) plotter.SetTextBox( BO::Text(idx.species) );
+          if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
           // calculate/apply corrections for each desired 1D histogram
-          PM::CorrectSpectra1D("EEC", PO::Side, idx, io, plotter, ofiles[0]);
-          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, io, plotter, ofiles[1]);
-          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, io, plotter, ofiles[2]);
+          PM::CorrectSpectra1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
+          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
+          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
           if (!isPAu) {
-            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, io, plotter, ofiles[1]);
-            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, io, plotter, ofiles[2]);
+            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
+            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
           }
 
           /* TODO add 2D correction */
