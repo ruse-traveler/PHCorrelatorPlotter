@@ -22,7 +22,6 @@
 #include "include/PHCorrelatorPlotter.h"
 // plotting options
 #include "options/BaseOptions.h"
-#include "options/InputOutput.h"
 #include "options/PlotOptions.h"
 #include "options/PlotsToMake.h"
 
@@ -79,7 +78,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   std::cout << "    Opened output file" << std::endl;
 
   // load input options
-  InputOutput io = InputOutput();
+  PHEC::PHCorrelatorInput input = PHEC::PHCorrelatorInput();
   std::cout << "    Loaded input options." << std::endl;
 
   // create maker
@@ -97,14 +96,14 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
 
     // loop through all combinations of species, jet pt,charge, and spin
     PHEC::Type::PlotIndex idx(-1);
-    for (idx.species = 0; idx.species < io.Files().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.pt = 0; idx.pt < io.Hists().GetPtTags().size(); ++idx.pt) {
-        for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
-          for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
+    for (idx.species = 0; idx.species < input.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.pt = 0; idx.pt < input.Hists().GetPtTags().size(); ++idx.pt) {
+        for (idx.chrg = 0; idx.chrg < input.Hists().GetChargeTags().size(); ++idx.chrg) {
+          for (idx.spin = 0; idx.spin < input.Hists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
-            const bool isPAu = io.IsPAu(idx);
-            if (isPAu && !io.IsBluePolarization(idx)) {
+            const bool isPAu = input.IsPAu(idx);
+            if (isPAu && !input.IsBluePolarization(idx)) {
               continue;
             }
 
@@ -112,20 +111,20 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
             // create comparison for each desired 1D histogram
-            PM::SimVsReco1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
-            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
-            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
+            PM::SimVsReco1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
+            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
+            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
             if (isPAu) {
-              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
-              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
+              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
+              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
-            PM::SimVsReco2D("CollinsBlueVsR", idx, io, maker, ofiles[1]);
-            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, io, maker, ofiles[2]);
+            PM::SimVsReco2D("CollinsBlueVsR", idx, input, maker, ofiles[1]);
+            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, input, maker, ofiles[2]);
             if (!isPAu) {
-              PM::SimVsReco2D("CollinsYellVsR", idx, io, maker, ofiles[1]);
-              PM::SimVsReco2D("BoerMuldersYellVsR", idx, io, maker, ofiles[2]);
+              PM::SimVsReco2D("CollinsYellVsR", idx, input, maker, ofiles[1]);
+              PM::SimVsReco2D("BoerMuldersYellVsR", idx, input, maker, ofiles[2]);
             }
 
           }  // end spin loop
@@ -143,14 +142,14 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
 
     // loop through all combinations of species, level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
-    for (idx.species = 0; idx.species < io.Files().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.level = 0; idx.level < io.Files().GetLevelTags().size(); ++idx.level) {
-        for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
-          for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
+    for (idx.species = 0; idx.species < input.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.level = 0; idx.level < input.Files().GetLevelTags().size(); ++idx.level) {
+        for (idx.chrg = 0; idx.chrg < input.Hists().GetChargeTags().size(); ++idx.chrg) {
+          for (idx.spin = 0; idx.spin < input.Hists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
-            const bool isPAu = io.IsPAu(idx);
-            if (isPAu && !io.IsBluePolarization(idx)) {
+            const bool isPAu = input.IsPAu(idx);
+            if (isPAu && !input.IsBluePolarization(idx)) {
               continue;
             }
 
@@ -158,20 +157,20 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
             // create comparisons for each desired 1D histogram
-            PM::VsPtJet1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
-            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
-            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
+            PM::VsPtJet1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
+            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
+            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
-              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
+              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
+              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
-            PM::VsPtJet2D("CollinsBlueVsR", idx, io, maker, ofiles[1]);
-            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, io, maker, ofiles[2]);
+            PM::VsPtJet2D("CollinsBlueVsR", idx, input, maker, ofiles[1]);
+            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, input, maker, ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet2D("CollinsYellVsR", idx, io, maker, ofiles[1]);
-              PM::VsPtJet2D("BoerMuldersYellVsR", idx, io, maker, ofiles[2]);
+              PM::VsPtJet2D("CollinsYellVsR", idx, input, maker, ofiles[1]);
+              PM::VsPtJet2D("BoerMuldersYellVsR", idx, input, maker, ofiles[2]);
             }
 
           }  // end spin loop
@@ -189,17 +188,17 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
 
     // loop through all combinations of level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
-    for (idx.level = 0; idx.level < io.Files().GetLevelTags().size(); ++idx.level) {
-      for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
-        for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
+    for (idx.level = 0; idx.level < input.Files().GetLevelTags().size(); ++idx.level) {
+      for (idx.chrg = 0; idx.chrg < input.Hists().GetChargeTags().size(); ++idx.chrg) {
+        for (idx.spin = 0; idx.spin < input.Hists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
-          if (!io.IsBluePolarization(idx)) continue;
+          if (!input.IsBluePolarization(idx)) continue;
 
           // create comparisons for each desired 1D histogram
-          PM::PPVsPAu1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
-          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
-          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
+          PM::PPVsPAu1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
+          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
+          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
 
           /* TODO add 2D comparison */
 
@@ -217,13 +216,13 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
 
     // loop through all combinations of species, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
-    for (idx.species = 0; idx.species < io.Files().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.chrg = 0; idx.chrg < io.Hists().GetChargeTags().size(); ++idx.chrg) {
-        for (idx.spin = 0; idx.spin < io.Hists().GetSpinTags().size(); ++idx.spin) {
+    for (idx.species = 0; idx.species < input.Files().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.chrg = 0; idx.chrg < input.Hists().GetChargeTags().size(); ++idx.chrg) {
+        for (idx.spin = 0; idx.spin < input.Hists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
-          const bool isPAu = io.IsPAu(idx);
-          if (isPAu && !io.IsBluePolarization(idx)) {
+          const bool isPAu = input.IsPAu(idx);
+          if (isPAu && !input.IsBluePolarization(idx)) {
             continue;
           }
 
@@ -231,12 +230,12 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
           // calculate/apply corrections for each desired 1D histogram
-          PM::CorrectSpectra1D("EEC", PO::Side, idx, io, maker, ofiles[0]);
-          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, io, maker, ofiles[1]);
-          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, io, maker, ofiles[2]);
+          PM::CorrectSpectra1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
+          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
+          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
           if (!isPAu) {
-            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, io, maker, ofiles[1]);
-            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, io, maker, ofiles[2]);
+            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
+            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
           }
 
           /* TODO add 2D correction */

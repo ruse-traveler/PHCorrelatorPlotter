@@ -17,7 +17,6 @@
 // plotting utilities
 #include "../include/PHCorrelatorPlotter.h"
 // plotting options
-#include "InputOutput.h"
 #include "PlotOptions.h"
 
 // abbreviate common namespaces
@@ -48,7 +47,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -72,27 +71,27 @@ namespace PlotsToMake {
     const std::size_t tru_mar = 29;
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("DataVsSim", index.species) + "_";
-    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, index);
+    const std::string tag    = input.MakeSpeciesTag("DataVsSim", index.species) + "_";
+    const std::string canvas = input.MakeCanvasName("cDataVsSim" + variable, index);
 
     // build hist names
-    const std::string dat_hist = io.MakeHistName(variable, iData);
-    const std::string rec_hist = io.MakeHistName(variable, iReco);
-    const std::string tru_hist = io.MakeHistName(variable, iTrue);
+    const std::string dat_hist = input.MakeHistName(variable, iData);
+    const std::string rec_hist = input.MakeHistName(variable, iReco);
+    const std::string tru_hist = input.MakeHistName(variable, iTrue);
 
     // build hist renames
-    const std::string dat_name = io.MakeHistName(variable, iData, tag);
-    const std::string rec_name = io.MakeHistName(variable, iReco, tag);
-    const std::string tru_name = io.MakeHistName(variable, iTrue, tag);
+    const std::string dat_name = input.MakeHistName(variable, iData, tag);
+    const std::string rec_name = input.MakeHistName(variable, iReco, tag);
+    const std::string tru_name = input.MakeHistName(variable, iTrue, tag);
 
     // build hist legends
-    const std::string dat_leg = io.MakeLegend(iData);
-    const std::string rec_leg = io.MakeLegend(iReco);
-    const std::string tru_leg = io.MakeLegend(iTrue);
+    const std::string dat_leg = input.MakeLegend(iData);
+    const std::string rec_leg = input.MakeLegend(iReco);
+    const std::string tru_leg = input.MakeLegend(iTrue);
 
     // bundle input options
     PHEC::PlotInput dat_opt = PHEC::PlotInput(
-      io.Files().GetFile(iData),
+      input.Files().GetFile(iData),
       dat_hist,
       dat_name,
       dat_leg,
@@ -103,7 +102,7 @@ namespace PlotsToMake {
       )
     );
     PHEC::PlotInput rec_opt = PHEC::PlotInput(
-      io.Files().GetFile(iReco),
+      input.Files().GetFile(iReco),
       rec_hist,
       rec_name,
       rec_leg,
@@ -114,7 +113,7 @@ namespace PlotsToMake {
       )
     );
     PHEC::PlotInput tru_opt = PHEC::PlotInput(
-      io.Files().GetFile(iTrue),
+      input.Files().GetFile(iTrue),
       tru_hist,
       tru_name,
       tru_leg,
@@ -147,7 +146,7 @@ namespace PlotsToMake {
   void SimVsReco2D(
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -161,41 +160,41 @@ namespace PlotsToMake {
     iTrue.level = InFiles::True;
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("DataVsSim", index.species) + "_";
-    const std::string canvas = io.MakeCanvasName("cDataVsSim" + variable, index);
+    const std::string tag    = input.MakeSpeciesTag("DataVsSim", index.species) + "_";
+    const std::string canvas = input.MakeCanvasName("cDataVsSim" + variable, index);
 
     // build hist names
-    const std::string dat_hist = io.MakeHistName(variable, iData);
-    const std::string rec_hist = io.MakeHistName(variable, iReco);
-    const std::string tru_hist = io.MakeHistName(variable, iTrue);
+    const std::string dat_hist = input.MakeHistName(variable, iData);
+    const std::string rec_hist = input.MakeHistName(variable, iReco);
+    const std::string tru_hist = input.MakeHistName(variable, iTrue);
 
     // build hist renames
-    const std::string dat_name = io.MakeHistName(variable, iData, tag);
-    const std::string rec_name = io.MakeHistName(variable, iReco, tag);
-    const std::string tru_name = io.MakeHistName(variable, iTrue, tag);
+    const std::string dat_name = input.MakeHistName(variable, iData, tag);
+    const std::string rec_name = input.MakeHistName(variable, iReco, tag);
+    const std::string tru_name = input.MakeHistName(variable, iTrue, tag);
 
     // build hist legends
-    const std::string dat_leg = io.MakeLegend(iData);
-    const std::string rec_leg = io.MakeLegend(iReco);
-    const std::string tru_leg = io.MakeLegend(iTrue);
+    const std::string dat_leg = input.MakeLegend(iData);
+    const std::string rec_leg = input.MakeLegend(iReco);
+    const std::string tru_leg = input.MakeLegend(iTrue);
 
     // bundle input options
     PHEC::PlotInput dat_opt = PHEC::PlotInput(
-      io.Files().GetFile(iData),
+      input.Files().GetFile(iData),
       dat_hist,
       dat_name,
       dat_leg,
       "colz"
     );
     PHEC::PlotInput rec_opt = PHEC::PlotInput(
-      io.Files().GetFile(iReco),
+      input.Files().GetFile(iReco),
       rec_hist,
       rec_name,
       rec_leg,
       "colz"
     );
     PHEC::PlotInput tru_opt = PHEC::PlotInput(
-      io.Files().GetFile(iTrue),
+      input.Files().GetFile(iTrue),
       tru_hist,
       tru_name,
       tru_leg,
@@ -226,7 +225,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -250,27 +249,27 @@ namespace PlotsToMake {
     const std::size_t pt15_mar = 32;
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("VsPtJet", index.species) + "_";
-    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, index);
+    const std::string tag    = input.MakeSpeciesTag("VsPtJet", index.species) + "_";
+    const std::string canvas = input.MakeCanvasName("cVsPtJet" + variable, index);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, iPt5);
-    const std::string pt10_hist = io.MakeHistName(variable, iPt10);
-    const std::string pt15_hist = io.MakeHistName(variable, iPt15);
+    const std::string pt5_hist  = input.MakeHistName(variable, iPt5);
+    const std::string pt10_hist = input.MakeHistName(variable, iPt10);
+    const std::string pt15_hist = input.MakeHistName(variable, iPt15);
 
     // build hist renames
-    const std::string pt5_name  = io.MakeHistName(variable, iPt5,  tag);
-    const std::string pt10_name = io.MakeHistName(variable, iPt10, tag);
-    const std::string pt15_name = io.MakeHistName(variable, iPt15, tag);
+    const std::string pt5_name  = input.MakeHistName(variable, iPt5,  tag);
+    const std::string pt10_name = input.MakeHistName(variable, iPt10, tag);
+    const std::string pt15_name = input.MakeHistName(variable, iPt15, tag);
 
     // build hist legends
-    const std::string pt5_leg  = io.MakeLegend(iPt5);
-    const std::string pt10_leg = io.MakeLegend(iPt10);
-    const std::string pt15_leg = io.MakeLegend(iPt15);
+    const std::string pt5_leg  = input.MakeLegend(iPt5);
+    const std::string pt10_leg = input.MakeLegend(iPt10);
+    const std::string pt15_leg = input.MakeLegend(iPt15);
 
     // bundle input options
     PHEC::PlotInput pt5_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt5),
+      input.Files().GetFile(iPt5),
       pt5_hist,
       pt5_name,
       pt5_leg,
@@ -281,7 +280,7 @@ namespace PlotsToMake {
       )
     );
     PHEC::PlotInput pt10_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt10),
+      input.Files().GetFile(iPt10),
       pt10_hist,
       pt10_name,
       pt10_leg,
@@ -292,7 +291,7 @@ namespace PlotsToMake {
       )
     );
     PHEC::PlotInput pt15_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt15),
+      input.Files().GetFile(iPt15),
       pt15_hist,
       pt15_name,
       pt15_leg,
@@ -326,7 +325,7 @@ namespace PlotsToMake {
   void VsPtJet2D(
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -340,41 +339,41 @@ namespace PlotsToMake {
     iPt15.pt = InHists::Pt15;
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("VsPtJet", index.species) + "_";
-    const std::string canvas = io.MakeCanvasName("cVsPtJet" + variable, index);
+    const std::string tag    = input.MakeSpeciesTag("VsPtJet", index.species) + "_";
+    const std::string canvas = input.MakeCanvasName("cVsPtJet" + variable, index);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, iPt5);
-    const std::string pt10_hist = io.MakeHistName(variable, iPt10);
-    const std::string pt15_hist = io.MakeHistName(variable, iPt15);
+    const std::string pt5_hist  = input.MakeHistName(variable, iPt5);
+    const std::string pt10_hist = input.MakeHistName(variable, iPt10);
+    const std::string pt15_hist = input.MakeHistName(variable, iPt15);
 
     // build hist renames
-    const std::string pt5_name  = io.MakeHistName(variable, iPt5,  tag);
-    const std::string pt10_name = io.MakeHistName(variable, iPt10, tag);
-    const std::string pt15_name = io.MakeHistName(variable, iPt15, tag);
+    const std::string pt5_name  = input.MakeHistName(variable, iPt5,  tag);
+    const std::string pt10_name = input.MakeHistName(variable, iPt10, tag);
+    const std::string pt15_name = input.MakeHistName(variable, iPt15, tag);
 
     // build hist legends
-    const std::string pt5_leg  = io.MakeLegend(iPt5);
-    const std::string pt10_leg = io.MakeLegend(iPt10);
-    const std::string pt15_leg = io.MakeLegend(iPt15);
+    const std::string pt5_leg  = input.MakeLegend(iPt5);
+    const std::string pt10_leg = input.MakeLegend(iPt10);
+    const std::string pt15_leg = input.MakeLegend(iPt15);
 
     // bundle input options
     PHEC::PlotInput pt5_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt5),
+      input.Files().GetFile(iPt5),
       pt5_hist,
       pt5_name,
       pt5_leg,
       "colz"
     );
     PHEC::PlotInput pt10_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt10),
+      input.Files().GetFile(iPt10),
       pt10_hist,
       pt10_name,
       pt10_leg,
       "colz"
     );
     PHEC::PlotInput pt15_opt = PHEC::PlotInput(
-      io.Files().GetFile(iPt15),
+      input.Files().GetFile(iPt15),
       pt15_hist,
       pt15_name,
       pt15_leg,
@@ -405,7 +404,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -430,25 +429,25 @@ namespace PlotsToMake {
 
     // make canvas name and tag
     const std::string tag    = "PPVsPAu_";
-    const std::string canvas = io.MakeCanvasName("cPPVsPAu" + variable, index);
+    const std::string canvas = input.MakeCanvasName("cPPVsPAu" + variable, index);
 
     // build hist names
-    const std::string pt5_hist  = io.MakeHistName(variable, iPt5);
-    const std::string pt10_hist = io.MakeHistName(variable, iPt10);
-    const std::string pt15_hist = io.MakeHistName(variable, iPt15);
+    const std::string pt5_hist  = input.MakeHistName(variable, iPt5);
+    const std::string pt10_hist = input.MakeHistName(variable, iPt10);
+    const std::string pt15_hist = input.MakeHistName(variable, iPt15);
 
     // build hist renames
     const StringPair pt5_name  = std::make_pair(
-      io.MakeHistName(variable, iPt5, tag + "PP_"),
-      io.MakeHistName(variable, iPt5, tag + "PAu)")
+      input.MakeHistName(variable, iPt5, tag + "PP_"),
+      input.MakeHistName(variable, iPt5, tag + "PAu)")
     );
     const StringPair pt10_name = std::make_pair(
-      io.MakeHistName(variable, iPt10, tag + "PP_"),
-      io.MakeHistName(variable, iPt10, tag + "PAu_")
+      input.MakeHistName(variable, iPt10, tag + "PP_"),
+      input.MakeHistName(variable, iPt10, tag + "PAu_")
     );
     const StringPair pt15_name = std::make_pair(
-      io.MakeHistName(variable, iPt15, tag + "PP_"),
-      io.MakeHistName(variable, iPt15, tag + "PAu_")
+      input.MakeHistName(variable, iPt15, tag + "PP_"),
+      input.MakeHistName(variable, iPt15, tag + "PAu_")
     );
 
     // set up pp vs. p+Au indices
@@ -467,22 +466,22 @@ namespace PlotsToMake {
 
     // build hist legends
     const StringPair pt5_leg  = std::make_pair(
-      io.MakeLegend(iPt5pp),
-      io.MakeLegend(iPt5pa)
+      input.MakeLegend(iPt5pp),
+      input.MakeLegend(iPt5pa)
     );
     const StringPair pt10_leg = std::make_pair(
-      io.MakeLegend(iPt10pp),
-      io.MakeLegend(iPt10pa)
+      input.MakeLegend(iPt10pp),
+      input.MakeLegend(iPt10pa)
     );
     const StringPair pt15_leg = std::make_pair(
-      io.MakeLegend(iPt15pp),
-      io.MakeLegend(iPt15pa)
+      input.MakeLegend(iPt15pp),
+      input.MakeLegend(iPt15pa)
     );
 
     // bundle input options
     InputPair pt5_opt = std::make_pair(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt5pp),
+        input.Files().GetFile(iPt5pp),
         pt5_hist,
         pt5_name.first,
         pt5_leg.first,
@@ -493,7 +492,7 @@ namespace PlotsToMake {
         )
       ),
       PHEC::PlotInput(
-        io.Files().GetFile(iPt5pa),
+        input.Files().GetFile(iPt5pa),
         pt5_hist,
         pt5_name.second,
         pt5_leg.second,
@@ -506,7 +505,7 @@ namespace PlotsToMake {
     );
     InputPair pt10_opt = std::make_pair(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt10pp),
+        input.Files().GetFile(iPt10pp),
         pt10_hist,
         pt10_name.first,
         pt10_leg.first,
@@ -517,7 +516,7 @@ namespace PlotsToMake {
         )
       ),
       PHEC::PlotInput(
-        io.Files().GetFile(iPt10pa),
+        input.Files().GetFile(iPt10pa),
         pt10_hist,
         pt10_name.second,
         pt10_leg.second,
@@ -530,7 +529,7 @@ namespace PlotsToMake {
     );
     InputPair pt15_opt = std::make_pair(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt15pp),
+        input.Files().GetFile(iPt15pp),
         pt15_hist,
         pt15_name.first,
         pt15_leg.first,
@@ -541,7 +540,7 @@ namespace PlotsToMake {
         )
       ),
       PHEC::PlotInput(
-        io.Files().GetFile(iPt15pa),
+        input.Files().GetFile(iPt15pa),
         pt15_hist,
         pt15_name.second,
         pt15_leg.second,
@@ -583,7 +582,7 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const InputOutput& io,
+    const PHEC::PHCorrelatorInput& input,
     const PHEC::PHCorrelatorPlotMaker& maker,
     TFile* ofile
   ) {
@@ -630,63 +629,63 @@ namespace PlotsToMake {
     const std::size_t pt15_mar[3] = {23, 23, 32};
 
     // make canvas name and tag
-    const std::string tag    = io.MakeSpeciesTag("Correct1D", index.species) + "_";
-    const std::string canvas = io.MakeCanvasName("cCorrect" + variable, index);
+    const std::string tag    = input.MakeSpeciesTag("Correct1D", index.species) + "_";
+    const std::string canvas = input.MakeCanvasName("cCorrect" + variable, index);
 
     // build data hist names
-    const std::string pt5_dhist  = io.MakeHistName(variable, iPt5data);
-    const std::string pt10_dhist = io.MakeHistName(variable, iPt10data);
-    const std::string pt15_dhist = io.MakeHistName(variable, iPt15data);
+    const std::string pt5_dhist  = input.MakeHistName(variable, iPt5data);
+    const std::string pt10_dhist = input.MakeHistName(variable, iPt10data);
+    const std::string pt15_dhist = input.MakeHistName(variable, iPt15data);
 
     // build reco hist names
-    const std::string pt5_rhist  = io.MakeHistName(variable, iPt5reco);
-    const std::string pt10_rhist = io.MakeHistName(variable, iPt10reco);
-    const std::string pt15_rhist = io.MakeHistName(variable, iPt15reco);
+    const std::string pt5_rhist  = input.MakeHistName(variable, iPt5reco);
+    const std::string pt10_rhist = input.MakeHistName(variable, iPt10reco);
+    const std::string pt15_rhist = input.MakeHistName(variable, iPt15reco);
 
     // build true hist names
-    const std::string pt5_thist  = io.MakeHistName(variable, iPt5true);
-    const std::string pt10_thist = io.MakeHistName(variable, iPt10true);
-    const std::string pt15_thist = io.MakeHistName(variable, iPt15true);
+    const std::string pt5_thist  = input.MakeHistName(variable, iPt5true);
+    const std::string pt10_thist = input.MakeHistName(variable, iPt10true);
+    const std::string pt15_thist = input.MakeHistName(variable, iPt15true);
 
     // build hist renames
     const std::string pt5_name[3] = {
-      io.MakeHistName(variable, iPt5data, tag),
-      io.MakeHistName(variable, iPt5reco, tag),
-      io.MakeHistName(variable, iPt5true, tag)
+      input.MakeHistName(variable, iPt5data, tag),
+      input.MakeHistName(variable, iPt5reco, tag),
+      input.MakeHistName(variable, iPt5true, tag)
     };
     const std::string pt10_name[3] = {
-      io.MakeHistName(variable, iPt10data, tag),
-      io.MakeHistName(variable, iPt10reco, tag),
-      io.MakeHistName(variable, iPt10true, tag)
+      input.MakeHistName(variable, iPt10data, tag),
+      input.MakeHistName(variable, iPt10reco, tag),
+      input.MakeHistName(variable, iPt10true, tag)
     };
     const std::string pt15_name[3] = {
-      io.MakeHistName(variable, iPt15data, tag),
-      io.MakeHistName(variable, iPt15reco, tag),
-      io.MakeHistName(variable, iPt15true, tag)
+      input.MakeHistName(variable, iPt15data, tag),
+      input.MakeHistName(variable, iPt15reco, tag),
+      input.MakeHistName(variable, iPt15true, tag)
     };
 
     // build hist legends
     const std::string pt5_leg[3] = {
-      io.MakeLegend(iPt5data),
-      io.MakeLegend(iPt5reco),
-      io.MakeLegend(iPt5true)
+      input.MakeLegend(iPt5data),
+      input.MakeLegend(iPt5reco),
+      input.MakeLegend(iPt5true)
     };
     const std::string pt10_leg[3] = {
-      io.MakeLegend(iPt10data),
-      io.MakeLegend(iPt10reco),
-      io.MakeLegend(iPt10true)
+      input.MakeLegend(iPt10data),
+      input.MakeLegend(iPt10reco),
+      input.MakeLegend(iPt10true)
     };
     const std::string pt15_leg[3] = {
-      io.MakeLegend(iPt15data),
-      io.MakeLegend(iPt15reco),
-      io.MakeLegend(iPt15true)
+      input.MakeLegend(iPt15data),
+      input.MakeLegend(iPt15reco),
+      input.MakeLegend(iPt15true)
     };
 
     // bundle input data options
     PHEC::Inputs data_opt;
     data_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt5data),
+        input.Files().GetFile(iPt5data),
         pt5_dhist,
         pt5_name[0],
         pt5_leg[0],
@@ -699,7 +698,7 @@ namespace PlotsToMake {
     );
     data_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt10data),
+        input.Files().GetFile(iPt10data),
         pt10_dhist,
         pt10_name[0],
         pt10_leg[0],
@@ -712,7 +711,7 @@ namespace PlotsToMake {
     );
     data_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt15data),
+        input.Files().GetFile(iPt15data),
         pt15_dhist,
         pt15_name[0],
         pt15_leg[0],
@@ -728,7 +727,7 @@ namespace PlotsToMake {
     PHEC::Inputs reco_opt;
     reco_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt5reco),
+        input.Files().GetFile(iPt5reco),
         pt5_rhist,
         pt5_name[1],
         pt5_leg[1],
@@ -741,7 +740,7 @@ namespace PlotsToMake {
     );
     reco_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt10reco),
+        input.Files().GetFile(iPt10reco),
         pt10_rhist,
         pt10_name[1],
         pt10_leg[1],
@@ -754,7 +753,7 @@ namespace PlotsToMake {
     );
     reco_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt15reco),
+        input.Files().GetFile(iPt15reco),
         pt15_rhist,
         pt15_name[1],
         pt15_leg[1],
@@ -770,7 +769,7 @@ namespace PlotsToMake {
     PHEC::Inputs true_opt;
     true_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt5true),
+        input.Files().GetFile(iPt5true),
         pt5_thist,
         pt5_name[2],
         pt5_leg[2],
@@ -783,7 +782,7 @@ namespace PlotsToMake {
     );
     true_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt10true),
+        input.Files().GetFile(iPt10true),
         pt10_thist,
         pt10_name[2],
         pt10_leg[2],
@@ -796,7 +795,7 @@ namespace PlotsToMake {
     );
     true_opt.push_back(
       PHEC::PlotInput(
-        io.Files().GetFile(iPt15true),
+        input.Files().GetFile(iPt15true),
         pt15_thist,
         pt15_name[2],
         pt15_leg[2],

@@ -18,8 +18,6 @@
 #include <vector>
 // plotting utilities
 #include "../include/PHCorrelatorPlotter.h"
-// plotting options
-#include "InputOutput.h"
 
 
 
