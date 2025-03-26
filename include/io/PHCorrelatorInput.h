@@ -77,33 +77,33 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make a variable + species tag
       // ------------------------------------------------------------------------
-      String MakeSpeciesTag(const String& base, const int spe) const {
+      std::string MakeSpeciesTag(const std::string& base, const int spe) const {
 
         return base + m_files.GetSpeciesTag(spe);
 
-      }  // end 'MakeSpeciesTag(String&, int)'
+      }  // end 'MakeSpeciesTag(std::string&, int)'
 
       // ------------------------------------------------------------------------
       //! Make a histogram name
       // ------------------------------------------------------------------------
-      String MakeHistName(
-        const String& var,
+      std::string MakeHistName(
+        const std::string& var,
         const Type::PlotIndex& idx,
-        const String& tag = ""
+        const std::string& tag = ""
       ) const {
 
-        const String base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
-        const String index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
+        const std::string base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
+        const std::string index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
         return base + index;
 
-      }  // end 'MakeHistName(String&, Type::PlotIndex&, String&)'
+      }  // end 'MakeHistName(std::string&, Type::PlotIndex&, std::string&)'
 
       // ------------------------------------------------------------------------
       //! Make a histogram legend
       // ------------------------------------------------------------------------
-      String MakeLegend(const Type::PlotIndex& idx) const {
+      std::string MakeLegend(const Type::PlotIndex& idx) const {
 
-        String legend;
+        std::string legend;
         if (idx.species > -1) {
           legend += m_files.GetSpeciesLegend(idx.species) + " ";
         }
@@ -118,12 +118,12 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make canvas name
       // ------------------------------------------------------------------------
-      String MakeCanvasName(
-        const String& base,
+      std::string MakeCanvasName(
+        const std::string& base,
         const Type::PlotIndex& idx
       ) const {
 
-        String name = base;
+        std::string name = base;
         if (idx.species > -1) {
           name += "_" + m_files.GetSpeciesTag(idx.species);
         }
@@ -143,7 +143,7 @@ namespace PHEnergyCorrelator {
         }
         return name;
 
-      }  // end 'MakeCanvasName(String&, Type::PlotIndex&)'
+      }  // end 'MakeCanvasName(std::string&, Type::PlotIndex&)'
 
       // ------------------------------------------------------------------------
       // default ctor/dtor

@@ -37,12 +37,12 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      Strings m_tags_pt;
-      Strings m_tags_ch;
-      Strings m_tags_sp;
-      Strings m_legs_pt;
-      Strings m_legs_ch;
-      Strings m_legs_sp;
+      Type::Strings m_tags_pt;
+      Type::Strings m_tags_ch;
+      Type::Strings m_tags_sp;
+      Type::Strings m_legs_pt;
+      Type::Strings m_legs_ch;
+      Type::Strings m_legs_sp;
 
       // ----------------------------------------------------------------------
       //! Define pt hist tags and legend text
@@ -137,32 +137,32 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetPtTags(Strings& tags)        {m_tags_pt = tags;}
-      void SetChargeTags(Strings& tags)    {m_tags_ch = tags;}
-      void SetSpinTags(Strings& tags)      {m_tags_sp = tags;}
-      void SetPtLegends(Strings& legs)     {m_legs_pt = legs;}
-      void SetChargeLegends(Strings& legs) {m_legs_ch = legs;}
-      void SetSpinLegends(Strings& legs)   {m_legs_sp = legs;}
+      void SetPtTags(const Type::Strings& tags)        {m_tags_pt = tags;}
+      void SetChargeTags(const Type::Strings& tags)    {m_tags_ch = tags;}
+      void SetSpinTags(const Type::Strings& tags)      {m_tags_sp = tags;}
+      void SetPtLegends(const Type::Strings& legs)     {m_legs_pt = legs;}
+      void SetChargeLegends(const Type::Strings& legs) {m_legs_ch = legs;}
+      void SetSpinLegends(const Type::Strings& legs)   {m_legs_sp = legs;}
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Strings GetPtTags()        const {return m_tags_pt;}
-      Strings GetChargeTags()    const {return m_tags_ch;}
-      Strings GetSpinTags()      const {return m_tags_sp;}
-      Strings GetPtLegends()     const {return m_legs_pt;}
-      Strings GetChargeLegends() const {return m_legs_ch;}
-      Strings GetSpinLegends()   const {return m_legs_sp;}
+      Type::Strings GetPtTags()        const {return m_tags_pt;}
+      Type::Strings GetChargeTags()    const {return m_tags_ch;}
+      Type::Strings GetSpinTags()      const {return m_tags_sp;}
+      Type::Strings GetPtLegends()     const {return m_legs_pt;}
+      Type::Strings GetChargeLegends() const {return m_legs_ch;}
+      Type::Strings GetSpinLegends()   const {return m_legs_sp;}
 
       // ----------------------------------------------------------------------
       //! Get a particular tag, legend text
       // ----------------------------------------------------------------------
-      String GetPtTag(const int pt)        const {return m_tags_pt.at(pt);}
-      String GetChargeTag(const int ch)    const {return m_tags_ch.at(ch);}
-      String GetSpinTag(const int sp)      const {return m_tags_sp.at(sp);}
-      String GetPtLegend(const int pt)     const {return m_legs_pt.at(pt);}
-      String GetChargeLegend(const int ch) const {return m_legs_ch.at(ch);}
-      String GetSpinLegend(const int sp)   const {return m_legs_sp.at(sp);}
+      std::string GetPtTag(const int pt)        const {return m_tags_pt.at(pt);}
+      std::string GetChargeTag(const int ch)    const {return m_tags_ch.at(ch);}
+      std::string GetSpinTag(const int sp)      const {return m_tags_sp.at(sp);}
+      std::string GetPtLegend(const int pt)     const {return m_legs_pt.at(pt);}
+      std::string GetChargeLegend(const int ch) const {return m_legs_ch.at(ch);}
+      std::string GetSpinLegend(const int sp)   const {return m_legs_sp.at(sp);}
 
       // ----------------------------------------------------------------------
       //! default ctor

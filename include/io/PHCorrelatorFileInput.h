@@ -39,11 +39,11 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      Files   m_files;
-      Strings m_tags_species;
-      Strings m_tags_levels;
-      Strings m_legs_species;
-      Strings m_legs_levels;
+      Type::Files   m_files;
+      Type::Strings m_tags_species;
+      Type::Strings m_tags_levels;
+      Type::Strings m_legs_species;
+      Type::Strings m_legs_levels;
 
       // ----------------------------------------------------------------------
       //! Define input files
@@ -132,33 +132,33 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetFiles(const Files& files)           {m_files        = files;}
-      void SetSpeciesTags(const Strings& tags)    {m_tags_species = tags;}
-      void SetLevelTags(const Strings& tags)      {m_tags_levels  = tags;}
-      void SetSpeciesLegends(const Strings& legs) {m_legs_species = legs;}
-      void SetLevelLegends(const Strings& legs)   {m_legs_levels  = legs;}
+      void SetFiles(const Type::Files& files)           {m_files        = files;}
+      void SetSpeciesTags(const Type::Strings& tags)    {m_tags_species = tags;}
+      void SetLevelTags(const Type::Strings& tags)      {m_tags_levels  = tags;}
+      void SetSpeciesLegends(const Type::Strings& legs) {m_legs_species = legs;}
+      void SetLevelLegends(const Type::Strings& legs)   {m_legs_levels  = legs;}
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Files   GetFiles()          const {return m_files;}
-      Strings GetSpeciesTags()    const {return m_tags_species;}
-      Strings GetLevelTags()      const {return m_tags_levels;}
-      Strings GetSpeciesLegends() const {return m_legs_species;}
-      Strings GetLeveLegends()    const {return m_legs_levels;}
+      Type::Files   GetFiles()          const {return m_files;}
+      Type::Strings GetSpeciesTags()    const {return m_tags_species;}
+      Type::Strings GetLevelTags()      const {return m_tags_levels;}
+      Type::Strings GetSpeciesLegends() const {return m_legs_species;}
+      Type::Strings GetLeveLegends()    const {return m_legs_levels;}
 
       // ----------------------------------------------------------------------
       //! Get a particular tag, legend text
       // ----------------------------------------------------------------------
-      String GetSpeciesTag(const int species)    const {return m_tags_species.at(species);}
-      String GetLevelTag(const int level)        const {return m_tags_levels.at(level);}
-      String GetSpeciesLegend(const int species) const {return m_legs_species.at(species);}
-      String GetLevelLegend(const int level)     const {return m_legs_levels.at(level);}
+      std::string GetSpeciesTag(const int species)    const {return m_tags_species.at(species);}
+      std::string GetLevelTag(const int level)        const {return m_tags_levels.at(level);}
+      std::string GetSpeciesLegend(const int species) const {return m_legs_species.at(species);}
+      std::string GetLevelLegend(const int level)     const {return m_legs_levels.at(level);}
 
       // ----------------------------------------------------------------------
       //! Get files for a specific species
       // ----------------------------------------------------------------------
-      Strings GetFiles(const Type::PlotIndex& idx) const {
+      Type::Strings GetFiles(const Type::PlotIndex& idx) const {
 
         return m_files.at(idx.species);
 
@@ -167,7 +167,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Get a particular file
       // ----------------------------------------------------------------------
-      String GetFile(const Type::PlotIndex& idx) const {
+      std::string GetFile(const Type::PlotIndex& idx) const {
 
         return m_files.at(idx.species).at(idx.level);
 

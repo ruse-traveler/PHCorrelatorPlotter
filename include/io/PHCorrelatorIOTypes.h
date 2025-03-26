@@ -24,7 +24,6 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! Convenient types
     // ------------------------------------------------------------------------
-    typedef std::string String;
     typedef std::vector<std::string> Strings;
     typedef std::vector<std::vector<std::string> > Files;
 
