@@ -47,8 +47,8 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -56,9 +56,9 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iData = index;
     PHEC::Type::PlotIndex iReco = index;
     PHEC::Type::PlotIndex iTrue = index;
-    iData.level = InFiles::Data;
-    iReco.level = InFiles::Reco;
-    iTrue.level = InFiles::True;
+    iData.level = PHEC::FileInput::Data;
+    iReco.level = PHEC::FileInput::Reco;
+    iTrue.level = PHEC::FileInput::True;
 
     // colors for data, reco, and truth levels
     const std::size_t dat_col = 899;
@@ -146,8 +146,8 @@ namespace PlotsToMake {
   void SimVsReco2D(
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -155,9 +155,9 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iData = index;
     PHEC::Type::PlotIndex iReco = index;
     PHEC::Type::PlotIndex iTrue = index;
-    iData.level = InFiles::Data;
-    iReco.level = InFiles::Reco;
-    iTrue.level = InFiles::True;
+    iData.level = PHEC::FileInput::Data;
+    iReco.level = PHEC::FileInput::Reco;
+    iTrue.level = PHEC::FileInput::True;
 
     // make canvas name and tag
     const std::string tag    = input.MakeSpeciesTag("DataVsSim", index.species) + "_";
@@ -202,14 +202,14 @@ namespace PlotsToMake {
     );
 
     // load into vector
-    std::vector<PHEC::PlotInput> input;
-    input.push_back( dat_opt );
-    input.push_back( rec_opt );
-    input.push_back( tru_opt );
+    std::vector<PHEC::PlotInput> inputs;
+    inputs.push_back( dat_opt );
+    inputs.push_back( rec_opt );
+    inputs.push_back( tru_opt );
 
     // make plot
     maker.PlotSpectra2D(
-      PO::CompareSpectra2D(input, canvas),
+      PO::CompareSpectra2D(inputs, canvas),
       ofile
     );
     return;
@@ -225,8 +225,8 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -234,9 +234,9 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iPt5  = index;
     PHEC::Type::PlotIndex iPt10 = index;
     PHEC::Type::PlotIndex iPt15 = index;
-    iPt5.pt  = InHists::Pt5;
-    iPt10.pt = InHists::Pt10;
-    iPt15.pt = InHists::Pt15;
+    iPt5.pt  = PHEC::HistInput::Pt5;
+    iPt10.pt = PHEC::HistInput::Pt10;
+    iPt15.pt = PHEC::HistInput::Pt15;
 
     // colors for diferent jet pt
     const std::size_t pt5_col  = 799;
@@ -303,14 +303,14 @@ namespace PlotsToMake {
     );
 
     // load into vector
-    std::vector<PHEC::PlotInput> input;
-    input.push_back( pt5_opt );
-    input.push_back( pt10_opt );
-    input.push_back( pt15_opt );
+    std::vector<PHEC::PlotInput> inputs;
+    inputs.push_back( pt5_opt );
+    inputs.push_back( pt10_opt );
+    inputs.push_back( pt15_opt );
 
     // make plot
     maker.PlotSpectra1D(
-      PO::CompareSpectra1D(input, canvas, opt),
+      PO::CompareSpectra1D(inputs, canvas, opt),
       ofile
     );
     return;
@@ -325,8 +325,8 @@ namespace PlotsToMake {
   void VsPtJet2D(
     const std::string& variable,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -334,9 +334,9 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iPt5  = index;
     PHEC::Type::PlotIndex iPt10 = index;
     PHEC::Type::PlotIndex iPt15 = index;
-    iPt5.pt  = InHists::Pt5;
-    iPt10.pt = InHists::Pt10;
-    iPt15.pt = InHists::Pt15;
+    iPt5.pt  = PHEC::HistInput::Pt5;
+    iPt10.pt = PHEC::HistInput::Pt10;
+    iPt15.pt = PHEC::HistInput::Pt15;
 
     // make canvas name and tag
     const std::string tag    = input.MakeSpeciesTag("VsPtJet", index.species) + "_";
@@ -381,14 +381,14 @@ namespace PlotsToMake {
     );
 
     // load into vector
-    std::vector<PHEC::PlotInput> input;
-    input.push_back( pt5_opt );
-    input.push_back( pt10_opt );
-    input.push_back( pt15_opt );
+    std::vector<PHEC::PlotInput> inputs;
+    inputs.push_back( pt5_opt );
+    inputs.push_back( pt10_opt );
+    inputs.push_back( pt15_opt );
 
     // make plot
     maker.PlotSpectra2D(
-      PO::CompareSpectra2D(input, canvas),
+      PO::CompareSpectra2D(inputs, canvas),
       ofile
     );
     return;
@@ -404,8 +404,8 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -413,9 +413,9 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iPt5  = index;
     PHEC::Type::PlotIndex iPt10 = index;
     PHEC::Type::PlotIndex iPt15 = index;
-    iPt5.pt  = InHists::Pt5;
-    iPt10.pt = InHists::Pt10;
-    iPt15.pt = InHists::Pt15;
+    iPt5.pt  = PHEC::HistInput::Pt5;
+    iPt10.pt = PHEC::HistInput::Pt10;
+    iPt15.pt = PHEC::HistInput::Pt15;
 
     // colors for diferent jet pt
     const StylePair pt5_col  = std::make_pair(809, 799);
@@ -457,12 +457,12 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iPt10pa = iPt10;
     PHEC::Type::PlotIndex iPt15pp = iPt15;
     PHEC::Type::PlotIndex iPt15pa = iPt15;
-    iPt5pp.species  = InFiles::PP;
-    iPt5pa.species  = InFiles::PAu;
-    iPt10pp.species = InFiles::PP;
-    iPt10pa.species = InFiles::PAu;
-    iPt15pp.species = InFiles::PP;
-    iPt15pa.species = InFiles::PAu;
+    iPt5pp.species  = PHEC::FileInput::PP;
+    iPt5pa.species  = PHEC::FileInput::PAu;
+    iPt10pp.species = PHEC::FileInput::PP;
+    iPt10pa.species = PHEC::FileInput::PAu;
+    iPt15pp.species = PHEC::FileInput::PP;
+    iPt15pa.species = PHEC::FileInput::PAu;
 
     // build hist legends
     const StringPair pt5_leg  = std::make_pair(
@@ -582,8 +582,8 @@ namespace PlotsToMake {
     const std::string& variable,
     const int opt,
     const PHEC::Type::PlotIndex& index,
-    const PHEC::PHCorrelatorInput& input,
-    const PHEC::PHCorrelatorPlotMaker& maker,
+    const PHEC::Input& input,
+    const PHEC::PlotMaker& maker,
     TFile* ofile
   ) {
 
@@ -591,32 +591,32 @@ namespace PlotsToMake {
     PHEC::Type::PlotIndex iPt5data = index;
     PHEC::Type::PlotIndex iPt5reco = index;
     PHEC::Type::PlotIndex iPt5true = index;
-    iPt5data.pt    = InHists::Pt5;
-    iPt5data.level = InFiles::Data;
-    iPt5reco.pt    = InHists::Pt5;
-    iPt5reco.level = InFiles::Reco;
-    iPt5true.pt    = InHists::Pt5;
-    iPt5true.level = InFiles::True;
+    iPt5data.pt    = PHEC::HistInput::Pt5;
+    iPt5data.level = PHEC::FileInput::Data;
+    iPt5reco.pt    = PHEC::HistInput::Pt5;
+    iPt5reco.level = PHEC::FileInput::Reco;
+    iPt5true.pt    = PHEC::HistInput::Pt5;
+    iPt5true.level = PHEC::FileInput::True;
 
     PHEC::Type::PlotIndex iPt10data = index;
     PHEC::Type::PlotIndex iPt10reco = index;
     PHEC::Type::PlotIndex iPt10true = index;
-    iPt10data.pt    = InHists::Pt10;
-    iPt10data.level = InFiles::Data;
-    iPt10reco.pt    = InHists::Pt10;
-    iPt10reco.level = InFiles::Reco;
-    iPt10true.pt    = InHists::Pt10;
-    iPt10true.level = InFiles::True;
+    iPt10data.pt    = PHEC::HistInput::Pt10;
+    iPt10data.level = PHEC::FileInput::Data;
+    iPt10reco.pt    = PHEC::HistInput::Pt10;
+    iPt10reco.level = PHEC::FileInput::Reco;
+    iPt10true.pt    = PHEC::HistInput::Pt10;
+    iPt10true.level = PHEC::FileInput::True;
 
     PHEC::Type::PlotIndex iPt15data = index;
     PHEC::Type::PlotIndex iPt15reco = index;
     PHEC::Type::PlotIndex iPt15true = index;
-    iPt15data.pt    = InHists::Pt15;
-    iPt15data.level = InFiles::Data;
-    iPt15reco.pt    = InHists::Pt15;
-    iPt15reco.level = InFiles::Reco;
-    iPt15true.pt    = InHists::Pt15;
-    iPt15true.level = InFiles::True;
+    iPt15data.pt    = PHEC::HistInput::Pt15;
+    iPt15data.level = PHEC::FileInput::Data;
+    iPt15reco.pt    = PHEC::HistInput::Pt15;
+    iPt15reco.level = PHEC::FileInput::Reco;
+    iPt15true.pt    = PHEC::HistInput::Pt15;
+    iPt15true.level = PHEC::FileInput::True;
 
     // colors for diferent jet pt
     const std::size_t pt5_col[3]  = {799, 797, 809};

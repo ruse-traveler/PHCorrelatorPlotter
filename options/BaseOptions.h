@@ -95,14 +95,14 @@ namespace BaseOptions {
    *  which holds information (e.g. about which
    *  simulation was used for the plots).
    */ 
-  PHEC::TextBox Text(const int species = InFiles::PP) {
+  PHEC::TextBox Text(const int species = PHEC::FileInput::PP) {
 
     std::string system("");
     switch (species) {
-      case InFiles::PP:
+      case PHEC::FileInput::PP:
         system += "p+p collisions";
         break;
-      case InFiles::PAu:
+      case PHEC::FileInput::PAu:
         system += "p+Au collisions";
         break;
       default:

@@ -78,11 +78,11 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   std::cout << "    Opened output file" << std::endl;
 
   // load input options
-  PHEC::PHCorrelatorInput input = PHEC::PHCorrelatorInput();
+  PHEC::Input input = PHEC::Input();
   std::cout << "    Loaded input options." << std::endl;
 
   // create maker
-  PHEC::PHCorrelatorPlotMaker maker = PHEC::PHCorrelatorPlotMaker(
+  PHEC::PlotMaker maker = PHEC::PlotMaker(
     BO::BasePlotStyle(),
     BO::BaseTextStyle(),
     BO::Text()
