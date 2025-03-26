@@ -55,7 +55,7 @@ namespace PHEnergyCorrelator {
   /*! This class consolidates plotting routines associated
    *  with the PHENIX ENC analysis.
    */
-  class PHCorrelatorPlotMaker {
+  class PlotMaker {
 
     public:
 
@@ -1579,13 +1579,13 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! default ctor/dtor
       // ----------------------------------------------------------------------
-      PHCorrelatorPlotMaker()  {};
-      ~PHCorrelatorPlotMaker() {};
+      PlotMaker()  {};
+      ~PlotMaker() {};
 
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      PHCorrelatorPlotMaker(
+      PlotMaker(
         const Style& plot,
         const Style& text,
         const TextBox& box = TextBox()
