@@ -12,7 +12,10 @@
 
 // c++ utilities
 #include <string>
+#include <utility>
 #include <vector>
+// plotting utilities
+#include "../components/PHCorrelatorPlotTypes.h"
 
 
 
@@ -24,6 +27,9 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! Convenient types
     // ------------------------------------------------------------------------
+    typedef std::pair<std::size_t, std::size_t> StylePair;
+    typedef std::pair<std::string, std::string> StringPair;
+    typedef std::pair<PlotInput, PlotInput> InputPair;
     typedef std::vector<std::string> Strings;
     typedef std::vector<std::vector<std::string> > Files;
 

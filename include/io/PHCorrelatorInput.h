@@ -24,7 +24,7 @@
 namespace PHEnergyCorrelator {
 
   // ============================================================================
-  //! Plotting Input/Output Options
+  //! Plotting Input Options
   // ============================================================================
   /*! A small wrapper class to interface with FileInput
    *  and HistInput objects.
@@ -42,14 +42,14 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Setters
       // ------------------------------------------------------------------------
-      void Files(const FileInput& files) {m_files = files;}
-      void Hists(const HistInput& hists) {m_hists = hists;}
+      void SetFiles(const FileInput& files) {m_files = files;}
+      void SetHists(const HistInput& hists) {m_hists = hists;}
 
       // ------------------------------------------------------------------------
       //! Getters
       // ------------------------------------------------------------------------
-      FileInput Files() const {return m_files;}
-      HistInput Hists() const {return m_hists;}
+      FileInput GetFiles() const {return m_files;}
+      HistInput GetHists() const {return m_hists;}
 
       // ------------------------------------------------------------------------
       //! Check if is p+Au
