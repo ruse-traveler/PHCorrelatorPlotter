@@ -31,6 +31,7 @@
 #include "io/PHCorrelatorHistInput.h"
 #include "io/PHCorrelatorInput.h"
 #include "io/PHCorrelatorIOTypes.h"
+#include "io/PHCorrelatorOutput.h"
 #include "maker/PHCorrelatorPlotMaker.h"
 
 // alias for convenience

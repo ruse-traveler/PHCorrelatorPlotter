@@ -23,19 +23,17 @@
 // plotting options
 #include "options/BaseOptions.h"
 #include "options/PlotOptions.h"
-#include "options/PlotsToMake.h"
 
 // abbreviate common namespaces
 namespace BO = BaseOptions;
 namespace PO = PlotOptions;
-namespace PM = PlotsToMake;
 
 
 
 // ============================================================================
 //! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
+void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
 
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
@@ -46,25 +44,25 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   std::vector<TFile*> ofiles;
   switch (plot) {
 
-    case PM::SimVsReco:
+    case PHEC::Output::SimVsReco:
       ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       break;
 
-    case PM::VsPtJet:
+    case PHEC::Output::VsPtJet:
       ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       break;
 
-    case PM::PPVsPAu:
+    case PHEC::Output::PPVsPAu:
       ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       break;
 
-    case PM::CorrectSpectra:
+    case PHEC::Output::CorrectSpectra:
       ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
       ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
@@ -81,18 +79,24 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   PHEC::Input input = PHEC::Input();
   std::cout << "    Loaded input options." << std::endl;
 
-  // create maker
+  // create plot maker
   PHEC::PlotMaker maker = PHEC::PlotMaker(
     BO::BasePlotStyle(),
     BO::BaseTextStyle(),
     BO::Text()
   );
-  std::cout << "    Made maker." << std::endl;
+  std::cout << "    Made plot maker." << std::endl;
+
+  // load output options
+  PHEC::Output output = PHEC::Output();
+  output.SetMaker(maker);
+  output.SetInput(input);
+  std::cout << "    Loaded output options." << std::endl;
 
   // --------------------------------------------------------------------------
   // compare sim vs. data distributions
   // --------------------------------------------------------------------------
-  if (plot == PM::SimVsReco) {
+  if (plot == PHEC::Output::SimVsReco) {
 
     // loop through all combinations of species, jet pt,charge, and spin
     PHEC::Type::PlotIndex idx(-1);
@@ -110,21 +114,24 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             // make sure collision system is correct
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
+            // set index
+            output.SetIndex(idx);
+
             // create comparison for each desired 1D histogram
-            PM::SimVsReco1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
-            PM::SimVsReco1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
-            PM::SimVsReco1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
+            output.SimVsReco1D("EEC", PO::Side, ofiles[0]);
+            output.SimVsReco1D("CollinsBlue", PO::Angle, ofiles[1]);
+            output.SimVsReco1D("BoerMuldersBlue", PO::Angle, ofiles[2]);
             if (isPAu) {
-              PM::SimVsReco1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
-              PM::SimVsReco1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
+              output.SimVsReco1D("CollinsYell", PO::Angle, ofiles[1]);
+              output.SimVsReco1D("BoerMuldersYell", PO::Angle, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
-            PM::SimVsReco2D("CollinsBlueVsR", idx, input, maker, ofiles[1]);
-            PM::SimVsReco2D("BoerMuldersBlueVsR", idx, input, maker, ofiles[2]);
+            output.SimVsReco2D("CollinsBlueVsR", ofiles[1]);
+            output.SimVsReco2D("BoerMuldersBlueVsR", ofiles[2]);
             if (!isPAu) {
-              PM::SimVsReco2D("CollinsYellVsR", idx, input, maker, ofiles[1]);
-              PM::SimVsReco2D("BoerMuldersYellVsR", idx, input, maker, ofiles[2]);
+              output.SimVsReco2D("CollinsYellVsR", ofiles[1]);
+              output.SimVsReco2D("BoerMuldersYellVsR", ofiles[2]);
             }
 
           }  // end spin loop
@@ -138,7 +145,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   // compare distributions as a function of pt jet
   // --------------------------------------------------------------------------
-  if (plot == PM::VsPtJet) {
+  if (plot == PHEC::Output::VsPtJet) {
 
     // loop through all combinations of species, level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
@@ -156,21 +163,24 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
             // make sure collision system is correct
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
+            // set index
+            output.SetIndex(idx);
+
             // create comparisons for each desired 1D histogram
-            PM::VsPtJet1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
-            PM::VsPtJet1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
-            PM::VsPtJet1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
+            output.VsPtJet1D("EEC", PO::Side, ofiles[0]);
+            output.VsPtJet1D("CollinsBlue", PO::Angle, ofiles[1]);
+            output.VsPtJet1D("BoerMuldersBlue", PO::Angle, ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
-              PM::VsPtJet1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
+              output.VsPtJet1D("CollinsYell", PO::Angle, ofiles[1]);
+              output.VsPtJet1D("BoerMuldersYell", PO::Angle, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
-            PM::VsPtJet2D("CollinsBlueVsR", idx, input, maker, ofiles[1]);
-            PM::VsPtJet2D("BoerMuldersBlueVsR", idx, input, maker, ofiles[2]);
+            output.VsPtJet2D("CollinsBlueVsR", ofiles[1]);
+            output.VsPtJet2D("BoerMuldersBlueVsR", ofiles[2]);
             if (!isPAu) {
-              PM::VsPtJet2D("CollinsYellVsR", idx, input, maker, ofiles[1]);
-              PM::VsPtJet2D("BoerMuldersYellVsR", idx, input, maker, ofiles[2]);
+              output.VsPtJet2D("CollinsYellVsR", ofiles[1]);
+              output.VsPtJet2D("BoerMuldersYellVsR", ofiles[2]);
             }
 
           }  // end spin loop
@@ -184,7 +194,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   // compare pp vs. pau distributions
   // --------------------------------------------------------------------------
-  if (plot == PM::PPVsPAu) {
+  if (plot == PHEC::Output::PPVsPAu) {
 
     // loop through all combinations of level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
@@ -195,10 +205,13 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           // only consider blue polarizations for pAu
           if (!input.IsBluePolarization(idx)) continue;
 
+          // set index
+          output.SetIndex(idx);
+
           // create comparisons for each desired 1D histogram
-          PM::PPVsPAu1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
-          PM::PPVsPAu1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
-          PM::PPVsPAu1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
+          output.PPVsPAu1D("EEC", PO::Side, ofiles[0]);
+          output.PPVsPAu1D("CollinsBlue", PO::Angle, ofiles[1]);
+          output.PPVsPAu1D("BoerMuldersBlue", PO::Angle, ofiles[2]);
 
           /* TODO add 2D comparison */
 
@@ -212,7 +225,7 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
   // --------------------------------------------------------------------------
   // apply correction factors
   // --------------------------------------------------------------------------
-  if (plot == PM::CorrectSpectra) {
+  if (plot == PHEC::Output::CorrectSpectra) {
 
     // loop through all combinations of species, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
@@ -229,13 +242,16 @@ void RunPHCorrelatorPlotter(const int plot = PM::SimVsReco) {
           // make sure collision system is correct
           if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
 
+          // set index
+          output.SetIndex(idx);
+
           // calculate/apply corrections for each desired 1D histogram
-          PM::CorrectSpectra1D("EEC", PO::Side, idx, input, maker, ofiles[0]);
-          PM::CorrectSpectra1D("CollinsBlue", PO::Angle, idx, input, maker, ofiles[1]);
-          PM::CorrectSpectra1D("BoerMuldersBlue", PO::Angle, idx, input, maker, ofiles[2]);
+          output.CorrectSpectra1D("EEC", PO::Side, ofiles[0]);
+          output.CorrectSpectra1D("CollinsBlue", PO::Angle, ofiles[1]);
+          output.CorrectSpectra1D("BoerMuldersBlue", PO::Angle, ofiles[2]);
           if (!isPAu) {
-            PM::CorrectSpectra1D("CollinsYell", PO::Angle, idx, input, maker, ofiles[1]);
-            PM::CorrectSpectra1D("BoerMuldersYell", PO::Angle, idx, input, maker, ofiles[2]);
+            output.CorrectSpectra1D("CollinsYell", PO::Angle, ofiles[1]);
+            output.CorrectSpectra1D("BoerMuldersYell", PO::Angle, ofiles[2]);
           }
 
           /* TODO add 2D correction */
