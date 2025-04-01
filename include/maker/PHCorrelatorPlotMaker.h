@@ -25,16 +25,7 @@
 #include <TH1.h>
 #include <TLegend.h>
 // plotting utilities
-#include "../components/PHCorrelatorCanvasManager.h"
-#include "../components/PHCorrelatorLegend.h"
-#include "../components/PHCorrelatorPlotInput.h"
-#include "../components/PHCorrelatorPlotOpts.h"
-#include "../components/PHCorrelatorPlotShape.h"
-#include "../components/PHCorrelatorPlotTools.h"
-#include "../components/PHCorrelatorPlotTypes.h"
-#include "../components/PHCorrelatorRange.h"
-#include "../components/PHCorrelatorStyle.h"
-#include "../components/PHCorrelatorTextBox.h"
+#include "../elements/PHCorrelatorPlotterElements.h"
 
 
 
