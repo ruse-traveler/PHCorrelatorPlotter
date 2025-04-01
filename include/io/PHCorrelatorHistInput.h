@@ -115,7 +115,7 @@ namespace PHEnergyCorrelator {
         m_tags_sp.push_back("spBUYD");
         m_tags_sp.push_back("spBDYU");
         m_tags_sp.push_back("spBDYD");
-        m_tags_sp.push_back("spInt");
+        m_tags_sp.push_back("spINT");
 
         // define legends
         m_legs_sp.clear();
