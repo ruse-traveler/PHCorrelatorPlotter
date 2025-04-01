@@ -15,7 +15,7 @@
 #include <utility>
 #include <vector>
 // plotting utilities
-#include "../components/PHCorrelatorPlotTypes.h"
+#include "../elements/PHCorrelatorPlotterElements.h"
 
 
 

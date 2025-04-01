@@ -22,16 +22,8 @@
 #include "PHCorrelatorHistInput.h"
 #include "PHCorrelatorInput.h"
 #include "PHCorrelatorIOTypes.h"
-#include "../components/PHCorrelatorPlotInput.h"
-#include "../components/PHCorrelatorStyle.h"
-#include "../maker/PHCorrelatorPlotMaker.h"
-// plotting options
-//   - FIXME integrate options into plot maker
-#include "../../options/PlotOptions.h"
-
-// abbreviate common namespaces
-//   - FIXME remove when ready
-namespace PO = PlotOptions;
+#include "../elements/PHCorrelatorPlotterElements.h"
+#include "../maker/PHCorrelatorPlotterMaker.h"
 
 
 
@@ -117,7 +109,7 @@ namespace PHEnergyCorrelator {
 
         // bundle input options
         PlotInput dat_opt = PlotInput(
-          m_input.Files().GetFile(iData),
+          m_input.GetFiles().GetFile(iData),
           dat_hist,
           dat_name,
           dat_leg,
@@ -128,7 +120,7 @@ namespace PHEnergyCorrelator {
           )
         );
         PlotInput rec_opt = PlotInput(
-          m_input.Files().GetFile(iReco),
+          m_input.GetFiles().GetFile(iReco),
           rec_hist,
           rec_name,
           rec_leg,
@@ -139,7 +131,7 @@ namespace PHEnergyCorrelator {
           )
         );
         PlotInput tru_opt = PlotInput(
-          m_input.Files().GetFile(iTrue),
+          m_input.GetFiles().GetFile(iTrue),
           tru_hist,
           tru_name,
           tru_leg,
@@ -157,7 +149,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra1D(
-          PO::SpectraVsBaseline(tru_opt, num_input, canvas, opt),
+          PMO::SpectraVsBaseline(tru_opt, num_input, canvas, opt),
           ofile
         );
         return;
@@ -198,21 +190,21 @@ namespace PHEnergyCorrelator {
 
         // bundle input options
         PlotInput dat_opt = PlotInput(
-          m_input.Files().GetFile(iData),
+          m_input.GetFiles().GetFile(iData),
           dat_hist,
           dat_name,
           dat_leg,
           "colz"
         );
         PlotInput rec_opt = PlotInput(
-          m_input.Files().GetFile(iReco),
+          m_input.GetFiles().GetFile(iReco),
           rec_hist,
           rec_name,
           rec_leg,
           "colz"
         );
         PlotInput tru_opt = PlotInput(
-          m_input.Files().GetFile(iTrue),
+          m_input.GetFiles().GetFile(iTrue),
           tru_hist,
           tru_name,
           tru_leg,
@@ -227,7 +219,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra2D(
-          PO::CompareSpectra2D(inputs, canvas),
+          PMO::CompareSpectra2D(inputs, canvas),
           ofile
         );
         return;
@@ -278,7 +270,7 @@ namespace PHEnergyCorrelator {
 
         // bundle input options
         PlotInput pt5_opt = PlotInput(
-          m_input.Files().GetFile(iPt5),
+          m_input.GetFiles().GetFile(iPt5),
           pt5_hist,
           pt5_name,
           pt5_leg,
@@ -289,7 +281,7 @@ namespace PHEnergyCorrelator {
           )
         );
         PlotInput pt10_opt = PlotInput(
-          m_input.Files().GetFile(iPt10),
+          m_input.GetFiles().GetFile(iPt10),
           pt10_hist,
           pt10_name,
           pt10_leg,
@@ -300,7 +292,7 @@ namespace PHEnergyCorrelator {
           )
         );
         PlotInput pt15_opt = PlotInput(
-          m_input.Files().GetFile(iPt15),
+          m_input.GetFiles().GetFile(iPt15),
           pt15_hist,
           pt15_name,
           pt15_leg,
@@ -319,7 +311,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra1D(
-          PO::CompareSpectra1D(inputs, canvas, opt),
+          PMO::CompareSpectra1D(inputs, canvas, opt),
           ofile
         );
         return;
@@ -360,21 +352,21 @@ namespace PHEnergyCorrelator {
 
         // bundle input options
         PlotInput pt5_opt = PlotInput(
-          m_input.Files().GetFile(iPt5),
+          m_input.GetFiles().GetFile(iPt5),
           pt5_hist,
           pt5_name,
           pt5_leg,
           "colz"
         );
         PlotInput pt10_opt = PlotInput(
-          m_input.Files().GetFile(iPt10),
+          m_input.GetFiles().GetFile(iPt10),
           pt10_hist,
           pt10_name,
           pt10_leg,
           "colz"
         );
         PlotInput pt15_opt = PlotInput(
-          m_input.Files().GetFile(iPt15),
+          m_input.GetFiles().GetFile(iPt15),
           pt15_hist,
           pt15_name,
           pt15_leg,
@@ -389,7 +381,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra2D(
-          PO::CompareSpectra2D(inputs, canvas),
+          PMO::CompareSpectra2D(inputs, canvas),
           ofile
         );
         return;
@@ -410,14 +402,14 @@ namespace PHEnergyCorrelator {
         iPt15.pt = HistInput::Pt15;
 
         // colors for diferent jet pt
-        const StylePair pt5_col  = std::make_pair(809, 799);
-        const StylePair pt10_col = std::make_pair(899, 909);
-        const StylePair pt15_col = std::make_pair(889, 879);
+        const Type::StylePair pt5_col  = std::make_pair(809, 799);
+        const Type::StylePair pt10_col = std::make_pair(899, 909);
+        const Type::StylePair pt15_col = std::make_pair(889, 879);
 
         // markers for different jet pt
-        const StylePair pt5_mar  = std::make_pair(22, 26);
-        const StylePair pt10_mar = std::make_pair(20, 24);
-        const StylePair pt15_mar = std::make_pair(23, 32);
+        const Type::StylePair pt5_mar  = std::make_pair(22, 26);
+        const Type::StylePair pt10_mar = std::make_pair(20, 24);
+        const Type::StylePair pt15_mar = std::make_pair(23, 32);
 
         // make canvas name and tag
         const std::string tag    = "PPVsPAu_";
@@ -429,15 +421,15 @@ namespace PHEnergyCorrelator {
         const std::string pt15_hist = m_input.MakeHistName(variable, iPt15);
 
         // build hist renames
-        const StringPair pt5_name  = std::make_pair(
+        const Type::StringPair pt5_name  = std::make_pair(
           m_input.MakeHistName(variable, iPt5, tag + "PP_"),
           m_input.MakeHistName(variable, iPt5, tag + "PAu)")
         );
-        const StringPair pt10_name = std::make_pair(
+        const Type::StringPair pt10_name = std::make_pair(
           m_input.MakeHistName(variable, iPt10, tag + "PP_"),
           m_input.MakeHistName(variable, iPt10, tag + "PAu_")
         );
-        const StringPair pt15_name = std::make_pair(
+        const Type::StringPair pt15_name = std::make_pair(
           m_input.MakeHistName(variable, iPt15, tag + "PP_"),
           m_input.MakeHistName(variable, iPt15, tag + "PAu_")
         );
@@ -457,23 +449,23 @@ namespace PHEnergyCorrelator {
         iPt15pa.species = FileInput::PAu;
 
         // build hist legends
-        const StringPair pt5_leg  = std::make_pair(
+        const Type::StringPair pt5_leg  = std::make_pair(
           m_input.MakeLegend(iPt5pp),
           m_input.MakeLegend(iPt5pa)
         );
-        const StringPair pt10_leg = std::make_pair(
+        const Type::StringPair pt10_leg = std::make_pair(
           m_input.MakeLegend(iPt10pp),
           m_input.MakeLegend(iPt10pa)
         );
-        const StringPair pt15_leg = std::make_pair(
+        const Type::StringPair pt15_leg = std::make_pair(
           m_input.MakeLegend(iPt15pp),
           m_input.MakeLegend(iPt15pa)
         );
 
         // bundle input options
-        InputPair pt5_opt = std::make_pair(
+        Type::InputPair pt5_opt = std::make_pair(
           PlotInput(
-            m_input.Files().GetFile(iPt5pp),
+            m_input.GetFiles().GetFile(iPt5pp),
             pt5_hist,
             pt5_name.first,
             pt5_leg.first,
@@ -484,7 +476,7 @@ namespace PHEnergyCorrelator {
             )
           ),
           PlotInput(
-            m_input.Files().GetFile(iPt5pa),
+            m_input.GetFiles().GetFile(iPt5pa),
             pt5_hist,
             pt5_name.second,
             pt5_leg.second,
@@ -495,9 +487,9 @@ namespace PHEnergyCorrelator {
             )
           )
         );
-        InputPair pt10_opt = std::make_pair(
+        Type::InputPair pt10_opt = std::make_pair(
           PlotInput(
-            m_input.Files().GetFile(iPt10pp),
+            m_input.GetFiles().GetFile(iPt10pp),
             pt10_hist,
             pt10_name.first,
             pt10_leg.first,
@@ -508,7 +500,7 @@ namespace PHEnergyCorrelator {
             )
           ),
           PlotInput(
-            m_input.Files().GetFile(iPt10pa),
+            m_input.GetFiles().GetFile(iPt10pa),
             pt10_hist,
             pt10_name.second,
             pt10_leg.second,
@@ -519,9 +511,9 @@ namespace PHEnergyCorrelator {
             )
           )
         );
-        InputPair pt15_opt = std::make_pair(
+        Type::InputPair pt15_opt = std::make_pair(
           PlotInput(
-            m_input.Files().GetFile(iPt15pp),
+            m_input.GetFiles().GetFile(iPt15pp),
             pt15_hist,
             pt15_name.first,
             pt15_leg.first,
@@ -532,7 +524,7 @@ namespace PHEnergyCorrelator {
             )
           ),
           PlotInput(
-            m_input.Files().GetFile(iPt15pa),
+            m_input.GetFiles().GetFile(iPt15pa),
             pt15_hist,
             pt15_name.second,
             pt15_leg.second,
@@ -558,7 +550,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra1D(
-          PO::CompareRatios(denominator, numerator, canvas, opt),
+          PMO::CompareRatios(denominator, numerator, canvas, opt),
           ofile
         );
         return;
@@ -668,7 +660,7 @@ namespace PHEnergyCorrelator {
         Inputs data_opt;
         data_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt5data),
+            m_input.GetFiles().GetFile(iPt5data),
             pt5_dhist,
             pt5_name[0],
             pt5_leg[0],
@@ -681,7 +673,7 @@ namespace PHEnergyCorrelator {
         );
         data_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt10data),
+            m_input.GetFiles().GetFile(iPt10data),
             pt10_dhist,
             pt10_name[0],
             pt10_leg[0],
@@ -694,7 +686,7 @@ namespace PHEnergyCorrelator {
         );
         data_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt15data),
+            m_input.GetFiles().GetFile(iPt15data),
             pt15_dhist,
             pt15_name[0],
             pt15_leg[0],
@@ -710,7 +702,7 @@ namespace PHEnergyCorrelator {
         Inputs reco_opt;
         reco_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt5reco),
+            m_input.GetFiles().GetFile(iPt5reco),
             pt5_rhist,
             pt5_name[1],
             pt5_leg[1],
@@ -723,7 +715,7 @@ namespace PHEnergyCorrelator {
         );
         reco_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt10reco),
+            m_input.GetFiles().GetFile(iPt10reco),
             pt10_rhist,
             pt10_name[1],
             pt10_leg[1],
@@ -736,7 +728,7 @@ namespace PHEnergyCorrelator {
         );
         reco_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt15reco),
+            m_input.GetFiles().GetFile(iPt15reco),
             pt15_rhist,
             pt15_name[1],
             pt15_leg[1],
@@ -752,7 +744,7 @@ namespace PHEnergyCorrelator {
         Inputs true_opt;
         true_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt5true),
+            m_input.GetFiles().GetFile(iPt5true),
             pt5_thist,
             pt5_name[2],
             pt5_leg[2],
@@ -765,7 +757,7 @@ namespace PHEnergyCorrelator {
         );
         true_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt10true),
+            m_input.GetFiles().GetFile(iPt10true),
             pt10_thist,
             pt10_name[2],
             pt10_leg[2],
@@ -778,7 +770,7 @@ namespace PHEnergyCorrelator {
         );
         true_opt.push_back(
           PlotInput(
-            m_input.Files().GetFile(iPt15true),
+            m_input.GetFiles().GetFile(iPt15true),
             pt15_thist,
             pt15_name[2],
             pt15_leg[2],
@@ -792,7 +784,7 @@ namespace PHEnergyCorrelator {
 
         // make plot
         m_maker.PlotSpectra1D(
-          PO::CorrectSpectra1D(data_opt, reco_opt, true_opt, canvas, opt),
+          PMO::CorrectSpectra1D(data_opt, reco_opt, true_opt, canvas, opt),
           ofile
         );
         return;
