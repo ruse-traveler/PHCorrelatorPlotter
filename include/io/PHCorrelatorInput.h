@@ -86,6 +86,7 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make a histogram name
       // ------------------------------------------------------------------------
+      /*! FIXME meed to turn on/off tags certain tags */
       std::string MakeHistName(
         const std::string& var,
         const Type::PlotIndex& idx,
@@ -93,7 +94,8 @@ namespace PHEnergyCorrelator {
       ) const {
 
         const std::string base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
-        const std::string index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
+        //const std::string index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
+        const std::string index = m_hists.GetPtTag(idx.pt) + m_hists.GetSpinTag(idx.spin);
         return base + index;
 
       }  // end 'MakeHistName(std::string&, Type::PlotIndex&, std::string&)'
