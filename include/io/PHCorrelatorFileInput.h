@@ -58,9 +58,9 @@ namespace PHEnergyCorrelator {
 
         // define input files for pp
         std::vector<std::string> pp_files;
-        pp_files.push_back("./input/ppRun15_datFullStats_testOptimizing_r03all.d26m3y2025.root");
-        pp_files.push_back("./input/ppRun15_simHalfStats_testOptimizing_r03all.d26m3y2025.root");
-        pp_files.push_back("./input/ppRun15_simHalfStats_testOptimizing_r03all.d26m3y2025.root");
+        pp_files.push_back("./input/ppRun15_datFullStats_testingUpdates_r03all.d26m3y2025.root");
+        pp_files.push_back("./input/ppRun15_simHalfStats_testingUpdates_r03all.d26m3y2025.root");
+        pp_files.push_back("./input/ppRun15_simHalfStats_testingUpdates_r03all.d26m3y2025.root");
 
         // define input files for pAu
         std::vector<std::string> pa_files;
