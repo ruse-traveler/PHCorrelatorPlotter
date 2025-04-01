@@ -841,7 +841,7 @@ namespace PHEnergyCorrelator {
         unity -> Draw();
         manager.GetTPad( param.options.spectra_pad ) -> cd();
         dhists[0] -> Draw();
-        nhists[1] -> Draw();
+        nhists[0] -> Draw("same");
         for (std::size_t iden = 1; iden < dhists.size(); ++iden) {
           dhists[iden] -> Draw("same");
           nhists[iden] -> Draw("same");

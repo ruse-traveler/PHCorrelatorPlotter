@@ -31,7 +31,7 @@ namespace BO = BaseOptions;
 // ============================================================================
 //! Run PHENIX ENC plotting routines
 // ============================================================================
-void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
+void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
 
   // announce start
   std::cout << "\n  Beginning PHENIX ENC plotting routines..." << std::endl;
@@ -42,28 +42,34 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
   std::vector<TFile*> ofiles;
   switch (plot) {
 
-    case PHEC::Output::SimVsReco:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsRecoBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
+    case PHEC::Output::SimVsData:
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataEEC.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataCollins.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataBoerMulders.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      break;
+
+    case PHEC::Output::RecoVsData:
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataEEC.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataCollins.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataBoerMulders.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
       break;
 
     case PHEC::Output::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
       break;
 
     case PHEC::Output::PPVsPAu:
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
       break;
 
     case PHEC::Output::CorrectSpectra:
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_debuggingPlotIndex.d17m3y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_testingUpdates.d1m4y2025.root", "recreate") );
       break;
 
     default:
@@ -94,10 +100,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
   // --------------------------------------------------------------------------
   // compare sim vs. data distributions
   // --------------------------------------------------------------------------
-  if (plot == PHEC::Output::SimVsReco) {
+  if (plot == PHEC::Output::SimVsData) {
+
+    PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning sim vs. data plots." << std::endl;
 
     // loop through all combinations of species, jet pt,charge, and spin
-    PHEC::Type::PlotIndex idx(-1);
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
         for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
@@ -119,21 +127,69 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
             output.SetIndex(idx);
 
             // create comparison for each desired 1D histogram
-            output.SimVsReco1D("EEC", PHEC::PMO::Side, ofiles[0]);
-            output.SimVsReco1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-            output.SimVsReco1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
-            if (isPAu) {
-              output.SimVsReco1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
-              output.SimVsReco1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+            output.SimVsData1D("EEC", PHEC::PMO::Side, ofiles[0]);
+            output.SimVsData1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
+            output.SimVsData1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+            if (!isPAu) {
+              output.SimVsData1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
+              output.SimVsData1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
-            output.SimVsReco2D("CollinsBlueVsR", ofiles[1]);
-            output.SimVsReco2D("BoerMuldersBlueVsR", ofiles[2]);
+            output.SimVsData2D("CollinsBlueVsR", ofiles[1]);
+            output.SimVsData2D("BoerMuldersBlueVsR", ofiles[2]);
             if (!isPAu) {
-              output.SimVsReco2D("CollinsYellVsR", ofiles[1]);
-              output.SimVsReco2D("BoerMuldersYellVsR", ofiles[2]);
+              output.SimVsData2D("CollinsYellVsR", ofiles[1]);
+              output.SimVsData2D("BoerMuldersYellVsR", ofiles[2]);
             }
+
+          }  // end spin loop
+        }  // end jet charge loop
+      }  // end pt jet loop
+    }  // end species loop
+    std::cout << "    Completed sim vs. data plots." << std::endl;
+
+  }  // end SimVsData plot
+
+  // --------------------------------------------------------------------------
+  // compare reco vs. data distributions
+  // --------------------------------------------------------------------------
+  if (plot == PHEC::Output::RecoVsData) {
+
+    PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning reco vs. data plots." << std::endl;
+
+    // loop through all combinations of species, jet pt,charge, and spin
+    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
+        for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+          for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+
+            // only consider blue polarizations for pAu
+            const bool isPAu = input.IsPAu(idx);
+            if (isPAu && !input.IsBluePolarization(idx)) {
+              continue;
+            }
+
+            // FIXME remove after we rerun p+Au samples
+            if (isPAu) continue;
+
+            // make sure collision system is correct
+            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+
+            // set index
+            output.SetIndex(idx);
+
+            // create comparison for each desired 1D histogram
+            output.RecoVsData1D("EEC", PHEC::PMO::Side, ofiles[0]);
+            output.RecoVsData1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
+            output.RecoVsData1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+            if (!isPAu) {
+              output.RecoVsData1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
+              output.RecoVsData1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+            }
+
+            /* TODO make 2D comparisons */
 
           }  // end spin loop
         }  // end jet charge loop
@@ -141,15 +197,17 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
     }  // end species loop
     std::cout << "    Completed sim vs. reco plots." << std::endl;
 
-  }  // end SimVsReco plot
+  }  // end SimVsData plot
 
   // --------------------------------------------------------------------------
   // compare distributions as a function of pt jet
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::VsPtJet) {
 
-    // loop through all combinations of species, level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning vs. ptJet plots." << std::endl;
+
+    // loop through all combinations of species, level, charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
         for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
@@ -200,8 +258,10 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::PPVsPAu) {
 
-    // loop through all combinations of level, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning pp vs. pAu plots." << std::endl;
+
+    // loop through all combinations of level, charge, and spin
     for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
       for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
         for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
@@ -231,8 +291,10 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsReco) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::CorrectSpectra) {
 
-    // loop through all combinations of species, charge, and spin
     PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning correction plots." << std::endl;
+
+    // loop through all combinations of species, charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
         for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {

@@ -276,6 +276,77 @@ namespace PHEnergyCorrelator {
 
 
     // ------------------------------------------------------------------------
+    //! Bundle 1D `CompareRatios` parameters
+    // ------------------------------------------------------------------------
+    PlotMaker::CompareRatiosParams CompareRatios1D(
+      const Inputs& in_denoms,
+      const Inputs& in_numers,
+      const std::string& canvas_name = "cCompareRatios1D",
+      const int range_opt = Side
+    ) {
+
+      // grab default pad options, and
+      // turn on log y/x when necessary
+      PadOpts ratio_opts = PadOpts();
+      PadOpts spect_opts = PadOpts();
+      if (range_opt == Side) {
+        ratio_opts.logx = 1;
+        spect_opts.logx = 1;
+        spect_opts.logy = 1;
+      }
+
+      // set pad vertices
+      Type::Vertices ratio_vtxs;
+      ratio_vtxs.push_back(0.00);
+      ratio_vtxs.push_back(0.00);
+      ratio_vtxs.push_back(1.00);
+      ratio_vtxs.push_back(0.35);
+
+      Type::Vertices spect_vtxs;
+      spect_vtxs.push_back(0.00);
+      spect_vtxs.push_back(0.35);
+      spect_vtxs.push_back(1.00);
+      spect_vtxs.push_back(1.00);
+
+      // set spectra margins
+      Type::Margins ratio_margins;
+      ratio_margins.push_back(0.005);
+      ratio_margins.push_back(0.02);
+      ratio_margins.push_back(0.25);
+      ratio_margins.push_back(0.15);
+
+      Type::Margins spect_margins;
+      spect_margins.push_back(0.02);
+      spect_margins.push_back(0.02);
+      spect_margins.push_back(0.005);
+      spect_margins.push_back(0.15);
+
+      // define canvas (use default pad options)
+      Canvas canvas = Canvas(canvas_name, "", std::make_pair(750, 1125), PadOpts());
+      canvas.AddPad( Pad("pRatio",   "", ratio_vtxs, ratio_margins, ratio_opts), "ratio" );
+      canvas.AddPad( Pad("pSpectra", "", spect_vtxs, spect_margins, spect_opts), "spectra" );
+
+      // set auxilliary options
+      PlotOpts plot_opts;
+      plot_opts.plot_range  = DefinePlotRange(range_opt);
+      plot_opts.norm_range  = DefineNormRange(range_opt);
+      plot_opts.canvas      = canvas;
+      plot_opts.ratio_pad   = "ratio";
+      plot_opts.spectra_pad = "spectra";
+
+      // bundle parameters
+      PlotMaker::CompareRatiosParams params;
+      params.denominators = in_denoms;
+      params.numerators   = in_numers;
+      params.options      = plot_opts;
+      params.unity        = DefineUnity(range_opt);
+      return params;
+
+    }  // end 'CompareRatios1D(Inputs& x 2, std::string&, int)'
+
+
+
+    // ------------------------------------------------------------------------
     //! Bundle `SpectraVsBaseline` parameters
     // ------------------------------------------------------------------------
     PlotMaker::SpectraVsBaselineParams SpectraVsBaseline(

@@ -25,6 +25,9 @@
 #include "../elements/PHCorrelatorPlotterElements.h"
 #include "../maker/PHCorrelatorPlotterMaker.h"
 
+// TEST
+#include <iostream>
+
 
 
 namespace PHEnergyCorrelator {
@@ -40,7 +43,7 @@ namespace PHEnergyCorrelator {
     public:
 
       // enumerate outputs
-      enum Plots {SimVsReco, VsPtJet, PPVsPAu, CorrectSpectra};
+      enum Plots {SimVsData, RecoVsData, VsPtJet, PPVsPAu, CorrectSpectra};
 
     private:
 
@@ -66,9 +69,9 @@ namespace PHEnergyCorrelator {
       Input           GetInput() {return m_input;}
 
       // ----------------------------------------------------------------------
-      //! Make 1D sim vs. reco plot
+      //! Make 1D sim vs. data plot
       // ----------------------------------------------------------------------
-      void SimVsReco1D(const std::string& variable, const int opt, TFile* ofile) {
+      void SimVsData1D(const std::string& variable, const int opt, TFile* ofile) {
 
         // constrain level indices
         Type::PlotIndex iData = m_index;
@@ -154,12 +157,12 @@ namespace PHEnergyCorrelator {
         );
         return;
 
-      }  // end 'SimVsReco1D(std::string&, int, TFile*)'
+      }  // end 'SimVsData1D(std::string&, int, TFile*)'
 
       // ----------------------------------------------------------------------
       // Make 2D sim vs. reco plot
       // ----------------------------------------------------------------------
-      void SimVsReco2D(const std::string& variable, TFile* ofile) {
+      void SimVsData2D(const std::string& variable, TFile* ofile) {
 
         // constrain level indices
         Type::PlotIndex iData = m_index;
@@ -224,7 +227,55 @@ namespace PHEnergyCorrelator {
         );
         return;
 
-      }  // end 'SimVsReco2D(std::string&, TFile*)'
+      }  // end 'SimVsData2D(std::string&, TFile*)'
+
+      // ----------------------------------------------------------------------
+      //! Make 1D reco vs. data comparison plot
+      // ----------------------------------------------------------------------      
+      void RecoVsData1D(const std::string& variable, const int opt, TFile* ofile) {
+
+        // constrain level indices
+        Type::PlotIndex iData = m_index;
+        Type::PlotIndex iReco = m_index;
+        iData.level = FileInput::Data;
+        iReco.level = FileInput::Reco;
+
+        // make canvas name and tag
+        const std::string tag    = m_input.MakeSpeciesTag("DataVsReco", m_index.species) + "_";
+        const std::string canvas = m_input.MakeCanvasName("cDataVsReco" + variable, m_index);
+
+        // bundle input options
+        PlotInput dat_opt = PlotInput(
+          m_input.GetFiles().GetFile(iData),
+          m_input.MakeHistName(variable, iData),
+          m_input.MakeHistName(variable, iData, tag),
+          m_input.MakeLegend(iData),
+          "",
+          Style::Plot(923, 20)
+        );
+        PlotInput rec_opt = PlotInput(
+          m_input.GetFiles().GetFile(iReco),
+          m_input.MakeHistName(variable, iReco),
+          m_input.MakeHistName(variable, iReco, tag),
+          m_input.MakeLegend(iReco),
+          "",
+          Style::Plot(899, 24)
+        );
+
+        // load into vectors
+        std::vector<PlotInput> dat_in;
+        std::vector<PlotInput> rec_in;
+        dat_in.push_back( dat_opt );
+        rec_in.push_back( rec_opt );
+
+        //  make plot
+        m_maker.PlotSpectra1D(
+          PMO::CompareRatios1D(dat_in, rec_in, canvas, opt),
+          ofile
+        );
+        return;
+
+      }  // end 'RecoVsData1D(std::string&, int, TFile*)'
 
       // ----------------------------------------------------------------------
       // Make 1D vs. jet pt comparison
