@@ -11,32 +11,13 @@
 #ifndef PHCORRELATORPLOTTER_H
 #define PHCORRELATORPLOTTER_H
 
-// plotter components
-#include "components/PHCorrelatorCanvas.h"
-#include "components/PHCorrelatorCanvasManager.h"
-#include "components/PHCorrelatorLegend.h"
-#include "components/PHCorrelatorPad.h"
-#include "components/PHCorrelatorPadOpts.h"
-#include "components/PHCorrelatorPlotInput.h"
-#include "components/PHCorrelatorPlotOpts.h"
-#include "components/PHCorrelatorPlotShape.h"
-#include "components/PHCorrelatorPlotTools.h"
-#include "components/PHCorrelatorPlotTypes.h"
-#include "components/PHCorrelatorProjection.h"
-#include "components/PHCorrelatorRange.h"
-#include "components/PHCorrelatorShape.h"
-#include "components/PHCorrelatorStyle.h"
-#include "components/PHCorrelatorTextBox.h"
-#include "io/PHCorrelatorFileInput.h"
-#include "io/PHCorrelatorHistInput.h"
-#include "io/PHCorrelatorInput.h"
-#include "io/PHCorrelatorIOTypes.h"
-#include "io/PHCorrelatorOutput.h"
-#include "maker/PHCorrelatorPlotMaker.h"
+#include "elements/PHCorrelatorPlotterElements.h"
+#include "io/PHCorrelatorPlotterIO.h"
+#include "maker/PHCorrelatorPlotterMaker.h"
 
 // alias for convenience
 namespace PHEC = PHEnergyCorrelator;
 
 #endif
 
-// end ========================================================================
+/// end =======================================================================
