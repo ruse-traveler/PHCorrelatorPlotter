@@ -45,7 +45,7 @@ namespace PHEnergyCorrelator {
     TH1* ProjectTH1(const TH2* hist) {
 
       /* TODO fill in */
-      return new TH1();
+      return new TH1D("hToDo", "TODO", 10, 0.0, 1.0);
 
     }  // end 'ProjectTH1(TH2*)'
 
