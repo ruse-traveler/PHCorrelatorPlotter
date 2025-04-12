@@ -103,6 +103,7 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make a histogram legend
       // ------------------------------------------------------------------------
+      /* FIXME need to turn other strings off */
       std::string MakeLegend(const Type::PlotIndex& idx) const {
 
         std::string legend;
@@ -112,7 +113,8 @@ namespace PHEnergyCorrelator {
         if (idx.level > -1) {
           legend += m_files.GetLevelLegend(idx.level) + " ";
         }
-        legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt) + ", " + m_hists.GetChargeLegend(idx.chrg);
+        //legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt) + ", " + m_hists.GetChargeLegend(idx.chrg);
+        legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt);
         return legend;
 
       }  // end 'MakeLegend(Type::PlotIndex&)'
