@@ -65,6 +65,9 @@ namespace PHEnergyCorrelator {
      *    first  = x range to plot
      *    second = y range to plot
      *    third  = z range to plot
+     *  
+     *  FIXME remove when options are merged with routines
+     *  (THIS IS DATA!!)
      */ 
     Range DefinePlotRange(const int opt = Side) {
 
@@ -118,6 +121,7 @@ namespace PHEnergyCorrelator {
     // ------------------------------------------------------------------------
     //! Define line for unit ratio
     // ------------------------------------------------------------------------
+    /* FIXME this should probably get turned into a Shape ctor */
     PlotShape DefineUnity(const int opt = Side) {
 
       return PlotShape(
