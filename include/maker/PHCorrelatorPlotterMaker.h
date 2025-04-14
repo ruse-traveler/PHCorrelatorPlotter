@@ -14,9 +14,11 @@
 #ifndef PHCORRELATORPLOTTERMAKER_H
 #define PHCORRELATORPLOTTERMAKER_H
 
+#include "PHCorrelatorBaseRoutine.h"
 #include "PHCorrelatorPlotMaker.h"
 #include "PHCorrelatorPlotMakerOptions.h"
 #include "PHCorrelatorPlotMakerTools.h"
+#include "PHCorrelatorPlotMakerTypes.h"
 
 // alias for convenience
 namespace PHEnergyCorrelator {
