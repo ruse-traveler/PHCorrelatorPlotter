@@ -19,6 +19,7 @@
 #include "PHCorrelatorPlotMakerOptions.h"
 #include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
+#include "PHCorrelatorPlotSpectra1D.h"
 
 // alias for convenience
 namespace PHEnergyCorrelator {
