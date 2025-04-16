@@ -88,7 +88,15 @@ namespace PHEnergyCorrelator {
 
     public:
 
-      /* TODO add configure */
+      // ----------------------------------------------------------------------
+      //! Getters
+      // ----------------------------------------------------------------------
+      Params GetParams() const {return m_params;}
+
+      // ----------------------------------------------------------------------
+      //! Setters
+      // ----------------------------------------------------------------------
+      void SetParams(const Params& params) {m_params = params;}
 
       // ----------------------------------------------------------------------
       //! Plot various 1D ENC (or othwerise) spectra
@@ -217,7 +225,11 @@ namespace PHEnergyCorrelator {
       PlotSpectra1D()  {};
       ~PlotSpectra1D() {};
 
-      /* TODO add other ctors */
+      // ----------------------------------------------------------------------
+      //! ctor accepting arguments
+      // ----------------------------------------------------------------------
+      explicit PlotSpectra1D(const Style& plot, const Style& text, const TextBox& box)
+        : BaseRoutine(plot, text, box) {};
 
   };  // end PlotSpectra1D
 

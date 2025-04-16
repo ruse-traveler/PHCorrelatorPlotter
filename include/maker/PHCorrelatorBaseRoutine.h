@@ -82,6 +82,17 @@ namespace PHEnergyCorrelator {
       BaseRoutine()  {};
       ~BaseRoutine() {};
 
+      // ----------------------------------------------------------------------
+      //! ctor accepting arguments
+      // ----------------------------------------------------------------------
+      explicit BaseRoutine(const Style& plot, const Style& text, const TextBox& box) {
+
+        m_basePlotStyle = plot;
+        m_baseTextStyle = text;
+        m_textBox       = box;
+
+      }  // end ctor(Style&, Style&, TextBox&)'
+
   };  // end BaseRoutine
 
 }    // end PHEnergyCorrelator namespace
