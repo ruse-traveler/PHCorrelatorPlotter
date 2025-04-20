@@ -74,7 +74,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       /*! Should be overwritten by derived routine.
        */
-      virtual void Plot(TFile* /*ofile*/) {return;}
+      virtual void Plot(TFile* /*ofile*/) const {return;}
 
       // ----------------------------------------------------------------------
       //! default ctor/dtor

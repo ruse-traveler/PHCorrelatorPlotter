@@ -1521,7 +1521,7 @@ namespace PHEnergyCorrelator {
         }
 
         // draw objects
-        //   - FIXME option should be configurable
+     
         manager.Draw();
         for (std::size_t ihst = 0; ihst < dhists.size(); ++ihst) {
 
