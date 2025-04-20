@@ -52,7 +52,7 @@ namespace PHEnergyCorrelator {
 
       const std::size_t div_one = (nhist / ncol) + 1;
       const std::size_t div_mod = (nhist / ncol) + (nhist % ncol);
-      return min(div_one, div_mod);
+      return std::min(div_one, div_mod);
 
     }  // end 'GetRowNumber(std::size_t, std::size_t)'
 
