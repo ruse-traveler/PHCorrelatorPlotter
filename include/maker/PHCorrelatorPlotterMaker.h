@@ -23,7 +23,8 @@
 #include "PHCorrelatorPlotRatios2D.h"
 #include "PHCorrelatorPlotSpectra1D.h"
 #include "PHCorrelatorPlotSpectra2D.h"
-#include "PHCorrealtorPlotVsBaseline1D.h"
+#include "PHCorrelatorPlotVsBaseline1D.h"
+#include "PHCorrelatorPlotVsBaseline2D.h"
 
 // alias for convenience
 namespace PHEnergyCorrelator {
