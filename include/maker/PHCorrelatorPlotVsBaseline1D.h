@@ -1,7 +1,7 @@
 /// ===========================================================================
 /*! \file    PHCorrelatorPlotVsBaseline1D.h
  *  \authors Derek Anderson
- *  \date    04.13.2024
+ *  \date    04.26.2025
  *
  *  PlotMaker routine to plot various 1D spectra.
  */
@@ -42,7 +42,7 @@ namespace PHEnergyCorrelator {
       // ======================================================================
       //! Parameters for plotting 1D spectra vs. a baseline
       // ======================================================================
-      /*! Struct to consolidate parameters for the "PlotVsBasline1D"
+      /*! Struct to consolidate parameters for the "PlotVsBaseline1D"
        *  plotting routine.
        */
       struct Params {

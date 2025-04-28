@@ -14,11 +14,17 @@
 #ifndef PHCORRELATORPLOTTERMAKER_H
 #define PHCORRELATORPLOTTERMAKER_H
 
-#include "PHCorrelatorBaseRoutine.h"
+// plotting components
 #include "PHCorrelatorPlotMaker.h"
 #include "PHCorrelatorPlotMakerOptions.h"
 #include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
+
+// plotting routines
+#include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorCorrectSpectra1D.h"
+#include "PHCorrelatorCorrectSpectra2D.h"
+
 #include "PHCorrelatorPlotRatios1D.h"
 #include "PHCorrelatorPlotRatios2D.h"
 #include "PHCorrelatorPlotSpectra1D.h"

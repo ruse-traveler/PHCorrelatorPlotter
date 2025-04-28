@@ -1,7 +1,7 @@
 /// ===========================================================================
 /*! \file    PHCorrelatorPlotSpectra1D.h
  *  \authors Derek Anderson
- *  \date    04.13.2024
+ *  \date    04.13.2025
  *
  *  PlotMaker routine to plot various 1D spectra.
  */
