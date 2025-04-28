@@ -16,6 +16,7 @@
 
 // plotting components
 #include "PHCorrelatorPlotMaker.h"
+#include "PHCorrelatorPlotMakerNew.h"
 #include "PHCorrelatorPlotMakerOptions.h"
 #include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
@@ -24,7 +25,6 @@
 #include "PHCorrelatorBaseRoutine.h"
 #include "PHCorrelatorCorrectSpectra1D.h"
 #include "PHCorrelatorCorrectSpectra2D.h"
-
 #include "PHCorrelatorPlotRatios1D.h"
 #include "PHCorrelatorPlotRatios2D.h"
 #include "PHCorrelatorPlotSpectra1D.h"

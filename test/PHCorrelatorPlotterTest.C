@@ -43,19 +43,71 @@ void PHCorrelatorPlotterTest() {
   // --------------------------------------------------------------------------
   //! Test maker
   // --------------------------------------------------------------------------
-  std::cout << "    Case [1]: test maker" << std::endl;
+  std::cout << "    Case [1]: test maker using default ctor" << std::endl;
 
-  // instantiate plot maker
-  PHEC::PlotMaker maker = PHEC::PlotMaker();
-  maker.SetBasePlotStyle( BO::BasePlotStyle() );
-  maker.SetBaseTextStyle( BO::BaseTextStyle() );
-  maker.SetTextBox( BO::Text() );
-  std::cout << "    ---- [PASS] created plot maker" << std::endl;
+  // instantiate plot maker with ctor()
+  PHEC::PlotMakerNew maker_a = PHEC::PlotMakerNew();
+  maker_a.SetBasePlotStyle( BO::BasePlotStyle() );
+  maker_a.SetBaseTextStyle( BO::BaseTextStyle() );
+  maker_a.SetTextBox( BO::Text() );
+  std::cout << "    ---- [PASS] created maker w/ default ctor, n routines = "
+            << maker_a.GetNRoutines()
+            << std::endl;
+
+  // --------------------------------------------------------------------------
+  //! Test calling PHEC::PlotMakerNew::Init() after PHEC::PlotMakerNew()
+  // --------------------------------------------------------------------------
+  std::cout << "    Case [2]: test calling PHEC::PlotMakerNew::Init (1/2)" << std::endl;
+
+  maker_a.Init();
+  std::cout << "    ---- [PASS] called Init(), n routines = "
+            << maker_a.GetNRoutines()
+            << std::endl;
+
+  // --------------------------------------------------------------------------
+  //! Test new plot maker
+  // --------------------------------------------------------------------------
+  std::cout << "    Case [3]: test maker using ctor w/ arguments" << std::endl;
+
+  // instantiate plot maker with ctor(...)
+  PHEC::PlotMakerNew maker_b = PHEC::PlotMakerNew(
+    BO::BasePlotStyle(),
+    BO::BaseTextStyle(),
+    BO::Text()
+  );
+  std::cout << "    ---- [PASS] created maker w/ ctor(...), n routines = "
+            << maker_b.GetNRoutines()
+            << std::endl;
+
+  // --------------------------------------------------------------------------
+  //! Test calling PHEC::PlotMakerNew::Init() after PHEC::PlotMakerNew(...)
+  // --------------------------------------------------------------------------
+  std::cout << "    Case [4]: test calling PHEC::PlotMakerNew::Init (2/2)" << std::endl;
+
+  maker_b.Init();
+  std::cout << "    ---- [PASS] called Init(), n routines = "
+            << maker_b.GetNRoutines()
+            << std::endl;
+
+  // --------------------------------------------------------------------------
+  //! Try accessing a plotting routine
+  // --------------------------------------------------------------------------
+  std::cout << "    Case [5]: test accessing a plotting routine" << std::endl;
+
+  PHEC::BaseRoutine* routine = maker_b("PlotSpectra1D");
+  std::cout << "    ---- [PASS] routine = " << routine << std::endl;
 
   // --------------------------------------------------------------------------
   //! Test output
   // --------------------------------------------------------------------------
-  std::cout << "    Case [2]: test output" << std::endl;
+  std::cout << "    Case [6]: test output" << std::endl;
+
+  // FIXME remove once new maker is swapped in
+  PHEC::PlotMaker maker = PHEC::PlotMaker(
+    BO::BasePlotStyle(),
+    BO::BaseTextStyle(),
+    BO::Text()
+  ); 
 
   // instantiate outputs
   PHEC::Output output = PHEC::Output();
@@ -63,11 +115,7 @@ void PHCorrelatorPlotterTest() {
   output.SetInput(input);
   std::cout << "    ---- [PASS] loaded outputs" << std::endl;
 
-  /* TODO test plotting routines */
-
-  // announce end
-
-  // exit test
+  // announce end & exit test
   std::cout << "  PHCorrelatorPlotter test complete!\n" << std::endl;
   return;
 
