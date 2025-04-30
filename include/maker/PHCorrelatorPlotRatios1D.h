@@ -49,20 +49,20 @@ namespace PHEnergyCorrelator {
       struct Params {
 
         // members
-        Inputs    denominators;  ///!< baselines to compare against and their details
-        Inputs    numerators;    ///!< list of spectra to compare and their details
-        PlotShape unity;         ///!< definition of unit ratio line to draw
-        Shapes    shapes;        ///!< additional shapes (e.g. lines) to draw
-        PlotOpts  options;       ///!< auxilliary plot options
+        Type::Inputs denominators;  ///!< baselines to compare against and their details
+        Type::Inputs numerators;    ///!< list of spectra to compare and their details
+        PlotShape    unity;         ///!< definition of unit ratio line to draw
+        Type::Shapes shapes;        ///!< additional shapes (e.g. lines) to draw
+        PlotOpts     options;       ///!< auxilliary plot options
 
         // --------------------------------------------------------------------
         //! default ctor
         // --------------------------------------------------------------------
         Params() {
-          denominators = Inputs();
-          numerators   = Inputs();
+          denominators = Type::Inputs();
+          numerators   = Type::Inputs();
           unity        = PlotShape();
-          shapes       = Shapes();
+          shapes       = Type::Shapes();
           options      = PlotOpts();
         }
 
@@ -75,10 +75,10 @@ namespace PHEnergyCorrelator {
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Params(
-          const Inputs& denom_args,
-          const Inputs& numer_args,
+          const Type::Inputs& denom_args,
+          const Type::Inputs& numer_args,
           const PlotShape& unity_arg,
-          const Shapes& shape_args,
+          const Type::Shapes& shape_args,
           const PlotOpts& opt_args
         ) {
           denominators = denom_args;
@@ -86,7 +86,7 @@ namespace PHEnergyCorrelator {
           unity        = unity_arg;
           shapes       = shape_args;
           options      = opt_args;
-        }  // end ctor(Inputs& x 2, PlotShape&, Shapes&, PlotOpts&)'
+        }  // end ctor(Type::Inputs& x 2, Type::PlotShape&, Type::Shapes&, PlotOpts&)'
 
       };  // end Params
 
@@ -106,6 +106,56 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetParams(const Params& params) {m_params = params;}
+
+      // ----------------------------------------------------------------------
+      //! Configure routine
+      // ----------------------------------------------------------------------
+      /*! Sets routine parameters with reasonable default values
+       *  based on provided inputs.
+       */
+      void Configure(
+        const Type::Inputs& in_denoms,
+        const Type::Inputs& in_numers,
+        const std::string& canvas_name = "cCompareRatios1D",
+        const int range_opt = Type::Side
+      ) {
+
+        // grab default pad options, and
+        // turn on log y/x when necessary
+        PadOpts ratio_opts = PadOpts();
+        PadOpts spect_opts = PadOpts();
+        if (range_opt == Type::Side) {
+          ratio_opts.logx = 1;
+          spect_opts.logx = 1;
+          spect_opts.logy = 1;
+        }
+
+        // generate ratio canvas
+        Canvas canvas = Tools::MakeRatioCanvas(
+          canvas_name,
+          "pSpectra",
+          "pRatio",
+          0.35,
+          spect_opts,
+          ratio_opts
+        );
+
+        // set auxilliary options
+        PlotOpts plot_opts;
+        plot_opts.plot_range  = Default::PlotRange(range_opt);
+        plot_opts.norm_range  = Default::NormRange(range_opt);
+        plot_opts.canvas      = canvas;
+        plot_opts.ratio_pad   = "ratio";
+        plot_opts.spectra_pad = "spectra";
+
+        // bundle parameters
+        m_params.denominators = in_denoms;
+        m_params.numerators   = in_numers;
+        m_params.options      = plot_opts;
+        m_params.unity        = Default::Unity(range_opt);
+        return;
+
+      }  // end 'Configure(Inputs& x 2, std::string&, int)'
 
       // ----------------------------------------------------------------------
       //! Plot various pairs of 1D ENC (or otherwise) spectra and their ratios
@@ -241,8 +291,8 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created legend and text box." << std::endl;
 
         // set styles
-        Styles den_styles = GenerateStyles( m_params.denominators );
-        Styles num_styles = GenerateStyles( m_params.numerators );
+        Type::Styles den_styles = GenerateStyles( m_params.denominators );
+        Type::Styles num_styles = GenerateStyles( m_params.numerators );
         for (std::size_t iden = 0; iden < nhists.size(); ++iden) {
 
           // set denominator style

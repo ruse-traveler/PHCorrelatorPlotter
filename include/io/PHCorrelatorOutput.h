@@ -23,17 +23,14 @@
 #include "PHCorrelatorInput.h"
 #include "PHCorrelatorIOTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
-#include "../maker/PHCorrelatorPlotterMaker.h"
-
-// TEST
-#include <iostream>
+#include "../maker/PHCorrelatorPlotMaker.h"
 
 
 
 namespace PHEnergyCorrelator {
 
   // ==========================================================================
-  //! Plotting Output
+  //! Plotting Output ()
   // ==========================================================================
   /*! A class to apply the generic routines of PHEC::PlotMaker
    *  to the inputs deined by PHEC::Input.
@@ -64,9 +61,9 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Type::PlotIndex GetIndex() {return m_index;}
-      PlotMaker       GetMaker() {return m_maker;}
-      Input           GetInput() {return m_input;}
+      Type::PlotIndex GetIndex() const {return m_index;}
+      PlotMaker       GetMaker() const {return m_maker;}
+      Input           GetInput() const {return m_input;}
 
       // ----------------------------------------------------------------------
       //! Make 1D sim vs. data plot
@@ -151,16 +148,14 @@ namespace PHEnergyCorrelator {
         num_input.push_back( rec_opt );
 
         // make plot
-        m_maker.PlotSpectra1D(
-          PMO::SpectraVsBaseline(tru_opt, num_input, canvas, opt),
-          ofile
-        );
+        m_maker.GetPlotVsBaseline1D().Configure(tru_opt, num_input, canvas, opt);
+        m_maker.GetPlotVsBaseline1D().Plot(ofile);
         return;
 
       }  // end 'SimVsData1D(std::string&, int, TFile*)'
 
       // ----------------------------------------------------------------------
-      // Make 2D sim vs. reco plot
+      // Make 2D sim vs. data plot
       // ----------------------------------------------------------------------
       void SimVsData2D(const std::string& variable, TFile* ofile) {
 
@@ -221,17 +216,15 @@ namespace PHEnergyCorrelator {
         inputs.push_back( tru_opt );
 
         // make plot
-        m_maker.PlotSpectra2D(
-          PMO::CompareSpectra2D(inputs, canvas),
-          ofile
-        );
+        m_maker.GetPlotSpectra2D().Configure(inputs, canvas);
+        m_maker.GetPlotSpectra2D().Plot(ofile);
         return;
 
       }  // end 'SimVsData2D(std::string&, TFile*)'
 
       // ----------------------------------------------------------------------
       //! Make 1D reco vs. data comparison plot
-      // ----------------------------------------------------------------------      
+      // ----------------------------------------------------------------------
       void RecoVsData1D(const std::string& variable, const int opt, TFile* ofile) {
 
         // constrain level indices
@@ -269,10 +262,8 @@ namespace PHEnergyCorrelator {
         rec_in.push_back( rec_opt );
 
         //  make plot
-        m_maker.PlotSpectra1D(
-          PMO::CompareRatios1D(dat_in, rec_in, canvas, opt),
-          ofile
-        );
+        m_maker.GetPlotRatios1D().Configure(dat_in, rec_in, canvas, opt);
+        m_maker.GetPlotRatios1D().Plot(ofile);
         return;
 
       }  // end 'RecoVsData1D(std::string&, int, TFile*)'
@@ -361,10 +352,8 @@ namespace PHEnergyCorrelator {
         inputs.push_back( pt15_opt );
 
         // make plot
-        m_maker.PlotSpectra1D(
-          PMO::CompareSpectra1D(inputs, canvas, opt),
-          ofile
-        );
+        m_maker.GetPlotSpectra1D().Configure(inputs, canvas, opt);
+        m_maker.GetPlotSpectra1D().Plot(ofile);
         return;
 
       }  // end 'VsPtJet1D(std::string&, int, TFile*)'
@@ -431,10 +420,8 @@ namespace PHEnergyCorrelator {
         inputs.push_back( pt15_opt );
 
         // make plot
-        m_maker.PlotSpectra2D(
-          PMO::CompareSpectra2D(inputs, canvas),
-          ofile
-        );
+        m_maker.GetPlotSpectra2D().Configure(inputs, canvas);
+        m_maker.GetPlotSpectra2D().Plot(ofile);
         return;
 
       }  // end 'VsPtJet2D(std::string&, TFile*)'
@@ -600,10 +587,8 @@ namespace PHEnergyCorrelator {
         numerator.push_back( pt15_opt.second );
 
         // make plot
-        m_maker.PlotSpectra1D(
-          PMO::CompareRatios(denominator, numerator, canvas, opt),
-          ofile
-        );
+        m_maker.GetPlotRatios1D().Configure(denominator, numerator, canvas, opt);
+        m_maker.GetPlotRatios1D().Plot(ofile);
         return;
 
       }  // end 'PPVsPAu1D(std::string&, int, TFile*)'
@@ -708,7 +693,7 @@ namespace PHEnergyCorrelator {
         };
 
         // bundle input data options
-        Inputs data_opt;
+        Type::Inputs data_opt;
         data_opt.push_back(
           PlotInput(
             m_input.GetFiles().GetFile(iPt5data),
@@ -750,7 +735,7 @@ namespace PHEnergyCorrelator {
         );
 
         // bundle input reco options
-        Inputs reco_opt;
+        Type::Inputs reco_opt;
         reco_opt.push_back(
           PlotInput(
             m_input.GetFiles().GetFile(iPt5reco),
@@ -792,7 +777,7 @@ namespace PHEnergyCorrelator {
         );
 
         // bundle input true options
-        Inputs true_opt;
+        Type::Inputs true_opt;
         true_opt.push_back(
           PlotInput(
             m_input.GetFiles().GetFile(iPt5true),
@@ -834,10 +819,8 @@ namespace PHEnergyCorrelator {
         );
 
         // make plot
-        m_maker.PlotSpectra1D(
-          PMO::CorrectSpectra1D(data_opt, reco_opt, true_opt, canvas, opt),
-          ofile
-        );
+        m_maker.GetCorrectSpectra1D().Configure(data_opt, reco_opt, true_opt, canvas, opt);
+        m_maker.GetCorrectSpectra1D().Plot(ofile);
         return;
 
       }  // end 'CorrectSpectra1D(std::string&, int, TFile*)'
@@ -854,4 +837,4 @@ namespace PHEnergyCorrelator {
 
 #endif
 
-// end ========================================================================
+/// end =======================================================================

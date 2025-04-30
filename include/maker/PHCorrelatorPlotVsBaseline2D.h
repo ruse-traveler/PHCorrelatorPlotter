@@ -22,6 +22,8 @@
 #include <TPaveText.h>
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "PHCorrelatorPlotVsBaseline1D.h"
 #include "../elements/PHCorrelatorPlotterElements.h"

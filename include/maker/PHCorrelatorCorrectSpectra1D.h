@@ -22,6 +22,8 @@
 #include <TPaveText.h>
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
 
@@ -50,22 +52,22 @@ namespace PHEnergyCorrelator {
       struct Params {
 
         // members
-        Inputs    data;     ///!< spectra to be corrected (e.g. data)
-        Inputs    recon;    ///!< numerators for correction factors (e.g. reco-level sim)
-        Inputs    truth;    ///!< denominators for correct factors (e.g. truth-level sim)
-        PlotShape unity;    ///!< definition of unit ratio line to draw
-        Shapes    shapes;   ///!< additional shapes (e.g. lines) to draw
-        PlotOpts  options;  ///!< auxilliary plot options
+        Type::Inputs data;     ///!< spectra to be corrected (e.g. data)
+        Type::Inputs recon;    ///!< numerators for correction factors (e.g. reco-level sim)
+        Type::Inputs truth;    ///!< denominators for correct factors (e.g. truth-level sim)
+        PlotShape    unity;    ///!< definition of unit ratio line to draw
+        Type::Shapes shapes;   ///!< additional shapes (e.g. lines) to draw
+        PlotOpts     options;  ///!< auxilliary plot options
 
         // --------------------------------------------------------------------
         //! default ctor
         // --------------------------------------------------------------------
         Params() {
-          data    = Inputs();
-          recon   = Inputs();
-          truth   = Inputs();
+          data    = Type::Inputs();
+          recon   = Type::Inputs();
+          truth   = Type::Inputs();
           unity   = PlotShape();
-          shapes  = Shapes();
+          shapes  = Type::Shapes();
           options = PlotOpts();
         }
 
@@ -78,11 +80,11 @@ namespace PHEnergyCorrelator {
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Params(
-          const Inputs& data_args,
-          const Inputs& reco_args,
-          const Inputs& true_args,
+          const Type::Inputs& data_args,
+          const Type::Inputs& reco_args,
+          const Type::Inputs& true_args,
           const PlotShape& unity_arg,
-          const Shapes& shape_args,
+          const Type::Shapes& shape_args,
           const PlotOpts&  opt_args
         ) {
           data    = data_args;
@@ -91,7 +93,7 @@ namespace PHEnergyCorrelator {
           unity   = unity_arg;
           shapes  = shape_args;
           options = opt_args;
-        }  // end ctor(Inputs& x 3, PlotShape&, Shapes&, PlotOpts&)
+        }  // end ctor(Type::Inputs& x 3, PlotShape&, Type::Shapes&, PlotOpts&)
 
       };  // end Params
 
@@ -111,6 +113,64 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetParams(const Params& params) {m_params = params;}
+
+      // ----------------------------------------------------------------------
+      //! Configure routine
+      // ----------------------------------------------------------------------
+      /*! Sets routine parameters with reasonable default values
+       *  based on provided inputs.
+       */
+      void Configure(
+        const Type::Inputs& in_data,
+        const Type::Inputs& in_reco,
+        const Type::Inputs& in_true,
+        const std::string& canvas_name = "cCorrectSpectra1D",
+        const int range_opt = Type::Side
+      ) {
+
+        // grab default pad options, and
+        // turn on log y/x when necessary
+        PadOpts rat_opts  = PadOpts();
+        PadOpts corr_opts = PadOpts();
+        PadOpts spec_opts = PadOpts();
+        if (range_opt == Type::Side) {
+          rat_opts.logx  = 1;
+          corr_opts.logx = 1;
+          spec_opts.logx = 1;
+          spec_opts.logy = 1;
+        }
+
+        // make correction canvas 
+        Canvas canvas = Tools::MakeCorrectionCanvas1D(
+          canvas_name,
+          "pCorrect",
+          "pRatio",
+          "pSpectra",
+          0.25,
+          0.4375,
+          spec_opts,
+          corr_opts,
+          rat_opts
+        );
+
+        // set auxilliary options
+        PlotOpts plot_opts;
+        plot_opts.plot_range  = Default::PlotRange(range_opt);
+        plot_opts.norm_range  = Default::NormRange(range_opt);
+        plot_opts.canvas      = canvas;
+        plot_opts.correct_pad = "correct";
+        plot_opts.ratio_pad   = "ratio";
+        plot_opts.spectra_pad = "spectra";
+
+        // bundle parameters
+        m_params.data    = in_data;
+        m_params.recon   = in_reco;
+        m_params.truth   = in_true;
+        m_params.options = plot_opts;
+        m_params.unity   = Default::Unity(range_opt);
+        return;
+
+      }  // end 'Configure(Inputs& x 3, std::string&, int)'
 
       // ----------------------------------------------------------------------
       //! Correct various 1D spectra
@@ -311,8 +371,8 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created legend and text box." << std::endl;
 
         // set styles
-        Styles dat_styles = GenerateStyles( m_params.data );
-        Styles tru_styles = GenerateStyles( m_params.truth );
+        Type::Styles dat_styles = GenerateStyles( m_params.data );
+        Type::Styles tru_styles = GenerateStyles( m_params.truth );
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // set data styles

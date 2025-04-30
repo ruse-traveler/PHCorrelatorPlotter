@@ -26,14 +26,6 @@ namespace PHEnergyCorrelator {
   namespace Tools {
 
     // ------------------------------------------------------------------------
-    // Options for plot ranges
-    // ------------------------------------------------------------------------
-    /* FIXME should go in constants */
-    enum RangeOpt {Side, Angle};
-
-
-
-    // ------------------------------------------------------------------------
     //! Get number of rows in a grid
     // ------------------------------------------------------------------------
     /*! Helper method to determine the relevant number of rows in a grid
@@ -105,7 +97,85 @@ namespace PHEnergyCorrelator {
       canvas.AddPad( Pad(up_name, "", up_vtxs, up_margins, up_opts), "spectra" );
       return canvas;
 
-    }  // end 'MakeRatioCanvas(std::string x 3, float, PadOpts& x 2)'
+    }  // end 'MakeRatioCanvas(...)'
+
+
+
+    // ------------------------------------------------------------------------
+    //! Make 1D correction canvas
+    // ------------------------------------------------------------------------
+    /*! Creates a canvas divided into an upper panel (usually for truth vs.
+     *  corrected spectra), a middle panel (usually for ratios of corrected
+     *  over truth), and a lower panel (usually for correction factors).
+     *
+     *    \param can_name   canvas name
+     *    \param up_name    name of upper pad
+     *    \param mid_name   name of middle pad
+     *    \param lo_name    name of lower pad
+     *    \param lo_height  height (in % of canvas height) of upper pad
+     *    \param mid_height height (in % of canvas height) of middle pad
+     *    \param up_opts    options for upper pad
+     *    \param mid_opts   options for middle pad
+     *    \param lo_opts    options for lower pad
+     */
+    Canvas MakeCorrectionCanvas1D(
+      const std::string can_name,
+      const std::string up_name,
+      const std::string mid_name,
+      const std::string lo_name,
+      const float lo_height = 0.25,
+      const float mid_height = 0.50,
+      const PadOpts& up_opts = PadOpts(),
+      const PadOpts& mid_opts = PadOpts(),
+      const PadOpts& lo_opts = PadOpts()
+    ) {
+
+      // set pad vertices
+      Type::Vertices lo_vtxs;
+      lo_vtxs.push_back(0.00);
+      lo_vtxs.push_back(0.00);
+      lo_vtxs.push_back(1.00);
+      lo_vtxs.push_back(lo_height);
+
+      Type::Vertices mid_vtxs;
+      mid_vtxs.push_back(0.00);
+      mid_vtxs.push_back(lo_height);
+      mid_vtxs.push_back(1.00);
+      mid_vtxs.push_back(mid_height);
+
+      Type::Vertices up_vtxs;
+      up_vtxs.push_back(0.00);
+      up_vtxs.push_back(mid_height);
+      up_vtxs.push_back(1.00);
+      up_vtxs.push_back(1.00);
+
+      // set spectra margins
+      Type::Margins lo_margins;
+      lo_margins.push_back(0.005);
+      lo_margins.push_back(0.02);
+      lo_margins.push_back(0.25);
+      lo_margins.push_back(0.15);
+
+      Type::Margins mid_margins;
+      mid_margins.push_back(0.005);
+      mid_margins.push_back(0.02);
+      mid_margins.push_back(0.005);
+      mid_margins.push_back(0.15);
+
+      Type::Margins up_margins;
+      up_margins.push_back(0.02);
+      up_margins.push_back(0.02);
+      up_margins.push_back(0.005);
+      up_margins.push_back(0.15);
+
+      // define canvas (use default pad options)
+      Canvas canvas = Canvas(can_name, "", std::make_pair(750, 1125), PadOpts());
+      canvas.AddPad( Pad(lo_name,  "", lo_vtxs,  lo_margins,  lo_opts),  "correct" );
+      canvas.AddPad( Pad(mid_name, "", mid_vtxs, mid_margins, mid_opts), "ratio");
+      canvas.AddPad( Pad(up_name,  "", up_vtxs,  up_margins,  up_opts),  "spectra" );
+      return canvas;
+
+    }  // end 'MakeCorrectionCanvas(...)'
 
 
 
@@ -187,7 +257,7 @@ namespace PHEnergyCorrelator {
       }
       return canvas;
 
-    }  // end 'MakeGridCanvas(std::string x 2, std::size_t x 2, Type::Margins&, PadOpts&, float)'
+    }  // end 'MakeGridCanvas(...)'
 
   }  // end Tools namespace
 }  // end PHEnergyCorrelator namespace

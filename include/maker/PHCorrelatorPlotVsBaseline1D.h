@@ -22,6 +22,8 @@
 #include <TPaveText.h>
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
 
@@ -48,20 +50,20 @@ namespace PHEnergyCorrelator {
       struct Params {
 
         // members
-        PlotInput denominator;  ///!< baseline to compare against and its details
-        Inputs    numerators;   ///!< list of spectra to compare and their details
-        PlotShape unity;        ///!< definition of unit ratio line to draw
-        Shapes    shapes;       ///!< additional shapes (e.g. lines) to draw
-        PlotOpts  options;      ///!< auxilliary plot options
+        PlotInput    denominator;  ///!< baseline to compare against and its details
+        Type::Inputs numerators;   ///!< list of spectra to compare and their details
+        PlotShape    unity;        ///!< definition of unit ratio line to draw
+        Type::Shapes shapes;       ///!< additional shapes (e.g. lines) to draw
+        PlotOpts     options;      ///!< auxilliary plot options
 
         // --------------------------------------------------------------------
         //! default ctor
         // --------------------------------------------------------------------
         Params() {
           denominator = PlotInput();
-          numerators  = Inputs();
+          numerators  = Type::Inputs();
           unity       = PlotShape();
-          shapes      = Shapes();
+          shapes      = Type::Shapes();
           options     = PlotOpts();
         }
 
@@ -75,9 +77,9 @@ namespace PHEnergyCorrelator {
         // --------------------------------------------------------------------
         Params(
           const PlotInput& denom_arg,
-          const Inputs& numer_args,
+          const Type::Inputs& numer_args,
           const PlotShape& unity_arg,
-          const Shapes& shape_args,
+          const Type::Shapes& shape_args,
           const PlotOpts& opt_args
         ) {
           denominator = denom_arg;
@@ -85,7 +87,7 @@ namespace PHEnergyCorrelator {
           unity       = unity_arg;
           shapes      = shape_args;
           options     = opt_args;
-        }  // end ctor(PlotInput&, Inputs&, PlotShape&, Shapes&, PlotOpts&)'
+        }  // end ctor(PlotInput&, Type::Inputs&, PlotShape&, Type::Shapes&, PlotOpts&)'
 
       };  // end Params
 
@@ -106,6 +108,56 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetParams(const Params& params) {m_params = params;}
+
+      // ----------------------------------------------------------------------
+      //! Configure routine
+      // ----------------------------------------------------------------------
+      /*! Sets routine parameters with reasonable default values
+       *  based on provided inputs.
+       */
+      void Configure(
+        const PlotInput& in_denom,
+        const Type::Inputs& in_numers,
+        const std::string& canvas_name = "cSpectraVsBaseline",
+        const int range_opt = Type::Side
+      ) {
+
+        // grab default pad options, and
+        // turn on log y/x when necessary
+        PadOpts ratio_opts = PadOpts();
+        PadOpts spect_opts = PadOpts();
+        if (range_opt == Type::Side) {
+          ratio_opts.logx = 1;
+          spect_opts.logx = 1;
+          spect_opts.logy = 1;
+        }
+
+        // generate ratio canvas
+        Canvas canvas = Tools::MakeRatioCanvas(
+          canvas_name,
+          "pSpectra",
+          "pRatio",
+          0.35,
+          spect_opts,
+          ratio_opts
+        );
+
+        // set auxilliary options
+        PlotOpts plot_opts;
+        plot_opts.plot_range  = Default::PlotRange(range_opt);
+        plot_opts.norm_range  = Default::NormRange(range_opt);
+        plot_opts.canvas      = canvas;
+        plot_opts.ratio_pad   = "ratio";
+        plot_opts.spectra_pad = "spectra";
+
+        // bundle parameters
+        m_params.denominator = in_denom;
+        m_params.numerators  = in_numers;
+        m_params.options     = plot_opts;
+        m_params.unity       = Default::Unity(range_opt);
+        return;
+
+      }  // end 'Configure(PlotInput&, Type::Inputs&, std::string&, int)'
 
       // ----------------------------------------------------------------------
       //! Plot various ENC (or othwerise) spectra vs. a baseline
@@ -230,7 +282,7 @@ namespace PHEnergyCorrelator {
         m_params.options.plot_range.Apply(Range::Y, dhist -> GetYaxis());
 
         // set numerator and ratio styles
-        Styles num_styles = GenerateStyles( m_params.numerators );
+        Type::Styles num_styles = GenerateStyles( m_params.numerators );
         for (std::size_t inum = 0; inum < nhists.size(); ++inum) {
           num_styles[inum].SetPlotStyle( m_params.numerators[inum].style );
           num_styles[inum].Apply( nhists[inum] );

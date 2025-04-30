@@ -13,7 +13,7 @@
 
 #include "elements/PHCorrelatorPlotterElements.h"
 #include "io/PHCorrelatorPlotterIO.h"
-#include "maker/PHCorrelatorPlotterMaker.h"
+#include "maker/PHCorrelatorPlotMaker.h"
 
 // alias for convenience
 namespace PHEC = PHEnergyCorrelator;

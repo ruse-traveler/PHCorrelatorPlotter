@@ -13,6 +13,8 @@
 // c++ utilities
 #include <iostream>
 #include <string>
+// root libraries
+#include <TFile.h>
 // plotting utilities
 #include "../include/PHCorrelatorPlotter.h"
 // plotting options
@@ -46,77 +48,64 @@ void PHCorrelatorPlotterTest() {
   std::cout << "    Case [1]: test maker using default ctor" << std::endl;
 
   // instantiate plot maker with ctor()
-  PHEC::PlotMakerNew maker_a = PHEC::PlotMakerNew();
+  PHEC::PlotMaker maker_a = PHEC::PlotMaker();
   maker_a.SetBasePlotStyle( BO::BasePlotStyle() );
   maker_a.SetBaseTextStyle( BO::BaseTextStyle() );
   maker_a.SetTextBox( BO::Text() );
-  std::cout << "    ---- [PASS] created maker w/ default ctor, n routines = "
-            << maker_a.GetNRoutines()
-            << std::endl;
-
-  // --------------------------------------------------------------------------
-  //! Test calling PHEC::PlotMakerNew::Init() after PHEC::PlotMakerNew()
-  // --------------------------------------------------------------------------
-  std::cout << "    Case [2]: test calling PHEC::PlotMakerNew::Init (1/2)" << std::endl;
-
   maker_a.Init();
-  std::cout << "    ---- [PASS] called Init(), n routines = "
-            << maker_a.GetNRoutines()
-            << std::endl;
+  std::cout << "    ---- [PASS] created maker w/ default ctor" << std::endl;
 
   // --------------------------------------------------------------------------
   //! Test new plot maker
   // --------------------------------------------------------------------------
-  std::cout << "    Case [3]: test maker using ctor w/ arguments" << std::endl;
+  std::cout << "    Case [2]: test maker using ctor w/ arguments" << std::endl;
 
   // instantiate plot maker with ctor(...)
-  PHEC::PlotMakerNew maker_b = PHEC::PlotMakerNew(
+  PHEC::PlotMaker maker_b = PHEC::PlotMaker(
     BO::BasePlotStyle(),
     BO::BaseTextStyle(),
     BO::Text()
   );
-  std::cout << "    ---- [PASS] created maker w/ ctor(...), n routines = "
-            << maker_b.GetNRoutines()
-            << std::endl;
-
-  // --------------------------------------------------------------------------
-  //! Test calling PHEC::PlotMakerNew::Init() after PHEC::PlotMakerNew(...)
-  // --------------------------------------------------------------------------
-  std::cout << "    Case [4]: test calling PHEC::PlotMakerNew::Init (2/2)" << std::endl;
-
-  maker_b.Init();
-  std::cout << "    ---- [PASS] called Init(), n routines = "
-            << maker_b.GetNRoutines()
-            << std::endl;
-
-  // --------------------------------------------------------------------------
-  //! Try accessing a plotting routine
-  // --------------------------------------------------------------------------
-  std::cout << "    Case [5]: test accessing a plotting routine" << std::endl;
-
-  PHEC::BaseRoutine* routine = maker_b("PlotSpectra1D");
-  std::cout << "    ---- [PASS] routine = " << routine << std::endl;
+  std::cout << "    ---- [PASS] created maker w/ ctor(...)" << std::endl;
 
   // --------------------------------------------------------------------------
   //! Test output
   // --------------------------------------------------------------------------
-  std::cout << "    Case [6]: test output" << std::endl;
-
-  // FIXME remove once new maker is swapped in
-  PHEC::PlotMaker maker = PHEC::PlotMaker(
-    BO::BasePlotStyle(),
-    BO::BaseTextStyle(),
-    BO::Text()
-  ); 
+  std::cout << "    Case [3]: test output" << std::endl;
 
   // instantiate outputs
   PHEC::Output output = PHEC::Output();
-  output.SetMaker(maker);
+  output.SetMaker(maker_a);
   output.SetInput(input);
   std::cout << "    ---- [PASS] loaded outputs" << std::endl;
 
-  // announce end & exit test
+  // --------------------------------------------------------------------------
+  //! Try making a couple plots
+  // --------------------------------------------------------------------------
+  std::cout << "    Case [4]: test making a couple plots" << std::endl;
+
+  // create dummy index
+  PHEC::Type::PlotIndex index(-1);
+  index.species = 0;
+  index.level = 0;
+  index.spin = 0;
+  index.pt = 0;
+
+  // create test output file
+  TFile* ofile = new TFile("test.root", "recreate");
+
+  // make plots
+  output.SetIndex(index);
+  output.SimVsData1D("EEC", PHEC::Type::Side, ofile);
+  output.SimVsData2D("CollinsBlueVsR", ofile);
+  std::cout << "    ---- [PASS] made plots" << std::endl;
+
+  // announce end
   std::cout << "  PHCorrelatorPlotter test complete!\n" << std::endl;
+
+  // exit test
+  //ofile -> cd();
+  //ofile -> Close();
   return;
 
 }

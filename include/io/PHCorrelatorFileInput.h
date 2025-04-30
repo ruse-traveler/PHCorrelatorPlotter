@@ -58,15 +58,15 @@ namespace PHEnergyCorrelator {
 
         // define input files for pp
         std::vector<std::string> pp_files;
-        pp_files.push_back("./input/ppRun15_datFullStats_useCstMomDiff_r03all.d11m4y2025.root");
-        pp_files.push_back("./input/ppRun15_recFullStats_useCstMomDiff_r03all.d11m4y2025.root");
-        pp_files.push_back("./input/ppRun15_truFullStats_useCstMomDiff_r03all.d11m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_datFullStats_useCstMomDiff_r03all.d11m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_recFullStats_useCstMomDiff_r03all.d11m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_truFullStats_useCstMomDiff_r03all.d11m4y2025.root");
 
         // define input files for pAu
         std::vector<std::string> pa_files;
-        pa_files.push_back("./input/Jan2025/paRun15_dataWithJetCharge_r03all_084.d27m1y2025.root");
-        pa_files.push_back("./input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
-        pa_files.push_back("./input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/Jan2025/paRun15_dataWithJetCharge_r03all_084.d27m1y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/Jan2025/paRun15_simWithJetCharge_r03all_084.d27m1y2025.root");
 
         // load vector of inputs
         m_files.clear();

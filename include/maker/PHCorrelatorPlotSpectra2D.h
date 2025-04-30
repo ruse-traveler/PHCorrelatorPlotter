@@ -22,6 +22,8 @@
 #include <TPaveText.h>
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "PHCorrelatorPlotSpectra1D.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
@@ -61,6 +63,61 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetParams(const Params& params) {m_params = params;}
+
+      // ----------------------------------------------------------------------
+      //! Configure routine
+      // ----------------------------------------------------------------------
+      /*! Sets routine parameters with reasonable default values
+       *  based on provided inputs.
+       */
+      void Configure(
+        const Type::Inputs& inputs,
+        const std::string& canvas_name = "cSpectra2D",
+        const std::size_t ncolumn = 2
+      ) {
+
+        // grab default pad options, and
+        // turn on log z
+        PadOpts pad_opts = PadOpts();
+        pad_opts.logx = 1;
+        pad_opts.logz = 1;
+
+        // set pad margins
+        Type::Margins pad_margins;
+        pad_margins.push_back(0.15);
+        pad_margins.push_back(0.15);
+        pad_margins.push_back(0.15);
+        pad_margins.push_back(0.15);
+
+        // generate grid canvas
+        Canvas canvas = Tools::MakeGridCanvas(
+          canvas_name,
+          "pPad",
+          inputs.size(),
+          ncolumn,
+          pad_margins
+        );
+
+        // set ranges
+        const Range plot_range = Range(
+          Default::PlotRange(Type::Side).GetX(),
+          Default::PlotRange(Type::Angle).GetY(),
+          Default::PlotRange(Type::Side).GetZ()
+        );
+        const Range norm_range = plot_range;
+
+        // set auxilliary options
+        PlotOpts plot_opts;
+        plot_opts.plot_range = plot_range;
+        plot_opts.norm_range = norm_range;
+        plot_opts.canvas     = canvas;
+
+        // bundle parameters
+        m_params.inputs  = inputs;
+        m_params.options = plot_opts;
+        return;
+
+      }  // end 'Configure(Inputs&, std::string&, std::size_t)'
 
       // ----------------------------------------------------------------------
       //! Plot various 2D ENC (or othwerise) spectra
@@ -114,7 +171,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created text box." << std::endl;
 
         // set hist styles
-        Styles styles = GenerateStyles( m_params.inputs );
+        Type::Styles styles = GenerateStyles( m_params.inputs );
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( m_params.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );

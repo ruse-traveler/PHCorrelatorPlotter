@@ -22,6 +22,8 @@
 #include <TPaveText.h>
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
 
@@ -48,16 +50,16 @@ namespace PHEnergyCorrelator {
       struct Params {
 
         // members
-        Inputs   inputs;   ///!< list objects to plots and their details
-        Shapes   shapes;   ///!< shapes (e.g. lines) to draw
-        PlotOpts options;  ///!< auxilliary plot options
+        Type::Inputs inputs;   ///!< list objects to plots and their details
+        Type::Shapes shapes;   ///!< shapes (e.g. lines) to draw
+        PlotOpts     options;  ///!< auxilliary plot options
 
         // --------------------------------------------------------------------
         //! default ctor
         // --------------------------------------------------------------------
         Params() {
-          inputs  = Inputs();
-          shapes  = Shapes();
+          inputs  = Type::Inputs();
+          shapes  = Type::Shapes();
           options = PlotOpts();
         }
 
@@ -70,8 +72,8 @@ namespace PHEnergyCorrelator {
         //! ctor accepting arguments
         // --------------------------------------------------------------------
         Params(
-          const Inputs& input_args,
-          const Shapes& shape_args,
+          const Type::Inputs& input_args,
+          const Type::Shapes& shape_args,
           const PlotOpts& opt_args
         ) {
           inputs  = input_args;
@@ -97,6 +99,55 @@ namespace PHEnergyCorrelator {
       //! Setters
       // ----------------------------------------------------------------------
       void SetParams(const Params& params) {m_params = params;}
+
+      // ----------------------------------------------------------------------
+      //! Configure routine
+      // ----------------------------------------------------------------------
+      /*! Sets routine parameters with reasonable default values
+       *  based on provided inputs.
+       */
+      void Configure(
+        const Type::Inputs& inputs,
+        const std::string& canvas_name = "cSpectra1D",
+        const int range_opt = Type::Side
+      ) {
+
+        // grab default pad options, and
+        // turn on log y
+        PadOpts pad_opts = PadOpts();
+        if (range_opt == Type::Side) {
+          pad_opts.logx = 1;
+          pad_opts.logy = 1;
+        }
+
+        // set margins
+        Type::Margins margins;
+        margins.push_back(0.02);
+        margins.push_back(0.02);
+        margins.push_back(0.15);
+        margins.push_back(0.15);
+
+        // define canvas (use default pad options)
+        Canvas canvas = Canvas(
+          canvas_name,
+          "",
+          std::make_pair(Default::Values.Small, Default::Values.Medium),
+          pad_opts
+        );
+        canvas.SetMargins( margins );
+
+        // set auxilliary options
+        PlotOpts plot_opts;
+        plot_opts.plot_range = Default::PlotRange(range_opt);
+        plot_opts.norm_range = Default::NormRange(range_opt);
+        plot_opts.canvas     = canvas;
+
+        // bundle parameters
+        m_params.inputs  = inputs;
+        m_params.options = plot_opts;
+        return;
+
+      }  // end 'Configure(Inputs&, std::string&, int)'
 
       // ----------------------------------------------------------------------
       //! Plot various 1D ENC (or othwerise) spectra
@@ -173,7 +224,7 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created legend and text box." << std::endl;
 
         // set hist styles
-        Styles styles = GenerateStyles( m_params.inputs );
+        Type::Styles styles = GenerateStyles( m_params.inputs );
         for (std::size_t ihst = 0; ihst < ihists.size(); ++ihst) {
           styles[ihst].SetPlotStyle( m_params.inputs[ihst].style );
           styles[ihst].Apply( ihists[ihst] );

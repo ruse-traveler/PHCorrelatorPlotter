@@ -23,6 +23,8 @@
 // plotting utilities
 #include "PHCorrelatorBaseRoutine.h"
 #include "PHCorrelatorCorrectSpectra1D.h"
+#include "PHCorrelatorPlotMakerDefault.h"
+#include "PHCorrelatorPlotMakerTools.h"
 #include "PHCorrelatorPlotMakerTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
 
@@ -238,8 +240,8 @@ namespace PHEnergyCorrelator {
         std::cout << "    Created legend and text box." << std::endl;
 
         // set styles
-        Styles dat_styles = GenerateStyles( m_params.data );
-        Styles tru_styles = GenerateStyles( m_params.truth );
+        Type::Styles dat_styles = GenerateStyles( m_params.data );
+        Type::Styles tru_styles = GenerateStyles( m_params.truth );
         for (std::size_t idat = 0; idat < dhists.size(); ++idat) {
 
           // set data styles

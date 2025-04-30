@@ -127,12 +127,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
             output.SetIndex(idx);
 
             // create comparison for each desired 1D histogram
-            output.SimVsData1D("EEC", PHEC::PMO::Side, ofiles[0]);
-            output.SimVsData1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-            output.SimVsData1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+            output.SimVsData1D("EEC", PHEC::Type::Side, ofiles[0]);
+            output.SimVsData1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+            output.SimVsData1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
             if (!isPAu) {
-              output.SimVsData1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
-              output.SimVsData1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+              output.SimVsData1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
+              output.SimVsData1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
             }
 
             // create comparison for each desired 2D histogram
@@ -181,12 +181,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
             output.SetIndex(idx);
 
             // create comparison for each desired 1D histogram
-            output.RecoVsData1D("EEC", PHEC::PMO::Side, ofiles[0]);
-            output.RecoVsData1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-            output.RecoVsData1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+            output.RecoVsData1D("EEC", PHEC::Type::Side, ofiles[0]);
+            output.RecoVsData1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+            output.RecoVsData1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
             if (!isPAu) {
-              output.RecoVsData1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
-              output.RecoVsData1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+              output.RecoVsData1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
+              output.RecoVsData1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
             }
 
             /* TODO make 2D comparisons */
@@ -229,12 +229,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
             output.SetIndex(idx);
 
             // create comparisons for each desired 1D histogram
-            output.VsPtJet1D("EEC", PHEC::PMO::Side, ofiles[0]);
-            output.VsPtJet1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-            output.VsPtJet1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+            output.VsPtJet1D("EEC", PHEC::Type::Side, ofiles[0]);
+            output.VsPtJet1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+            output.VsPtJet1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
             if (!isPAu) {
-              output.VsPtJet1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
-              output.VsPtJet1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+              output.VsPtJet1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
+              output.VsPtJet1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
             }
 
             // create comparisons for each desired 2D histogram
@@ -273,9 +273,9 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
           output.SetIndex(idx);
 
           // create comparisons for each desired 1D histogram
-          output.PPVsPAu1D("EEC", PHEC::PMO::Side, ofiles[0]);
-          output.PPVsPAu1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-          output.PPVsPAu1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+          output.PPVsPAu1D("EEC", PHEC::Type::Side, ofiles[0]);
+          output.PPVsPAu1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+          output.PPVsPAu1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
 
           /* TODO add 2D comparison */
 
@@ -315,12 +315,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
           output.SetIndex(idx);
 
           // calculate/apply corrections for each desired 1D histogram
-          output.CorrectSpectra1D("EEC", PHEC::PMO::Side, ofiles[0]);
-          output.CorrectSpectra1D("CollinsBlue", PHEC::PMO::Angle, ofiles[1]);
-          output.CorrectSpectra1D("BoerMuldersBlue", PHEC::PMO::Angle, ofiles[2]);
+          output.CorrectSpectra1D("EEC", PHEC::Type::Side, ofiles[0]);
+          output.CorrectSpectra1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+          output.CorrectSpectra1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
           if (!isPAu) {
-            output.CorrectSpectra1D("CollinsYell", PHEC::PMO::Angle, ofiles[1]);
-            output.CorrectSpectra1D("BoerMuldersYell", PHEC::PMO::Angle, ofiles[2]);
+            output.CorrectSpectra1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
+            output.CorrectSpectra1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
           }
 
           /* TODO add 2D correction */
