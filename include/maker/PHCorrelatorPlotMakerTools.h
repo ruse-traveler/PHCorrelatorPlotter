@@ -187,7 +187,7 @@ namespace PHEnergyCorrelator {
      *
      *    \param can_name canvas name
      *    \param pad_name base name of pads
-     *    \param npad     number of pads
+     *    \param npad     number of histograms (or inputs)
      *    \param ncolumn  number of columns
      *    \param margins  margins of each pad
      *    \param opts     options for each pad
@@ -196,15 +196,16 @@ namespace PHEnergyCorrelator {
     Canvas MakeGridCanvas(
       const std::string can_name,
       const std::string pad_name,
-      const std::size_t npad,
+      const std::size_t nhist,
       const std::size_t ncolumn,
       const Type::Margins& margins,
       const PadOpts& opts = PadOpts(),
       const float dim = 375
     ) {
 
-      // determine number of rows
-      const std::size_t nrow = GetRowNumber(npad, ncolumn);
+      // determine number of rows/pads
+      const std::size_t nrow = GetRowNumber(nhist, ncolumn);
+      const std::size_t npad = nrow * ncolumn;
 
       // determine canvas dimensions
       const Type::Dimensions dimensions = std::make_pair(
@@ -212,28 +213,30 @@ namespace PHEnergyCorrelator {
         dim * nrow
       );
 
+      // get pad width (xstep), heights (ystep)
+      const double xstep = 1.0 / (double) nrow;
+      const double ystep = 1.0 / (double) ncolumn;
+
       // determine vertices of pads
       std::vector<Type::Vertices> pad_vtxs;    
-      for (std::size_t ipad = 0; ipad < npad; ++ipad) {
+      for (std::size_t irow = nrow; irow > 0; --irow) {
+        for (std::size_t icol = 0; icol < ncolumn; ++icol) {
 
-        // get column/row indices
-        const std::size_t icol = ipad % ncolumn;
-        const std::size_t irow = GetRowNumber(ipad, ncolumn);
+          // set x vertices
+          const double startx = icol * xstep;
+          const double stopx  = (icol + 1) * xstep;
 
-        // set x vertices
-        const double startx = icol * (1.0 / (double) ncolumn);
-        const double stopx  = (icol % ncolumn) * (1.0 / (double) ncolumn);
+          // set y vertices
+          const double starty =  (irow - 1) * ystep;
+          const double stopy  =  irow * ystep;
 
-        // set y vertices
-        const double starty = irow * (1.0 / (double) nrow);
-        const double stopy  = (irow % nrow) * (1.0 / (double) nrow);
-
-        // add to vector
-        pad_vtxs.push_back( Type::Vertices() );
-        pad_vtxs.back().push_back( startx );
-        pad_vtxs.back().push_back( starty );
-        pad_vtxs.back().push_back( stopx );
-        pad_vtxs.back().push_back( stopy );
+          // add to vector
+          pad_vtxs.push_back( Type::Vertices() );
+          pad_vtxs.back().push_back( startx );
+          pad_vtxs.back().push_back( starty );
+          pad_vtxs.back().push_back( stopx );
+          pad_vtxs.back().push_back( stopy );
+        }
       }
 
       // define canvas (use default pad options)
