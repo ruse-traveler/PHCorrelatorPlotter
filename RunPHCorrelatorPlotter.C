@@ -43,33 +43,33 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::SimVsData) {
   switch (plot) {
 
     case PHEC::Output::SimVsData:
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataEEC.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataCollins.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataBoerMulders.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataEEC.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataCollins.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("simVsDataBoerMulders.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
       break;
 
     case PHEC::Output::RecoVsData:
-      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataEEC.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataCollins.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataBoerMulders.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataEEC.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataCollins.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("recoVsDataBoerMulders.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
       break;
 
     case PHEC::Output::VsPtJet:
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetEEC.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetCollins.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("vsPtJetBoerMulders.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
       break;
 
     case PHEC::Output::PPVsPAu:
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuEEC.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuCollins.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("ppVsPAuBoerMulders.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
       break;
 
     case PHEC::Output::CorrectSpectra:
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
-      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_useCstMomDiff.d12m4y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedEEC.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedCollins.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.ppRun15_forDiFFCHeck.d3m5y2025.root", "recreate") );
       break;
 
     default:
