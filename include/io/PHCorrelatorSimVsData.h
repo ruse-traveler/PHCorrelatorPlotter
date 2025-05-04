@@ -13,8 +13,12 @@
 // c++ utilities
 #include <string>
 #include <vector>
+// root libraries
+#include <TFile.h>
 // plotting utilities
 #include "PHCorrelatorBaseOutput.h"
+#include "PHCorrelatorIOTypes.h"
+#include "../elements/PHCorrelatorPlotterElements.h"
 
 
 
