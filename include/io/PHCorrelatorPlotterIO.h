@@ -11,11 +11,20 @@
 #ifndef PHCORRELATORPLOTTERIO_H
 #define PHCORRELATORPLOTTERIO_H
 
+// components
 #include "PHCorrelatorFileInput.h"
 #include "PHCorrelatorHistInput.h"
 #include "PHCorrelatorInput.h"
 #include "PHCorrelatorIOTypes.h"
 #include "PHCorrelatorOutput.h"
+
+// output wirings
+#include "PHCorrelatorBaseOutput.h"
+//#include "PHCorrelatorCorrectSpectra.h"
+//#include "PHCorrelatorPPVsPAu.h"
+//#include "PHCorrelatorRecoVsData.h"
+#include "PHCorrelatorSimVsData.h"
+//#include "PHCorrelatorVsPtJet.h"
 
 #endif
 
