@@ -30,7 +30,7 @@
 namespace PHEnergyCorrelator {
 
   // ==========================================================================
-  //! Plotting Output ()
+  //! Plotting Output
   // ==========================================================================
   /*! A class to apply the generic routines of PHEC::PlotMaker
    *  to the inputs deined by PHEC::Input.
