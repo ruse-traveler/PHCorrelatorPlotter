@@ -9,7 +9,7 @@
 # =============================================================================
 
 # set which plots to generate
-plots = [0, 1, 2, 3, 4]
+plots = [0, 1, 2, 3, 4, 5]
 
 # run macro for each option
 plots.each { |plot|

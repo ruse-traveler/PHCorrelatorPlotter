@@ -26,6 +26,7 @@
 #include "PHCorrelatorPPVsPAu.h"
 #include "PHCorrelatorRecoVsData.h"
 #include "PHCorrelatorSimVsData.h"
+#include "PHCorrelatorSpinRatios.h"
 #include "PHCorrelatorVsPtJet.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
 #include "../maker/PHCorrelatorPlotMaker.h"
@@ -46,7 +47,7 @@ namespace PHEnergyCorrelator {
 
       // enumerate outputs
       struct Plots {
-        enum EnuPlots {SimVsData, RecoVsData, VsPtJet, PPVsPAu, CorrectSpectra};
+        enum EnuPlots {SimVsData, RecoVsData, VsPtJet, PPVsPAu, CorrectSpectra, SpinRatios};
       };
 
       // for working with map of wirings
@@ -65,6 +66,7 @@ namespace PHEnergyCorrelator {
       void InitWirings() {
 
         m_outputs["VsPtJet"]        = new VsPtJet(m_index, m_maker, m_input);
+        m_outputs["SpinRatios"]     = new SpinRatios(m_index, m_maker, m_input);
         m_outputs["SimVsData"]      = new SimVsData(m_index, m_maker, m_input);
         m_outputs["RecoVsData"]     = new RecoVsData(m_index, m_maker, m_input);
         m_outputs["PPVsPAu"]        = new PPVsPAu(m_index, m_maker, m_input);

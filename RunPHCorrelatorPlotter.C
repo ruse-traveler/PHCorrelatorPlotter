@@ -72,6 +72,12 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
       ofiles.push_back( PHEC::Tools::OpenFile("correctedBoerMulders.run15_forDiFF.d9m5y2025.root", "recreate") );
       break;
 
+    case PHEC::Output::Plots::SpinRatios:
+      ofiles.push_back( PHEC::Tools::OpenFile("spinRatioEEC.run15_forDiFF.d9m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("spinRatioCollins.run15_forDiFF.d9m5y2025.root", "recreate") );
+      ofiles.push_back( PHEC::Tools::OpenFile("spinRatioBoerMulders.run15_forDiFF.d9m5y2025.root", "recreate") );
+      break;
+
     default:
       std::cerr << "PANIC: unknown plot (" << plot << ") to make!" << std::endl;
       break;
@@ -109,7 +115,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
     // loop through all combinations of species, jet pt,charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
-        for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
           for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
@@ -117,9 +123,6 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             if (isPAu && !input.IsBluePolarization(idx)) {
               continue;
             }
-
-            // FIXME remove after we rerun p+Au samples
-            if (isPAu) continue;
 
             // make sure collision system is correct
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
@@ -145,7 +148,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             }
 
           }  // end spin loop
-        }  // end jet charge loop
+        //}  // end jet charge loop
       }  // end pt jet loop
     }  // end species loop
     std::cout << "    Completed sim vs. data plots." << std::endl;
@@ -163,7 +166,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
     // loop through all combinations of species, jet pt,charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
-        for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
           for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
@@ -171,9 +174,6 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             if (isPAu && !input.IsBluePolarization(idx)) {
               continue;
             }
-
-            // FIXME remove after we rerun p+Au samples
-            if (isPAu) continue;
 
             // make sure collision system is correct
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
@@ -193,7 +193,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             /* TODO make 2D comparisons */
 
           }  // end spin loop
-        }  // end jet charge loop
+        //}  // end jet charge loop
       }  // end pt jet loop
     }  // end species loop
     std::cout << "    Completed sim vs. reco plots." << std::endl;
@@ -211,7 +211,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
     // loop through all combinations of species, level, charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
       for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
-        for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
           for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
 
             // only consider blue polarizations for pAu
@@ -219,9 +219,6 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             if (isPAu && !input.IsBluePolarization(idx)) {
               continue;
             }
-
-            // FIXME remove after we rerun p+Au samples
-            if (isPAu) continue;
 
             // make sure collision system is correct
             if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
@@ -247,7 +244,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
             }
 
           }  // end spin loop
-        }  // end jet charge loop
+        //}  // end jet charge loop
       }  // end level oop
     }  // end species loop
     std::cout << "    Completed vs. ptJet plots." << std::endl;
@@ -264,7 +261,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
     // loop through all combinations of level, charge, and spin
     for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
-      for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+      //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
         for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
@@ -281,7 +278,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
           /* TODO add 2D comparison */
 
         }  // end spin loop
-      }  // end jet charge loop
+      //}  // end jet charge loop
     }  // end level loop
     std::cout << "    Completed pp vs. pAu plots." << std::endl;
 
@@ -297,7 +294,7 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
     // loop through all combinations of species, charge, and spin
     for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {
+      //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
         for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
 
           // only consider blue polarizations for pAu
@@ -305,9 +302,6 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
           if (isPAu && !input.IsBluePolarization(idx)) {
             continue;
           }
-
-          // FIXME remove after we rerun p+Au samples
-          if (isPAu) continue;
 
           // make sure collision system is correct
           if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
@@ -327,11 +321,54 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
           /* TODO add 2D correction */
 
         }  // end spin loop
-      }  // end charge loop
+      //}  // end charge loop
     }   // end species loop
     std::cout << "    Completed correction plots." << std::endl;
 
   }  // end CorrectSpectra plot
+
+  // --------------------------------------------------------------------------
+  // do spin ratios
+  // --------------------------------------------------------------------------
+  if (plot == PHEC::Output::Plots::SpinRatios) {
+
+    PHEC::Type::PlotIndex idx(-1);
+    std::cout << "    Beginning spin ratio plots." << std::endl;
+
+    // loop through all combinations of species, charge, and spin
+    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
+      for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
+        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
+
+          // only consider blue polarizations for pAu
+          const bool isPAu = input.IsPAu(idx);
+          if (isPAu && !input.IsBluePolarization(idx)) {
+            continue;
+          }
+
+          // make sure collision system is correct
+          if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+
+          // set index
+          output.UpdateIndex(idx);
+
+          // calculate/apply corrections for each desired 1D histogram
+          output["SpinRatios"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+          output["SpinRatios"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
+          output["SpinRatios"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+          if (!isPAu) {
+            output["SpinRatios"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
+            output["SpinRatios"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+          }
+
+          /* TODO add 2D correction */
+
+      //}  // end charge loop
+      }  // end pt loop
+    }   // end species loop
+    std::cout << "    Completed spin ratio plots." << std::endl;
+
+  }  // end SpinRatios plot
 
   // --------------------------------------------------------------------------
   // close files & exit
