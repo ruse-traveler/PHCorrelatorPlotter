@@ -9,8 +9,7 @@
 # =============================================================================
 
 # set which plots to generate
-#   - FIXME add PPVsPAu back once we rerun p+Au samples
-plots = [0, 1, 2, 4]
+plots = [0, 1, 2, 3, 4]
 
 # run macro for each option
 plots.each { |plot|
