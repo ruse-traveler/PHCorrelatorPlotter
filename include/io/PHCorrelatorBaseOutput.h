@@ -76,7 +76,11 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      explicit BaseOutput(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input) {
+      explicit BaseOutput(
+        const Type::PlotIndex& index,
+        const PlotMaker& maker,
+        const Input& input
+      ) {
 
         m_index = index;
         m_maker = maker;

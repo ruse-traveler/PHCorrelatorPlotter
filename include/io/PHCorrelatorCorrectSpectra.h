@@ -29,7 +29,7 @@ namespace PHEnergyCorrelator {
   // ==========================================================================
   /*! Wiring to create a plot of corrected spectra.
    */
-  class CorrectSpectra : BaseOutput {
+  class CorrectSpectra : public BaseOutput {
 
     public:
 
@@ -295,7 +295,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      explicit CorrectSpectra(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
+      CorrectSpectra(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
         : BaseOutput(index, maker, input) {};
 
   };  // end CorrectSpectra

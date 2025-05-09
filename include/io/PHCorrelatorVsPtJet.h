@@ -29,7 +29,7 @@ namespace PHEnergyCorrelator {
   // ==========================================================================
   /*! Wiring to create a plot of spectra vs. ptJet.
    */
-  class VsPtJet : BaseOutput {
+  class VsPtJet : public BaseOutput {
 
     public:
 
@@ -211,7 +211,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      explicit VsPtJet(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
+      VsPtJet(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
         : BaseOutput(index, maker, input) {};
 
   };  // end VsPtJet

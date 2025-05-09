@@ -31,7 +31,7 @@ namespace PHEnergyCorrelator {
   /*! Wiring to create a plot of p+p spectra
    *  vs. p+Au spectra.
    */
-  class PPVsPAu : BaseOutput {
+  class PPVsPAu : public BaseOutput {
 
     public:
 
@@ -232,7 +232,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      explicit PPVsPAu(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
+      PPVsPAu(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
         : BaseOutput(index, maker, input) {};
 
   };  // end PPVsPAu

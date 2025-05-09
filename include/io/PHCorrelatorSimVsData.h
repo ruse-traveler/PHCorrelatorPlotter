@@ -30,7 +30,7 @@ namespace PHEnergyCorrelator {
   /*! Wiring to create a plot of simulated spectra
    *  vs. spectra in data.
    */
-  class SimVsData : BaseOutput {
+  class SimVsData : public BaseOutput {
 
     public:
 
@@ -211,7 +211,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       //! ctor accepting arguments
       // ----------------------------------------------------------------------
-      explicit SimVsData(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
+      SimVsData(const Type::PlotIndex& index, const PlotMaker& maker, const Input& input)
         : BaseOutput(index, maker, input) {};
 
   };  // end SimVsData

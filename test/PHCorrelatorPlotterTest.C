@@ -77,6 +77,8 @@ void PHCorrelatorPlotterTest() {
   PHEC::Output output = PHEC::Output();
   output.SetMaker(maker_a);
   output.SetInput(input);
+  output.SetIndex(PHEC::Type::PlotIndex());
+  output.Init();
   std::cout << "    ---- [PASS] loaded outputs" << std::endl;
 
   // --------------------------------------------------------------------------
@@ -95,17 +97,17 @@ void PHCorrelatorPlotterTest() {
   TFile* ofile = new TFile("test.root", "recreate");
 
   // make plots
-  output.SetIndex(index);
-  output.SimVsData1D("EEC", PHEC::Type::Side, ofile);
-  output.SimVsData2D("CollinsBlueVsR", ofile);
+  output.UpdateIndex(index);
+  output["SimVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofile);
+  output["SimVsData"] -> MakePlot2D("CollinsBlueVsR", ofile);
   std::cout << "    ---- [PASS] made plots" << std::endl;
 
   // announce end
   std::cout << "  PHCorrelatorPlotter test complete!\n" << std::endl;
 
   // exit test
-  //ofile -> cd();
-  //ofile -> Close();
+  ofile -> cd();
+  ofile -> Close();
   return;
 
 }

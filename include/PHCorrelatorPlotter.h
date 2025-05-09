@@ -12,7 +12,7 @@
 #define PHCORRELATORPLOTTER_H
 
 #include "elements/PHCorrelatorPlotterElements.h"
-#include "io/PHCorrelatorPlotterIO.h"
+#include "io/PHCorrelatorOutput.h"
 #include "maker/PHCorrelatorPlotMaker.h"
 
 // alias for convenience
