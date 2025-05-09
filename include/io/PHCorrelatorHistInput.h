@@ -31,8 +31,9 @@ namespace PHEnergyCorrelator {
 
     public:
 
-      enum PtJet {Pt5, Pt10, Pt15};
-      enum Spin  {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, Int};
+      enum PtJet {Pt5, Pt10, Pt15, PtInt};
+      enum Chrg  {Pos, Neg, ChInt};
+      enum Spin  {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, SpInt};
 
     private:
 
@@ -60,12 +61,14 @@ namespace PHEnergyCorrelator {
         m_tags_pt.push_back("pt0");
         m_tags_pt.push_back("pt1");
         m_tags_pt.push_back("pt2");
+        m_tags_pt.push_back("ptINT");
 
         // define legends
         m_legs_pt.clear();
         m_legs_pt.push_back("p_{T}^{jet} #in (5, 10) GeV/c");
         m_legs_pt.push_back("p_{T}^{jet} #in (10, 15) GeV/c");
         m_legs_pt.push_back("p_{T}^{jet} #in (15, 20) GeV/c");
+        m_legs_pt.push_back("p_PT}^{jet} > 5 GeV/c");
         return;
 
       }  // end 'LoadPtStrings()'

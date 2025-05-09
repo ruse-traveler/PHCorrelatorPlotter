@@ -68,7 +68,7 @@ namespace PHEnergyCorrelator {
         const bool isBlue = (
           (idx.spin == HistInput::BU) ||
           (idx.spin == HistInput::BD) ||
-          (idx.spin == HistInput::Int)
+          (idx.spin == HistInput::SpInt)
         );
         return isBlue;
 
