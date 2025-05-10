@@ -24,7 +24,7 @@ namespace PHEnergyCorrelator {
   // ==========================================================================
   //! Plot range
   // ==========================================================================
-  /*! This struct groups together the start/stop
+  /*! This class groups together the start/stop
    *  points for all 3 axes for convenience.
    */
   class Range {
@@ -38,25 +38,25 @@ namespace PHEnergyCorrelator {
     private:
 
       // members
-      Type::Interval x;
-      Type::Interval y;
-      Type::Interval z;
+      Type::Interval m_x;
+      Type::Interval m_y;
+      Type::Interval m_z;
 
     public:
 
       // ----------------------------------------------------------------------
       //! Getters
       // ----------------------------------------------------------------------
-      Type::Interval GetX() const {return x;}
-      Type::Interval GetY() const {return y;}
-      Type::Interval GetZ() const {return z;}
+      Type::Interval GetX() const {return m_x;}
+      Type::Interval GetY() const {return m_y;}
+      Type::Interval GetZ() const {return m_z;}
 
       // ----------------------------------------------------------------------
       //! Setters
       // ----------------------------------------------------------------------
-      void SetX(const Type::Interval& range) {x = range;}
-      void SetY(const Type::Interval& range) {y = range;}
-      void SetZ(const Type::Interval& range) {z = range;}
+      void SetX(const Type::Interval& range) {m_x = range;}
+      void SetY(const Type::Interval& range) {m_y = range;}
+      void SetZ(const Type::Interval& range) {m_z = range;}
 
       // ----------------------------------------------------------------------
       //! Apply a range to a TAxis
@@ -64,23 +64,18 @@ namespace PHEnergyCorrelator {
       void Apply(const Axis axis, TAxis* to_range) const {
 
         switch (axis) {
-
           case X:
-            to_range -> SetRangeUser(x.first, x.second);
+            to_range -> SetRangeUser(m_x.first, m_x.second);
             break;
-
           case Y:
-            to_range -> SetRangeUser(y.first, y.second);
+            to_range -> SetRangeUser(m_y.first, m_y.second);
             break;
-
           case Z:
-            to_range -> SetRangeUser(z.first, z.second);
+            to_range -> SetRangeUser(m_z.first, m_z.second);
             break;
-
           default:
             /* do nothing */
             break;
-
         }
         return;
 
@@ -90,9 +85,9 @@ namespace PHEnergyCorrelator {
       //! default ctor
       // ----------------------------------------------------------------------
       Range() {
-        x = std::make_pair(0.0, 1.0);
-        y = std::make_pair(0.0, 1.0);
-        z = std::make_pair(0.0, 1.0);
+        m_x = std::make_pair(0.0, 1.0);
+        m_y = std::make_pair(0.0, 1.0);
+        m_z = std::make_pair(0.0, 1.0);
       };
 
       // ----------------------------------------------------------------------
@@ -104,7 +99,7 @@ namespace PHEnergyCorrelator {
       //! ctor accepting only x range
       // ----------------------------------------------------------------------
       Range(const Type::Interval& xrange) {
-        x = xrange;
+        m_x = xrange;
       }
 
       // ----------------------------------------------------------------------
@@ -114,8 +109,8 @@ namespace PHEnergyCorrelator {
         const Type::Interval& xrange,
         const Type::Interval& yrange
       ) {
-        x = xrange;
-        y = yrange;
+        m_x = xrange;
+        m_y = yrange;
       }
 
       // ----------------------------------------------------------------------
@@ -126,9 +121,9 @@ namespace PHEnergyCorrelator {
         const Type::Interval& yrange,
         const Type::Interval& zrange
       ) {
-        x = xrange;
-        y = yrange;
-        z = zrange;
+        m_x = xrange;
+        m_y = yrange;
+        m_z = zrange;
       }
 
   };  // end Range
@@ -137,4 +132,4 @@ namespace PHEnergyCorrelator {
 
 #endif
 
-// end ========================================================================
+/// end =======================================================================
