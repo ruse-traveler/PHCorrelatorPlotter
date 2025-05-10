@@ -42,8 +42,9 @@ namespace PHEnergyCorrelator {
        *  \param variable what variable (spectra) is being plotted
        *  \param opt      what axis option to use
        *  \param ofile    what file to write output to 
-       */ 
-      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile) {
+       *  \param nrebin   what number of bins to merge if rebinning
+       */
+      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile, const int nrebin = 1) {
 
         // constrain level indices
         Type::PlotIndex iData = m_index;
@@ -62,7 +63,8 @@ namespace PHEnergyCorrelator {
           m_input.MakeHistName(variable, iData, tag),
           m_input.MakeLegend(iData),
           "",
-          Style::Plot(923, 20)
+          Style::Plot(923, 20),
+          GetRebin(nrebin, opt)
         );
         PlotInput rec_opt = PlotInput(
           m_input.GetFiles().GetFile(iReco),
@@ -70,7 +72,8 @@ namespace PHEnergyCorrelator {
           m_input.MakeHistName(variable, iReco, tag),
           m_input.MakeLegend(iReco),
           "",
-          Style::Plot(899, 24)
+          Style::Plot(899, 24),
+          GetRebin(nrebin, opt)
         );
 
         // load into vectors

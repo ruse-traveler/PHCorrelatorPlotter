@@ -42,13 +42,9 @@ namespace PHEnergyCorrelator {
        *  \param variable what variable (spectra) is being plotted
        *  \param opt      what axis option to use
        *  \param ofile    what file to write output to 
+       *  \param nrebin   what number of bins to merge if rebinning
        */ 
-      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile) {
-
-        // TODO combos to hit:
-        //   - BD/YU
-        //   - BU/YD
-        //   - any others?
+      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile, const int nrebin = 1) {
 
         // replicate indices and constrain levels
         Type::PlotIndex iData = m_index;
@@ -157,7 +153,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 dat_col.first,
                 dat_mar.first
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
           in_nums.push_back(
@@ -170,7 +167,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 rec_col.first,
                 rec_mar.first
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
           in_nums.push_back(
@@ -183,7 +181,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 tru_col.first,
                 tru_mar.first
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
 
@@ -198,7 +197,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 dat_col.second,
                 dat_mar.second
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
           in_dens.push_back(
@@ -211,7 +211,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 rec_col.second,
                 rec_mar.second
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
           in_dens.push_back(
@@ -224,7 +225,8 @@ namespace PHEnergyCorrelator {
               Style::Plot(
                 tru_col.second,
                 tru_mar.second
-              )
+              ),
+              GetRebin(nrebin, opt)
             )
           );
 

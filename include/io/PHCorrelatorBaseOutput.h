@@ -30,6 +30,19 @@ namespace PHEnergyCorrelator {
    */
   class BaseOutput {
 
+    private:
+
+      // ----------------------------------------------------------------------
+      //! Helper method to determine if rebinning should be done
+      // ----------------------------------------------------------------------
+      Rebin GetRebin(const int num, const int opt) {
+
+        const bool isAnAngle = (opt == Type::Angle);
+        const bool isHighPt  = (m_index.pt == HistInput::Pt15);
+        return (isAnAngle && isHighPt) ? Rebin(true, num) : Rebin(false);
+
+      }  // end 'GetRebin(int, int)'
+
     protected:
 
       // data members
@@ -58,7 +71,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       /*! Should be overwritten by derived wiring.
        */
-      virtual void MakePlot1D(const std::string& /*variable*/, const int /*opt*/, TFile* /*ofile*/) {return;}
+      virtual void MakePlot1D(const std::string& /*variable*/, const int /*opt*/, TFile* /*ofile*/, const int nrebin = 1) {return;}
 
       // ----------------------------------------------------------------------
       //! Make 2D output plot

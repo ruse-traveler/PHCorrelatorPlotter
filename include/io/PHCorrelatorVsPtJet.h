@@ -19,6 +19,7 @@
 #include "PHCorrelatorBaseOutput.h"
 #include "PHCorrelatorIOTypes.h"
 #include "../elements/PHCorrelatorPlotterElements.h"
+#include "../maker/PHCorrelatorPlotMaker.h"
 
 
 
@@ -41,8 +42,9 @@ namespace PHEnergyCorrelator {
        *  \param variable what variable (spectra) is being plotted
        *  \param opt      what axis option to use
        *  \param ofile    what file to write output to 
-       */ 
-      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile) {
+       *  \param nrebin   what number of bins to merge if rebinning
+       */
+      void MakePlot1D(const std::string& variable, const int opt, TFile* ofile, const int nrebin = 1) {
 
         // constrain pt indices
         Type::PlotIndex iPt5  = m_index;
@@ -113,7 +115,8 @@ namespace PHEnergyCorrelator {
           Style::Plot(
             pt15_col,
             pt15_mar
-          )
+          ),
+          (opt == Type::Angle) ? Rebin(true, nrebin) : Rebin(false)
         );
 
         // load into vector

@@ -132,11 +132,11 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
             // create comparison for each desired 1D histogram
             output["SimVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["SimVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-            output["SimVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+            output["SimVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+            output["SimVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
             if (!isPAu) {
-              output["SimVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
-              output["SimVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+              output["SimVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]), 3;
+              output["SimVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
             }
 
             // create comparison for each desired 2D histogram
@@ -183,11 +183,11 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
             // create comparison for each desired 1D histogram
             output["RecoVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["RecoVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-            output["RecoVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+            output["RecoVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+            output["RecoVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
             if (!isPAu) {
-              output["RecoVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
-              output["RecoVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+              output["RecoVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+              output["RecoVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
             }
 
             /* TODO make 2D comparisons */
@@ -228,11 +228,11 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
             // create comparisons for each desired 1D histogram
             output["VsPtJet"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["VsPtJet"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-            output["VsPtJet"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+            output["VsPtJet"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+            output["VsPtJet"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
             if (!isPAu) {
-              output["VsPtJet"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
-              output["VsPtJet"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+              output["VsPtJet"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+              output["VsPtJet"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
             }
 
             // create comparisons for each desired 2D histogram
@@ -272,8 +272,8 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
           // create comparisons for each desired 1D histogram
           output["PPVsPAu"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["PPVsPAu"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-          output["PPVsPAu"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+          output["PPVsPAu"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+          output["PPVsPAu"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
 
           /* TODO add 2D comparison */
 
@@ -311,11 +311,11 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
           // calculate/apply corrections for each desired 1D histogram
           output["CorrectSpectra"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["CorrectSpectra"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-          output["CorrectSpectra"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+          output["CorrectSpectra"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+          output["CorrectSpectra"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
           if (!isPAu) {
-            output["CorrectSpectra"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
-            output["CorrectSpectra"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+            output["CorrectSpectra"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+            output["CorrectSpectra"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
           }
 
           /* TODO add 2D correction */
@@ -354,11 +354,11 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
 
           // calculate/apply corrections for each desired 1D histogram
           output["SpinRatios"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["SpinRatios"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1]);
-          output["SpinRatios"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2]);
+          output["SpinRatios"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+          output["SpinRatios"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
           if (!isPAu) {
-            output["SpinRatios"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]);
-            output["SpinRatios"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2]);
+            output["SpinRatios"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+            output["SpinRatios"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
           }
 
           /* TODO add 2D correction */

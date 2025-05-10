@@ -23,6 +23,7 @@
 #include "PHCorrelatorPlotTypes.h"
 #include "PHCorrelatorProjection.h"
 #include "PHCorrelatorRange.h"
+#include "PHCorrelatorRebin.h"
 #include "PHCorrelatorShape.h"
 #include "PHCorrelatorStyle.h"
 #include "PHCorrelatorTextBox.h"

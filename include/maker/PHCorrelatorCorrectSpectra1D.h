@@ -223,6 +223,12 @@ namespace PHEnergyCorrelator {
           std::cout << "      File (data) = " << m_params.data[idat].file << "\n"
                     << "      Hist (data) = " << m_params.data[idat].object
                     << std::endl;
+
+          // rebin if need be
+          if (m_params.data[idat].rebin.GetRebin()) {
+            m_params.data[idat].rebin.Apply(dhists.back());
+            std::cout << "    Rebinned " << dhists.back() -> GetName() << std::endl;
+          }
         }  // end data loop
 
         // open reco inputs
@@ -241,6 +247,12 @@ namespace PHEnergyCorrelator {
                     << "      Hist (recon) = " << m_params.recon[irec].object
                     << std::endl;
 
+          // rebin if need be
+          if (m_params.recon[irec].rebin.GetRebin()) {
+            m_params.recon[irec].rebin.Apply(rhists.back());
+            std::cout << "    Rebinned " << rhists.back() -> GetName() << std::endl;
+          }
+
           // normalize reco if need be
           if (m_params.options.do_norm) {
             Tools::NormalizeByIntegral(
@@ -249,6 +261,7 @@ namespace PHEnergyCorrelator {
               m_params.options.norm_range.GetX().first,
               m_params.options.norm_range.GetX().second
             );
+            std::cout << "    Normalized " << rhists.back() -> GetName() << std::endl;
           }
         }  // end reco loop
 
@@ -268,6 +281,12 @@ namespace PHEnergyCorrelator {
                     << "      Hist (truth) = " << m_params.truth[itru].object
                     << std::endl;
 
+          // rebin if need be
+          if (m_params.truth[itru].rebin.GetRebin()) {
+            m_params.truth[itru].rebin.Apply(thists.back());
+            std::cout << "    Rebinned " << thists.back() -> GetName() << std::endl;
+          }
+
           // normalize true if need be
           if (m_params.options.do_norm) {
             Tools::NormalizeByIntegral(
@@ -276,6 +295,7 @@ namespace PHEnergyCorrelator {
               m_params.options.norm_range.GetX().first,
               m_params.options.norm_range.GetX().second
             );
+            std::cout << "    Normalized " << thists.back() -> GetName() << std::endl;
           }
         }  // end true loop
 
@@ -312,6 +332,7 @@ namespace PHEnergyCorrelator {
               m_params.options.norm_range.GetX().first,
               m_params.options.norm_range.GetX().second
             );
+            std::cout << "    Normalized " << dhists[idat] -> GetName() << std::endl;
           }
         }
         std::cout << "    Applied correction factors." << std::endl;

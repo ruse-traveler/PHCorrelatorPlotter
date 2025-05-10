@@ -181,6 +181,12 @@ namespace PHEnergyCorrelator {
                     << "      Hist = " << m_params.inputs[iin].object
                     << std::endl;
 
+          // rebin if need be
+          if (m_params.inputs[iin].rebin.GetRebin()) {
+            m_params.inputs[iin].rebin.Apply(ihists.back());
+            std::cout << "    Rebinned " << ihists.back() -> GetName() << std::endl;
+          }
+
           // normalize input if need be
           if (m_params.options.do_norm) {
             Tools::NormalizeByIntegral(
@@ -189,6 +195,7 @@ namespace PHEnergyCorrelator {
               m_params.options.norm_range.GetX().first,
               m_params.options.norm_range.GetX().second
             );
+            std::cout << "    Normalized " << ihists.back() -> GetName() << std::endl;
           }
         }  // end input loop
 

@@ -184,6 +184,12 @@ namespace PHEnergyCorrelator {
                   << "      Hist (denom) = " << m_params.denominator.object
                   << std::endl;
 
+          // rebin if need be
+          if (m_params.denominator.rebin.GetRebin()) {
+            m_params.denominator.rebin.Apply(dhist);
+            std::cout << "    Rebinned " << dhist -> GetName() << std::endl;
+          }
+
         // normalize denominator if need be
         if (m_params.options.do_norm) {
           Tools::NormalizeByIntegral(
@@ -192,6 +198,7 @@ namespace PHEnergyCorrelator {
             m_params.options.norm_range.GetX().first,
             m_params.options.norm_range.GetX().second
           );
+          std::cout << "    Normalized " << dhist -> GetName() << std::endl;
         }
 
         // open numerator inputs
@@ -210,6 +217,12 @@ namespace PHEnergyCorrelator {
                     << "      Hist (numer) = " << m_params.numerators[inum].object
                     << std::endl;
 
+          // rebin if need be
+          if (m_params.numerators[inum].rebin.GetRebin()) {
+            m_params.numerators[inum].rebin.Apply(nhists.back());
+            std::cout << "    Rebinned " << nhists.back() -> GetName() << std::endl;
+          }
+
           // normalize numerator if need be
           if (m_params.options.do_norm) {
             Tools::NormalizeByIntegral(
@@ -218,6 +231,7 @@ namespace PHEnergyCorrelator {
               m_params.options.norm_range.GetX().first,
               m_params.options.norm_range.GetX().second
             );
+            std::cout << "    Normalized " << nhists.back() -> GetName() << std::endl;
           }
         }  // end numerator loop
 

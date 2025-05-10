@@ -13,6 +13,7 @@
 // c++ utilities
 #include <string>
 // plotting utilities
+#include "PHCorrelatorRebin.h"
 #include "PHCorrelatorStyle.h"
 
 
@@ -33,6 +34,7 @@ namespace PHEnergyCorrelator {
     std::string legend;  ///!< legend entry
     std::string draw;    ///!< draw option
     Style::Plot style;   ///!< marker, line, and fill style
+    Rebin       rebin;   ///!< do rebinning
 
     // ------------------------------------------------------------------------
     //! default ctor
@@ -44,6 +46,7 @@ namespace PHEnergyCorrelator {
       legend = "";
       draw   = "";
       style  = Style::Plot();
+      rebin  = Rebin();
     };
 
     // ------------------------------------------------------------------------
@@ -60,7 +63,8 @@ namespace PHEnergyCorrelator {
       const std::string& rarg,
       const std::string& larg,
       const std::string& darg,
-      const Style::Plot& sarg = Style::Plot()
+      const Style::Plot& sarg = Style::Plot(),
+      const Rebin& rearg = Rebin()
     ) {
       file   = farg;
       object = oarg;
@@ -68,7 +72,8 @@ namespace PHEnergyCorrelator {
       legend = larg;
       draw   = darg;
       style  = sarg;
-    };  // end PlotInput(std::string x 5, Style::Plot)
+      rebin  = rearg;
+    };  // end PlotInput(std::string& x 5, Style::Plot&, Rebin&)
 
   };  // end PlotInput
 
