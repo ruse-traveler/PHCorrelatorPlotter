@@ -109,48 +109,50 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::SimVsData) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllSpecies();
+    loops.DoAllPt();
+    loops.DoAllSpin();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning sim vs. data plots." << std::endl;
 
-    // loop through all combinations of species, jet pt,charge, and spin
-    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
-        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
-          for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-            // only consider blue polarizations for pAu
-            const bool isPAu = input.IsPAu(idx);
-            if (isPAu && !input.IsBluePolarization(idx)) {
-              continue;
-            }
+      // only consider blue polarizations for pAu
+      const bool isPAu = input.IsPAu(indices[idx]);
+      if (isPAu && !input.IsBluePolarization(indices[idx])) {
+        continue;
+      }
 
-            // make sure collision system is correct
-            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+      // make sure collision system is correct
+      if (isPAu) output.GetMaker().SetTextBox( BO::Text(indices[idx].species) );
 
-            // set index
-            output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-            // create comparison for each desired 1D histogram
-            output["SimVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["SimVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-            output["SimVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
-            if (!isPAu) {
-              output["SimVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]), 3;
-              output["SimVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
-            }
+      // create comparison for each desired 1D histogram
+      output["SimVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["SimVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["SimVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      if (!isPAu) {
+        output["SimVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1]), 3;
+        output["SimVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
+      }
 
-            // create comparison for each desired 2D histogram
-            output["SimVsData"] -> MakePlot2D("CollinsBlueVsR", ofiles[1]);
-            output["SimVsData"] -> MakePlot2D("BoerMuldersBlueVsR", ofiles[2]);
-            if (!isPAu) {
-              output["SimVsData"] -> MakePlot2D("CollinsYellVsR", ofiles[1]);
-              output["SimVsData"] -> MakePlot2D("BoerMuldersYellVsR", ofiles[2]);
-            }
+      // create comparison for each desired 2D histogram
+      output["SimVsData"] -> MakePlot2D("CollinsBlueVsR", ofiles[1]);
+      output["SimVsData"] -> MakePlot2D("BoerMuldersBlueVsR", ofiles[2]);
+      if (!isPAu) {
+        output["SimVsData"] -> MakePlot2D("CollinsYellVsR", ofiles[1]);
+        output["SimVsData"] -> MakePlot2D("BoerMuldersYellVsR", ofiles[2]);
+      }
 
-          }  // end spin loop
-        //}  // end jet charge loop
-      }  // end pt jet loop
-    }  // end species loop
+    }  // end index loop
     std::cout << "    Completed sim vs. data plots." << std::endl;
 
   }  // end SimVsData plot
@@ -160,42 +162,44 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::RecoVsData) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllSpecies();
+    loops.DoAllPt();
+    loops.DoAllSpin();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning reco vs. data plots." << std::endl;
 
-    // loop through all combinations of species, jet pt,charge, and spin
-    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
-        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
-          for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-            // only consider blue polarizations for pAu
-            const bool isPAu = input.IsPAu(idx);
-            if (isPAu && !input.IsBluePolarization(idx)) {
-              continue;
-            }
+      // only consider blue polarizations for pAu
+      const bool isPAu = input.IsPAu(indices[idx]);
+      if (isPAu && !input.IsBluePolarization(indices[idx])) {
+        continue;
+      }
 
-            // make sure collision system is correct
-            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+      // make sure collision system is correct
+      if (isPAu) output.GetMaker().SetTextBox( BO::Text(indices[idx].species) );
 
-            // set index
-            output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-            // create comparison for each desired 1D histogram
-            output["RecoVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["RecoVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-            output["RecoVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
-            if (!isPAu) {
-              output["RecoVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
-              output["RecoVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
-            }
+      // create comparison for each desired 1D histogram
+      output["RecoVsData"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["RecoVsData"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["RecoVsData"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      if (!isPAu) {
+        output["RecoVsData"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+        output["RecoVsData"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
+      }
 
-            /* TODO make 2D comparisons */
+      /* TODO make 2D comparisons */
 
-          }  // end spin loop
-        //}  // end jet charge loop
-      }  // end pt jet loop
-    }  // end species loop
+    }  // end index loop
     std::cout << "    Completed sim vs. reco plots." << std::endl;
 
   }  // end SimVsData plot
@@ -205,48 +209,50 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::VsPtJet) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllSpecies();
+    loops.DoAllLevels();
+    loops.DoAllSpin();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning vs. ptJet plots." << std::endl;
 
-    // loop through all combinations of species, level, charge, and spin
-    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
-        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
-          for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-            // only consider blue polarizations for pAu
-            const bool isPAu = input.IsPAu(idx);
-            if (isPAu && !input.IsBluePolarization(idx)) {
-              continue;
-            }
+      // only consider blue polarizations for pAu
+      const bool isPAu = input.IsPAu(indices[idx]);
+      if (isPAu && !input.IsBluePolarization(indices[idx])) {
+        continue;
+      }
 
-            // make sure collision system is correct
-            if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+      // make sure collision system is correct
+      if (isPAu) output.GetMaker().SetTextBox( BO::Text(indices[idx].species) );
 
-            // set index
-            output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-            // create comparisons for each desired 1D histogram
-            output["VsPtJet"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-            output["VsPtJet"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-            output["VsPtJet"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
-            if (!isPAu) {
-              output["VsPtJet"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
-              output["VsPtJet"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
-            }
+      // create comparisons for each desired 1D histogram
+      output["VsPtJet"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["VsPtJet"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["VsPtJet"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      if (!isPAu) {
+        output["VsPtJet"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+        output["VsPtJet"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
+      }
 
-            // create comparisons for each desired 2D histogram
-            output["VsPtJet"] -> MakePlot2D("CollinsBlueVsR", ofiles[1]);
-            output["VsPtJet"] -> MakePlot2D("BoerMuldersBlueVsR", ofiles[2]);
-            if (!isPAu) {
-              output["VsPtJet"] -> MakePlot2D("CollinsYellVsR", ofiles[1]);
-              output["VsPtJet"] -> MakePlot2D("BoerMuldersYellVsR", ofiles[2]);
-            }
+      // create comparisons for each desired 2D histogram
+      output["VsPtJet"] -> MakePlot2D("CollinsBlueVsR", ofiles[1]);
+      output["VsPtJet"] -> MakePlot2D("BoerMuldersBlueVsR", ofiles[2]);
+      if (!isPAu) {
+        output["VsPtJet"] -> MakePlot2D("CollinsYellVsR", ofiles[1]);
+        output["VsPtJet"] -> MakePlot2D("BoerMuldersYellVsR", ofiles[2]);
+      }
 
-          }  // end spin loop
-        //}  // end jet charge loop
-      }  // end level oop
-    }  // end species loop
+    }  // end index loop
     std::cout << "    Completed vs. ptJet plots." << std::endl;
 
   }  // end VsPtJet plot
@@ -256,30 +262,33 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::PPVsPAu) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllLevels();
+    loops.DoAllSpin();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning pp vs. pAu plots." << std::endl;
 
-    // loop through all combinations of level, charge, and spin
-    for (idx.level = 0; idx.level < input.GetFiles().GetLevelTags().size(); ++idx.level) {
-      //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
-        for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-          // only consider blue polarizations for pAu
-          if (!input.IsBluePolarization(idx)) continue;
+      // only consider blue polarizations for pAu
+      if (!input.IsBluePolarization(indices[idx])) continue;
 
-          // set index
-          output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-          // create comparisons for each desired 1D histogram
-          output["PPVsPAu"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["PPVsPAu"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-          output["PPVsPAu"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      // create comparisons for each desired 1D histogram
+      output["PPVsPAu"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["PPVsPAu"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["PPVsPAu"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
 
-          /* TODO add 2D comparison */
+      /* TODO add 2D comparison */
 
-        }  // end spin loop
-      //}  // end jet charge loop
-    }  // end level loop
+    }  // end index loop
     std::cout << "    Completed pp vs. pAu plots." << std::endl;
 
   }  // end PPVsPAu plot
@@ -289,40 +298,43 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::CorrectSpectra) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllSpecies();
+    loops.DoAllSpin();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning correction plots." << std::endl;
 
-    // loop through all combinations of species, charge, and spin
-    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
-        for (idx.spin = 0; idx.spin < input.GetHists().GetSpinTags().size(); ++idx.spin) {
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-          // only consider blue polarizations for pAu
-          const bool isPAu = input.IsPAu(idx);
-          if (isPAu && !input.IsBluePolarization(idx)) {
-            continue;
-          }
+      // only consider blue polarizations for pAu
+      const bool isPAu = input.IsPAu(indices[idx]);
+      if (isPAu && !input.IsBluePolarization(indices[idx])) {
+        continue;
+      }
 
-          // make sure collision system is correct
-          if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+      // make sure collision system is correct
+      if (isPAu) output.GetMaker().SetTextBox( BO::Text(indices[idx].species) );
 
-          // set index
-          output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-          // calculate/apply corrections for each desired 1D histogram
-          output["CorrectSpectra"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["CorrectSpectra"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-          output["CorrectSpectra"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
-          if (!isPAu) {
-            output["CorrectSpectra"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
-            output["CorrectSpectra"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
-          }
+      // calculate/apply corrections for each desired 1D histogram
+      output["CorrectSpectra"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["CorrectSpectra"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["CorrectSpectra"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      if (!isPAu) {
+        output["CorrectSpectra"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+        output["CorrectSpectra"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
+      }
 
-          /* TODO add 2D correction */
+      /* TODO add 2D correction */
 
-        }  // end spin loop
-      //}  // end charge loop
-    }   // end species loop
+    }  // end index loop
     std::cout << "    Completed correction plots." << std::endl;
 
   }  // end CorrectSpectra plot
@@ -332,40 +344,43 @@ void RunPHCorrelatorPlotter(const int plot = PHEC::Output::Plots::SimVsData) {
   // --------------------------------------------------------------------------
   if (plot == PHEC::Output::Plots::SpinRatios) {
 
-    PHEC::Type::PlotIndex idx(-1);
+    // set indices to loop over
+    PHEC::PlotIndexVector loops;
+    loops.DoAllSpecies();
+    loops.DoAllPt();
+
+    // get plot indices
+    std::vector<PHEC::Type::PlotIndex> indices;
+    loops.GetVector(indices);
     std::cout << "    Beginning spin ratio plots." << std::endl;
 
-    // loop through all combinations of species, charge, and spin
-    for (idx.species = 0; idx.species < input.GetFiles().GetSpeciesTags().size(); ++idx.species) {
-      for (idx.pt = 0; idx.pt < input.GetHists().GetPtTags().size(); ++idx.pt) {
-        //for (idx.chrg = 0; idx.chrg < input.GetHists().GetChargeTags().size(); ++idx.chrg) {  // FIXME make index handling better
+    // loop through combinations to plot
+    for (std::size_t idx = 0; idx < indices.size(); ++idx) {
 
-          // only consider blue polarizations for pAu
-          const bool isPAu = input.IsPAu(idx);
-          if (isPAu && !input.IsBluePolarization(idx)) {
-            continue;
-          }
+      // only consider blue polarizations for pAu
+      const bool isPAu = input.IsPAu(indices[idx]);
+      if (isPAu && !input.IsBluePolarization(indices[idx])) {
+        continue;
+      }
 
-          // make sure collision system is correct
-          if (isPAu) maker.SetTextBox( BO::Text(idx.species) );
+      // make sure collision system is correct
+      if (isPAu) output.GetMaker().SetTextBox( BO::Text(indices[idx].species) );
 
-          // set index
-          output.UpdateIndex(idx);
+      // set index
+      output.UpdateIndex(indices[idx]);
 
-          // calculate/apply corrections for each desired 1D histogram
-          output["SpinRatios"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
-          output["SpinRatios"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
-          output["SpinRatios"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
-          if (!isPAu) {
-            output["SpinRatios"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
-            output["SpinRatios"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
-          }
+      // calculate/apply corrections for each desired 1D histogram
+      output["SpinRatios"] -> MakePlot1D("EEC", PHEC::Type::Side, ofiles[0]);
+      output["SpinRatios"] -> MakePlot1D("CollinsBlue", PHEC::Type::Angle, ofiles[1], 3);
+      output["SpinRatios"] -> MakePlot1D("BoerMuldersBlue", PHEC::Type::Angle, ofiles[2], 3);
+      if (!isPAu) {
+        output["SpinRatios"] -> MakePlot1D("CollinsYell", PHEC::Type::Angle, ofiles[1], 3);
+        output["SpinRatios"] -> MakePlot1D("BoerMuldersYell", PHEC::Type::Angle, ofiles[2], 3);
+      }
 
-          /* TODO add 2D correction */
+      /* TODO add 2D correction */
 
-      //}  // end charge loop
-      }  // end pt loop
-    }   // end species loop
+    }  // end index loop
     std::cout << "    Completed spin ratio plots." << std::endl;
 
   }  // end SpinRatios plot

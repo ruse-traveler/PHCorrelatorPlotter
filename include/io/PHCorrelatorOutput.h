@@ -23,6 +23,7 @@
 #include "PHCorrelatorCorrectSpectra.h"
 #include "PHCorrelatorInput.h"
 #include "PHCorrelatorIOTypes.h"
+#include "PHCorrelatorPlotIndexVector.h"
 #include "PHCorrelatorPPVsPAu.h"
 #include "PHCorrelatorRecoVsData.h"
 #include "PHCorrelatorSimVsData.h"
