@@ -102,7 +102,7 @@ namespace PHEnergyCorrelator {
         // set ranges
         const Range plot_range = Range(
           Default::PlotRange(Type::Side).GetX(),
-          Default::PlotRange(Type::Angle).GetY(),
+          Default::PlotRange(Type::Angle).GetX(),
           Default::PlotRange(Type::Side).GetZ()
         );
         const Range norm_range = plot_range;
