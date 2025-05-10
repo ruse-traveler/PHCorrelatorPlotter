@@ -30,11 +30,18 @@ namespace PHEnergyCorrelator {
 
     public:
 
-      // ----------------------------------------------------------------------
-      // Accessors for vectors
-      // ----------------------------------------------------------------------
-      enum Species {PP, PAu};
-      enum Level   {Data, Reco, True};
+      ///! enumerate species indices
+      enum Species {
+        PP  = 0,
+        PAu = 1
+      };
+
+      ///! enumerate level indices
+      enum Level {
+        Data = 0,
+        Reco = 1,
+        True = 2
+      };
 
     private:
 

@@ -31,9 +31,40 @@ namespace PHEnergyCorrelator {
 
     public:
 
-      enum PtJet {Pt5, Pt10, Pt15, PtInt};
-      enum Chrg  {Pos, Neg, ChInt};
-      enum Spin  {BU, BD, YU, YD, BUYU, BUYD, BDYU, BDYD, SpInt};
+      ///! enumerate pt indices
+      enum PtJet {
+        Pt5   = 0,
+        Pt10  = 1,
+        Pt15  = 2,
+        PtInt = 3
+      };
+
+      ///! enumerate cf indices
+      enum CFJet {
+        CFLow  = 0,
+        CFHigh = 1,
+        CFInt  = 2
+      };
+
+      ///! enumerate charge indices
+      enum Chrg {
+        Pos   = 0,
+        Neg   = 1,
+        ChInt = 2
+      };
+
+      ///! enumerate spin indices
+      enum Spin {
+        BU    = 0,
+        BD    = 1,
+        YU    = 2,
+        YD    = 3,
+        BUYU  = 4,
+        BUYD  = 5,
+        BDYU  = 6,
+        BDYD  = 7,
+        SpInt = 8
+      };
 
     private:
 
@@ -88,11 +119,13 @@ namespace PHEnergyCorrelator {
         m_tags_ch.clear();
         m_tags_ch.push_back("ch0");
         m_tags_ch.push_back("ch1");
+        m_tags_ch.push_back("chINT");
 
         // define legends
         m_legs_ch.clear();
         m_legs_ch.push_back("jet charge < 0");
         m_legs_ch.push_back("jet charge > 0");
+        m_legs_ch.push_back("jet charge integrated");
         return;
 
       }  // end 'LoadChargeStrings()'
