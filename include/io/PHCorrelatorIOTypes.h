@@ -12,8 +12,8 @@
 
 // c++ utilities
 #include <string>
-#include <utility>
 #include <vector>
+#include <utility>
 // plotting utilities
 #include "../elements/PHCorrelatorPlotterElements.h"
 
@@ -43,8 +43,6 @@ namespace PHEnergyCorrelator {
     /*! FIXME after merging, should split off file indices into
      *  a separate FileIndex type, and then make PlotIndex
      *  composed of HistIndex + FileIndex.
-     *
-     *  FIXME the default arguments should be a constant.
      */
     struct PlotIndex {
 
@@ -56,8 +54,17 @@ namespace PHEnergyCorrelator {
       int chrg;
       int spin;
 
-      //! default ctor/dtor
-      PlotIndex()  {};
+      //! default ctor
+      PlotIndex()
+        : level(-1)
+        , species(-1)
+        , pt(-1)
+        , cf(-1)
+        , chrg(-1)
+        , spin(-1)
+      {};
+
+      //! default dtor
       ~PlotIndex() {};
 
       //! ctor accepting a single argument
@@ -94,4 +101,4 @@ namespace PHEnergyCorrelator {
 
 #endif
 
-// end ========================================================================
+/// end =======================================================================
