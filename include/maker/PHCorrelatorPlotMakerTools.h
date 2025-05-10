@@ -240,7 +240,7 @@ namespace PHEnergyCorrelator {
       }
 
       // define canvas (use default pad options)
-      Canvas canvas = Canvas(can_name, "", dimensions, PadOpts());
+      Canvas canvas = Canvas(can_name, "", dimensions, opts);
       for (std::size_t ipad = 0; ipad < npad; ++ipad) {
 
         // create name

@@ -95,7 +95,8 @@ namespace PHEnergyCorrelator {
           "pPad",
           inputs.size(),
           ncolumn,
-          pad_margins
+          pad_margins,
+          pad_opts
         );
 
         // set ranges

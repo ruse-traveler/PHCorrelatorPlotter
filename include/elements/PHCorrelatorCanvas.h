@@ -185,7 +185,8 @@ namespace PHEnergyCorrelator {
 
         std::vector<TPad*> pads;
         for (std::size_t ipad = 0; ipad < m_pads.size(); ++ipad) {
-          pads.push_back( m_pads[ipad].MakeTPad() ); 
+          pads.push_back( m_pads[ipad].MakeTPad() );
+          m_pads[ipad].GetOptions().Apply( pads.back() ); 
         }
         return pads;
 
