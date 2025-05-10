@@ -68,7 +68,7 @@ namespace PHEnergyCorrelator {
         m_legs_pt.push_back("p_{T}^{jet} #in (5, 10) GeV/c");
         m_legs_pt.push_back("p_{T}^{jet} #in (10, 15) GeV/c");
         m_legs_pt.push_back("p_{T}^{jet} #in (15, 20) GeV/c");
-        m_legs_pt.push_back("p_PT}^{jet} > 5 GeV/c");
+        m_legs_pt.push_back("p_{T}^{jet} > 5 GeV/c");
         return;
 
       }  // end 'LoadPtStrings()'
