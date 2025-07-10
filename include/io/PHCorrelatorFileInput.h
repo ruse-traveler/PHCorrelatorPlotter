@@ -65,15 +65,15 @@ namespace PHEnergyCorrelator {
 
         // define input files for pp
         std::vector<std::string> pp_files;
-        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_datFullStats_forDiFF_r03full.d17m4y2025.root");
-        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_recFullStats_forDiFF_r03full.d18m4y2025.root");
-        pp_files.push_back("~/PHCorrelatorPlotter/input/ppRun15_truFullStats_forDiFF_r03full.d27m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_datFullStats_forDiFF_r03full.d17m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_recFullStats_forDiFF_r03full.d18m4y2025.root");
+        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_truFullStats_forDiFF_r03full.d27m4y2025.root");
 
         // define input files for pAu
         std::vector<std::string> pa_files;
-        pa_files.push_back("~/PHCorrelatorPlotter/input/paRun15_datFullStats_forDiFF_r03cen084full.d2m5y2025.root");
-        pa_files.push_back("~/PHCorrelatorPlotter/input/paRun15_recFullStats_forDiFF_r03cen084full.d3m5y2025.root");
-        pa_files.push_back("~/PHCorrelatorPlotter/input/paRun15_truFullStats_forDiFF_r03cen084full.d3m5y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_datFullStats_forDiFF_r03cen084full.d2m5y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_recFullStats_forDiFF_r03cen084full.d3m5y2025.root");
+        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_truFullStats_forDiFF_r03cen084full.d3m5y2025.root");
 
         // load vector of inputs
         m_files.clear();
