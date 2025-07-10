@@ -60,11 +60,23 @@ namespace PHEnergyCorrelator {
         std::vector<std::pair<int, int> > spins;
         spins.push_back( std::make_pair(HistInput::BD, HistInput::YU) );
         spins.push_back( std::make_pair(HistInput::BU, HistInput::YD) );
+        spins.push_back( std::make_pair(HistInput::BD, HistInput::YD) );
+        spins.push_back( std::make_pair(HistInput::BU, HistInput::YU) );
+        spins.push_back( std::make_pair(HistInput::YD, HistInput::BU) );
+        spins.push_back( std::make_pair(HistInput::YU, HistInput::BD) );
+        spins.push_back( std::make_pair(HistInput::YD, HistInput::BD) );
+        spins.push_back( std::make_pair(HistInput::YU, HistInput::BU) );
 
         // additional tags for canvas name
         std::vector<std::string> spin_can;
         spin_can.push_back("BDDivYU");
         spin_can.push_back("BUDivYD");
+        spin_can.push_back("BDDivYD");
+        spin_can.push_back("BUDivYU");
+        spin_can.push_back("YDDivBU");
+        spin_can.push_back("YUDivBD");
+        spin_can.push_back("YDDivBD");
+        spin_can.push_back("YUDivBU");
 
         // colors for different levels
         std::pair<std::size_t, std::size_t> dat_col = std::make_pair(898, 899);
