@@ -46,11 +46,11 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      Type::Files   m_files;
-      Type::Strings m_tags_species;
-      Type::Strings m_tags_levels;
-      Type::Strings m_legs_species;
-      Type::Strings m_legs_levels;
+      std::string[2][3] m_files;
+      std::string[2]    m_tags_species;
+      std::string[3]    m_tags_levels;
+      std::string[2]    m_legs_species;
+      std::string[3]    m_legs_levels;
 
       // ----------------------------------------------------------------------
       //! Define input files
@@ -84,52 +84,44 @@ namespace PHEnergyCorrelator {
       }  // end 'LoadInputFiles()'
 
       // ----------------------------------------------------------------------
-      //! Define species hist tags and legends
+      //! Load default species hist tags and legends
       // ----------------------------------------------------------------------
-      /*! The histogram tags and legend associated with the
-       *  "species" (pp vs. pAu) should be defined here,
+      /*! The default histogram tags and legend associated
+       *  with the "species" (pp vs. pAu) are defined here,
        *  and then retrived via the accessor functions.
-       *
-       *  FIXME make configurable(?)
        */
-      void LoadSpeciesStrings() {
+      void LoadDefaultSpeciesStrings() {
 
         // define tags
-        m_tags_species.clear();
-        m_tags_species.push_back("PP");
-        m_tags_species.push_back("PAu");
+        m_tags_species[PP]  = "PP";
+        m_tags_species[PAu] = "PAu";
 
         // define legends
-        m_legs_species.clear();
-        m_legs_species.push_back("#bf{[p+p]}");
-        m_legs_species.push_back("#bf{[p+Au]}");
+        m_legs_species[PP]  = "#bf{[p+p]}";
+        m_legs_species[PAu] = "#bf{[p+Au]}";
         return;
 
       }  // end 'LoadSpeciesStrings()'
 
       // ----------------------------------------------------------------------
-      //! Define level hist tags and legend text
+      //! Load default level hist tags and legend text
       // ----------------------------------------------------------------------
       /*! The histogram tags and legend associated with the
-       *  "level" (data, sim reco, sim truth) should be
-       *  defined here, and then retrived via the accessor
+       *  "level" (data, sim reco, sim truth) are defined
+       *  here, and then retrived via the accessor
        *  functions.
-       *
-       *  FIXME make configurable(?)
        */
-      void LoadLevelStrings() {
+      void LoadDefaultLevelStrings() {
 
-        // define tags
-        m_tags_levels.clear();
-        m_tags_levels.push_back("DataJet");
-        m_tags_levels.push_back("RecoJet");
-        m_tags_levels.push_back("TrueJet");
+        // set tags
+        m_tags_levels[Data] = "DataJet";
+        m_tags_levels[Reco] = "RecoJet";
+        m_tags_levels[True] = "TrueJet";
 
         // define legends
-        m_legs_levels.clear();
-        m_legs_levels.push_back("#bf{[Data]}");
-        m_legs_levels.push_back("#bf{[Reco.]}");
-        m_legs_levels.push_back("#bf{[Truth]}");
+        m_legs_levels[Data] = "#bf{[Data]}";
+        m_legs_levels[Reco] = "#bf{[Reco.]}";
+        m_legs_levels[True] = "#bf{[Truth]}";
         return;
 
       }  // end 'LoadLevelStrings()'
@@ -155,7 +147,7 @@ namespace PHEnergyCorrelator {
       Type::Strings GetLeveLegends()    const {return m_legs_levels;}
 
       // ----------------------------------------------------------------------
-      //! Get a particular tag, legend text
+      //! Get a tag, legend text
       // ----------------------------------------------------------------------
       std::string GetSpeciesTag(const int species)    const {return m_tags_species.at(species);}
       std::string GetLevelTag(const int level)        const {return m_tags_levels.at(level);}
@@ -186,8 +178,8 @@ namespace PHEnergyCorrelator {
       FileInput() {
 
         LoadInputFiles();
-        LoadSpeciesStrings();
-        LoadLevelStrings();
+        LoadDefaultSpeciesStrings();
+        LoadDefaultLevelStrings();
 
       };  // end ctor()
 

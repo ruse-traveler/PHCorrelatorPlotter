@@ -31,7 +31,6 @@ namespace PHEnergyCorrelator {
     typedef std::pair<std::string, std::string> StringPair;
     typedef std::pair<PlotInput, PlotInput> InputPair;
     typedef std::vector<std::string> Strings;
-    typedef std::vector<std::vector<std::string> > Files;
 
 
 
