@@ -53,42 +53,11 @@ namespace PHEnergyCorrelator {
       std::string[3]    m_legs_levels;
 
       // ----------------------------------------------------------------------
-      //! Define input files
-      // ----------------------------------------------------------------------
-      /*! All inputs files you'll need are defined here should
-       *  be defined here. Then files can be retrieved via the
-       *  accessor functions.
-       *
-       *  FIXME make configurable
-       */
-      void LoadInputFiles() {
-
-        // define input files for pp
-        std::vector<std::string> pp_files;
-        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_datFullStats_forDiFF_r03full.d17m4y2025.root");
-        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_recFullStats_forDiFF_r03full.d18m4y2025.root");
-        pp_files.push_back("~/PHCorrelatorPlotter/input/Apr2025/ppRun15_truFullStats_forDiFF_r03full.d27m4y2025.root");
-
-        // define input files for pAu
-        std::vector<std::string> pa_files;
-        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_datFullStats_forDiFF_r03cen084full.d2m5y2025.root");
-        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_recFullStats_forDiFF_r03cen084full.d3m5y2025.root");
-        pa_files.push_back("~/PHCorrelatorPlotter/input/May2025/paRun15_truFullStats_forDiFF_r03cen084full.d3m5y2025.root");
-
-        // load vector of inputs
-        m_files.clear();
-        m_files.push_back(pp_files);
-        m_files.push_back(pa_files);
-        return;
-
-      }  // end 'LoadInputFiles()'
-
-      // ----------------------------------------------------------------------
       //! Load default species hist tags and legends
       // ----------------------------------------------------------------------
       /*! The default histogram tags and legend associated
-       *  with the "species" (pp vs. pAu) are defined here,
-       *  and then retrived via the accessor functions.
+       *  with the "species" (pp vs. pAu) are defined here.
+       *  Can be configured via accessor functions.
        */
       void LoadDefaultSpeciesStrings() {
 
@@ -129,46 +98,70 @@ namespace PHEnergyCorrelator {
     public:
 
       // ----------------------------------------------------------------------
-      //! Setters
+      //! Set a file
       // ----------------------------------------------------------------------
-      void SetFiles(const Type::Files& files)           {m_files        = files;}
-      void SetSpeciesTags(const Type::Strings& tags)    {m_tags_species = tags;}
-      void SetLevelTags(const Type::Strings& tags)      {m_tags_levels  = tags;}
-      void SetSpeciesLegends(const Type::Strings& legs) {m_legs_species = legs;}
-      void SetLevelLegends(const Type::Strings& legs)   {m_legs_levels  = legs;}
+      void SetFile(const Species sp, const Level lv, const std::string& file) {
+
+        m_files[sp][lv] = file;
+        return;
+
+      }  // end 'SetFile(Species, Level, std::string&)'
 
       // ----------------------------------------------------------------------
-      //! Getters
+      //! Set a species tag
       // ----------------------------------------------------------------------
-      Type::Files   GetFiles()          const {return m_files;}
-      Type::Strings GetSpeciesTags()    const {return m_tags_species;}
-      Type::Strings GetLevelTags()      const {return m_tags_levels;}
-      Type::Strings GetSpeciesLegends() const {return m_legs_species;}
-      Type::Strings GetLeveLegends()    const {return m_legs_levels;}
+      void SetSpeciesTag(const Species sp, const std::string& tag) {
+
+        m_tags_species[sp] = tag;
+        return;
+
+      }  // end 'SetSpeciesTag(Species, std::string&)'
 
       // ----------------------------------------------------------------------
-      //! Get a tag, legend text
+      //! Set a level tag
       // ----------------------------------------------------------------------
-      std::string GetSpeciesTag(const int species)    const {return m_tags_species.at(species);}
-      std::string GetLevelTag(const int level)        const {return m_tags_levels.at(level);}
-      std::string GetSpeciesLegend(const int species) const {return m_legs_species.at(species);}
-      std::string GetLevelLegend(const int level)     const {return m_legs_levels.at(level);}
+      void SetLevelTag(const Level lv, const std::string& tag) {
+
+        m_tags_levels[lv] = tag;
+        return;
+
+      }  // end 'SetLevelTag(Level, std::string&)'
 
       // ----------------------------------------------------------------------
-      //! Get files for a specific species
+      //! Set a species legend
       // ----------------------------------------------------------------------
-      Type::Strings GetFiles(const Type::PlotIndex& idx) const {
+      void SetSpeciesLegend(const Species sp, const std::string& leg) {
 
-        return m_files.at(idx.species);
+        m_legs_species[sp] = leg;
+        return;
 
-      }  // end 'GetFiles(Type::PlotIndex&)'
+      }  // end 'SetSpeciesLegend(Species, std::string&)'
 
       // ----------------------------------------------------------------------
-      //! Get a particular file
+      //! Set a level legend
+      // ----------------------------------------------------------------------
+      void SetLevelLegend(const Level lv, const std::string& leg) {
+
+        m_legs_levels[lv] = leg;
+        return;
+
+      }  // end 'SetLevelLegend(Level, std::string&)'
+
+      // ----------------------------------------------------------------------
+      //! Get a file via explicity identify species & level index
+      // ----------------------------------------------------------------------
+      std::string GetFile(const Species sp, const Level lv) const {
+
+        return m_file[sp][lv];
+
+      }  // end 'GetFile(Species, Level)'
+
+      // ----------------------------------------------------------------------
+      //! Get a file via plot index 
       // ----------------------------------------------------------------------
       std::string GetFile(const Type::PlotIndex& idx) const {
 
-        return m_files.at(idx.species).at(idx.level);
+        return m_file[idx.species][idx.level];
 
       }  // end 'GetFile(Type::PlotIndex&)'
 
@@ -177,7 +170,6 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       FileInput() {
 
-        LoadInputFiles();
         LoadDefaultSpeciesStrings();
         LoadDefaultLevelStrings();
 
