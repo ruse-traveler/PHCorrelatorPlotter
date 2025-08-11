@@ -48,8 +48,8 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Getters
       // ------------------------------------------------------------------------
-      FileInput GetFiles() const {return m_files;}
-      HistInput GetHists() const {return m_hists;}
+      FileInput& GetFiles() {return &m_files;}
+      HistInput& GetHists() {return &m_hists;}
 
       // ------------------------------------------------------------------------
       //! Check if is p+Au
@@ -86,16 +86,31 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make a histogram name
       // ------------------------------------------------------------------------
-      /*! FIXME meed to turn on/off tags certain tags */
       std::string MakeHistName(
         const std::string& var,
         const Type::PlotIndex& idx,
         const std::string& tag = ""
       ) const {
 
-        const std::string base  = "h" + tag + m_files.GetLevelTag(idx.level) + var + "Stat_";
-        //const std::string index = m_hists.GetPtTag(idx.pt) + "cf0" + m_hists.GetChargeTag(idx.chrg) + m_hists.GetSpinTag(idx.spin);
-        const std::string index = m_hists.GetPtTag(idx.pt) + m_hists.GetSpinTag(idx.spin);
+        // create base (level + var) part of histogram name
+        std::string base  = "h" + tag;
+        if (idx.level > -1) {
+          base += m_files.GetLevelTag(idx.level);
+        }
+        base += var + "Stat_";
+
+        // and now create index (pt, chrg, cf, spin) part of
+        // histogram name
+        std::string index = "";
+        if (idx.pt > -1) {
+          index += m_hists.GetPtTag(idx.pt);
+        }
+        if (idx.cf > -1) {
+          index += m_hists.GetCFTag(idx.cf);
+        }
+        if (idx.spin > -1) {
+          index += m_hists.GetSpinTag(idx.spin);
+        }
         return base + index;
 
       }  // end 'MakeHistName(std::string&, Type::PlotIndex&, std::string&)'
@@ -103,7 +118,6 @@ namespace PHEnergyCorrelator {
       // ------------------------------------------------------------------------
       //! Make a histogram legend
       // ------------------------------------------------------------------------
-      /* FIXME need to turn other strings off */
       std::string MakeLegend(const Type::PlotIndex& idx) const {
 
         std::string legend;
@@ -113,8 +127,18 @@ namespace PHEnergyCorrelator {
         if (idx.level > -1) {
           legend += m_files.GetLevelLegend(idx.level) + " ";
         }
-        //legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt) + ", " + m_hists.GetChargeLegend(idx.chrg);
-        legend += m_hists.GetSpinLegend(idx.spin) + ", " + m_hists.GetPtLegend(idx.pt);
+        if (idx.spin > -1) {
+          legend += m_hists.GetSpinLegend(idx.spin) + ", ";
+        }
+        if (idx.pt > -1) {
+          legend += m_hists.GetPtLegend(idx.pt);
+        }
+        if (idx.chrg > -1) {
+          legend += ", " + m_hists.GetChargeLegend(idx.chrg);
+        }
+        if (idx.cf > -1) {
+          legend += ", " + m_hists.GetCFLegend(idx.cf);
+        }
         return legend;
 
       }  // end 'MakeLegend(Type::PlotIndex&)'
@@ -127,6 +151,7 @@ namespace PHEnergyCorrelator {
         const Type::PlotIndex& idx
       ) const {
 
+        // create base (var + level) part of canvas name
         std::string name = base;
         if (idx.species > -1) {
           name += "_" + m_files.GetSpeciesTag(idx.species);
@@ -136,11 +161,15 @@ namespace PHEnergyCorrelator {
         }
         name += "_";
 
+        // create index (pt, chrg, cf, spin) part of canvas name
         if (idx.pt > -1) {
           name += m_hists.GetPtTag(idx.pt);
         }
         if (idx.chrg > -1) {
           name += m_hists.GetChargeTag(idx.chrg);
+        }
+        if (idx.cf > -1) {
+          name += m_hists.GetCFTag(idx.cf);
         }
         if (idx.spin > -1) {
           name += m_hists.GetSpinTag(idx.spin);
