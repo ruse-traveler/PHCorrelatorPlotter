@@ -46,11 +46,11 @@ namespace PHEnergyCorrelator {
     private:
 
       // data members
-      std::string[2][3] m_files;
-      std::string[2]    m_tags_species;
-      std::string[3]    m_tags_levels;
-      std::string[2]    m_legs_species;
-      std::string[3]    m_legs_levels;
+      std::string m_files[2][3];
+      std::string m_tags_species[2];
+      std::string m_tags_levels[3];
+      std::string m_legs_species[2];
+      std::string m_legs_levels[3];
 
       // ----------------------------------------------------------------------
       //! Load default species hist tags and legends
@@ -70,7 +70,7 @@ namespace PHEnergyCorrelator {
         m_legs_species[PAu] = "#bf{[p+Au]}";
         return;
 
-      }  // end 'LoadSpeciesStrings()'
+      }  // end 'LoadDefaultSpeciesStrings()'
 
       // ----------------------------------------------------------------------
       //! Load default level hist tags and legend text
@@ -93,9 +93,23 @@ namespace PHEnergyCorrelator {
         m_legs_levels[True] = "#bf{[Truth]}";
         return;
 
-      }  // end 'LoadLevelStrings()'
+      }  // end 'LoadDefaultLevelStrings()'
 
     public:
+
+      // ----------------------------------------------------------------------
+      //! Set all files
+      // ----------------------------------------------------------------------
+      void SetFiles(const Type::Files& files) {
+
+        for (std::size_t isp = 0; isp < 2; ++isp) {
+          for (std::size_t ilv = 0; ilv < 3; ++ilv) {
+            m_files[isp][ilv] = files[isp][ilv];
+          }
+        }
+        return;
+
+      }  // end 'SetFiles(Type::Files&)'
 
       // ----------------------------------------------------------------------
       //! Set a file
@@ -148,11 +162,25 @@ namespace PHEnergyCorrelator {
       }  // end 'SetLevelLegend(Level, std::string&)'
 
       // ----------------------------------------------------------------------
+      //! Get all files
+      // ----------------------------------------------------------------------
+      void GetFiles(Type::Files& files) {
+
+        files.reserve(2);
+        for (std::size_t ilv = 0; ilv < 3; ++ilv) {
+          files[PP].push_back( m_files[PP][ilv] );
+          files[PAu].push_back( m_files[PAu][ilv] );
+        }
+        return;
+
+      }  // end 'GetFiles(Type::Files&)'
+
+      // ----------------------------------------------------------------------
       //! Get a file via explicity identify species & level index
       // ----------------------------------------------------------------------
       std::string GetFile(const Species sp, const Level lv) const {
 
-        return m_file[sp][lv];
+        return m_files[sp][lv];
 
       }  // end 'GetFile(Species, Level)'
 
@@ -161,7 +189,7 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       std::string GetFile(const Type::PlotIndex& idx) const {
 
-        return m_file[idx.species][idx.level];
+        return m_files[idx.species][idx.level];
 
       }  // end 'GetFile(Type::PlotIndex&)'
 
