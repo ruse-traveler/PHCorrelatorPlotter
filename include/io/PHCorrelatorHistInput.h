@@ -71,9 +71,11 @@ namespace PHEnergyCorrelator {
       // data members
       Type::Strings m_tags_pt;
       Type::Strings m_tags_ch;
+      Type::Strings m_tags_cf;
       Type::Strings m_tags_sp;
       Type::Strings m_legs_pt;
       Type::Strings m_legs_ch;
+      Type::Strings m_legs_cf;
       Type::Strings m_legs_sp;
 
       // ----------------------------------------------------------------------
@@ -131,6 +133,32 @@ namespace PHEnergyCorrelator {
       }  // end 'LoadChargeStrings()'
 
       // ----------------------------------------------------------------------
+      //! Define jet CF hist tags and legend text
+      // ----------------------------------------------------------------------
+      /*! All histogram tags and legend entries associated
+       *  with the jet CF should be defined here, and
+       *  then retrieved with the accessor functions.
+       *
+       *  FIXME make configurable(?)
+       */
+      void LoadCFStrings() {
+
+        // define tags
+        m_tags_cf.clear();
+        m_tags_cf.push_back("cf0");
+        m_tags_cf.push_back("cf1");
+        m_tags_cf.push_back("cfINT");
+
+        // define legends
+        m_legs_cf.clear();
+        m_legs_cf.push_back("jet CF #in (0, 0.5)");
+        m_legs_cf.push_back("jet CF #in (0.5, 1)");
+        m_legs_cf.push_back("jet CF integrated");
+        return;
+
+      }  // end 'LoadCFStrings()'
+
+      // ----------------------------------------------------------------------
       //! Load spin hist tags and legend text
       // ----------------------------------------------------------------------
       /*! All histogram tags and legend entries associated
@@ -175,9 +203,11 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       void SetPtTags(const Type::Strings& tags)        {m_tags_pt = tags;}
       void SetChargeTags(const Type::Strings& tags)    {m_tags_ch = tags;}
+      void SetCFTags(const Type::Strings& tags)        {m_tags_cf = tags;}
       void SetSpinTags(const Type::Strings& tags)      {m_tags_sp = tags;}
       void SetPtLegends(const Type::Strings& legs)     {m_legs_pt = legs;}
       void SetChargeLegends(const Type::Strings& legs) {m_legs_ch = legs;}
+      void SetCFLegends(const Type::Strings& legs)     {m_legs_cf = legs;}
       void SetSpinLegends(const Type::Strings& legs)   {m_legs_sp = legs;}
 
       // ----------------------------------------------------------------------
@@ -185,9 +215,11 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       Type::Strings GetPtTags()        const {return m_tags_pt;}
       Type::Strings GetChargeTags()    const {return m_tags_ch;}
+      Type::Strings GetCFTags()        const {return m_tags_cf;}
       Type::Strings GetSpinTags()      const {return m_tags_sp;}
       Type::Strings GetPtLegends()     const {return m_legs_pt;}
       Type::Strings GetChargeLegends() const {return m_legs_ch;}
+      Type::Strings GetCFLegends()     const {return m_legs_cf;}
       Type::Strings GetSpinLegends()   const {return m_legs_sp;}
 
       // ----------------------------------------------------------------------
@@ -195,9 +227,11 @@ namespace PHEnergyCorrelator {
       // ----------------------------------------------------------------------
       std::string GetPtTag(const int pt)        const {return m_tags_pt.at(pt);}
       std::string GetChargeTag(const int ch)    const {return m_tags_ch.at(ch);}
+      std::string GetCFTag(const int cf)        const {return m_tags_cf.at(cf);}
       std::string GetSpinTag(const int sp)      const {return m_tags_sp.at(sp);}
       std::string GetPtLegend(const int pt)     const {return m_legs_pt.at(pt);}
       std::string GetChargeLegend(const int ch) const {return m_legs_ch.at(ch);}
+      std::string GetCFTag(const int cf)        const {return m_legs_cf.at(cf);}
       std::string GetSpinLegend(const int sp)   const {return m_legs_sp.at(sp);}
 
       // ----------------------------------------------------------------------
@@ -207,6 +241,7 @@ namespace PHEnergyCorrelator {
 
         LoadPtStrings();
         LoadChargeStrings();
+        LoadCFStrings();
         LoadSpinStrings();
 
       };  // end ctor()
