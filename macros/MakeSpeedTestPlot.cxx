@@ -23,7 +23,7 @@
 void MakeSpeedTestPlot() {
 
   // output file name
-  const std::string sOutName = "speedTestResults_withUniquePairs.d17m3y2025.root";
+  const std::string sOutName = "speedTestResults_withFactorizedAngleCalc.d10m8y2025.root";
 
   // legend header (description of parameters)
   const std::string sHeader = "#bf{N_{jet/evt} = 1, N_{cst/jet} = 3}";
@@ -69,23 +69,30 @@ void MakeSpeedTestPlot() {
     {
       "#bf{Change 2:} remove unused histograms",
       "grChange2",
-      899,
+      808,
       25,
       {0.15, 1.28, 12.59, 131.86, 1359.72}
     },
     {
       "#bf{Change 3:} use hashes of histogram names as keys",
       "grChange3",
-      879,
+      899,
       26,
       {0.13, 1.17, 11.54, 112.9, 1157.41}
     },
     {
       "#bf{change 4:} look at only unique pairs",
       "grChange4",
-      859,
-      27,
+      908,
+      32,
       {0.80, 0.83, 7.56, 77.60, 772.97}
+    },
+    {
+      "#bf{change 5:} factorize angle calculations",
+      "grChange5",
+      879,
+      27,
+      {0.07, 0.72, 7.26, 72.51, 730,45}
     }
   };
 
@@ -106,10 +113,10 @@ void MakeSpeedTestPlot() {
   };
 
   // lambda to turn vector of times into scaled times
-  auto getScales = [](const std::vector<float> times) {
+  auto getScales = [](const std::vector<float> times, const std::size_t iref) {
     std::vector<float> scales;
     for (const float time : times) {
-      scales.push_back( time / times.front() );
+      scales.push_back( time / times.at(iref) );
     }
     return scales;
   };
@@ -152,7 +159,7 @@ void MakeSpeedTestPlot() {
 
     // make scale graph
     auto sName  = getScaleName( get<1>(descript) );
-    auto scales = getScales( get<4>(descript) );
+    auto scales = getScales( get<4>(descript), 1 );
     vecScaleGraphs.push_back(
       new TGraph(
         vecNumIter.size(),
@@ -170,7 +177,7 @@ void MakeSpeedTestPlot() {
     vecScaleGraphs.back() -> SetFillColor( get<2>(descript) );
     vecScaleGraphs.back() -> SetFillStyle( 0 );
     vecScaleGraphs.back() -> GetXaxis() -> SetTitle("N_{iter}");
-    vecScaleGraphs.back() -> GetYaxis() -> SetTitle("T_{CPU}(N_{iter}) / T_{CPU}(1)");
+    vecScaleGraphs.back() -> GetYaxis() -> SetTitle("T_{CPU}(N_{iter}) / T_{CPU}(1K)");
 
   }  // end description loop
 
